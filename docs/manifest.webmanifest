@@ -1,0 +1,18 @@
+{
+ "name": "مختصر القدوري",
+ "short_name": "القدوري",
+ "lang": "ur",
+ "dir": "rtl",
+ "start_url": "./",
+ "display": "standalone",
+ "background_color": "#0b4a6f",
+ "theme_color": "#0b4a6f",
+ "icons": [
+  {
+   "src": "icon.svg",
+   "sizes": "any",
+   "type": "image/svg+xml",
+   "purpose": "any maskable"
+  }
+ ]
+}
