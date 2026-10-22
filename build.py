@@ -64,7 +64,7 @@ dattr = '\n'.join(f':root[data-theme="dark"] .k{i}{{{kv(W[i][1], True)}}}' for i
 dark = ('--bg:#0d1217;--surface:#151c23;--surface-2:#1b242d;--ink:#e6ecf1;--muted:#9aa8b5;--line:#27323c;'
         '--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);--ay:#f0c46a;--ay-bg:#2b2410;--ha:#b7c5d3;--ha-bg:#1f2a34;'
         '--im-h:#a3c0ff;--im-y:#62d08e;--im-m:#f3ae52;--im-z:#c7a0ff;'
-        '--vc-a:#4fd6a0;--vc-o:#f5a742;--vc-q:#b69cf5;--r-must:#ff8a80;--r-sun:#5fd08c;--r-ok:#7db8f5;--r-mak:#f5b25a;--r-bad:#e48bd0;--r-num:#55d0e0;')
+        '--c-ar:#c3c4ff;--c-ar-bg:#1d1e40;--c-ur:#6ee7b0;--c-ur-bg:#0f2e22;--c-no:#ff9db9;--c-no-bg:#3a1320;--vc-a:#4fd6a0;--vc-o:#f5a742;--vc-q:#b69cf5;--r-must:#ff8a80;--r-sun:#5fd08c;--r-ok:#7db8f5;--r-mak:#f5b25a;--r-bad:#e48bd0;--r-num:#55d0e0;')
 
 
 PATS = {

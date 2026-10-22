@@ -2,7 +2,7 @@
 Called from build.py after the app is built. Set SITE below if the URL changes."""
 import html, json, datetime, pathlib
 
-SITE = 'https://drimranhayat.github.io/quduri-repo/'
+SITE = 'https://drimranhayat.github.io/quduri-repo-with-new-urdu/'
 NAME = 'الحیات علوم اسلامیہ (مطالعہ فقہ اسلامی: القدوری)'
 DESC = ('الحیات علوم اسلامیہ — مطالعہ فقہ اسلامی: مختصر القدوري (کتاب الطہارۃ، الصلاۃ، الزکاۃ، الصوم، الحج) مکمل عربی متن اعراب کے ساتھ، اردو ترجمہ، مفردات، '
         'سوال جواب اور MCQs — فقہ حنفی سیکھنے کے لیے۔ Mukhtasar al-Quduri Arabic text with tashkeel, Urdu translation, '

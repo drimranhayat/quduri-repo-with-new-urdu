@@ -115,7 +115,7 @@ def run():
                     pg.evaluate("document.querySelector('[data-v=ar]').click()")
                 # overlays on k1
                 pg.evaluate("location.hash='#k1'"); pg.wait_for_timeout(300)
-                for name, js in (('settings', "document.querySelector('[data-a=set]')?.click()"), ('toc', "document.querySelector('.bpt')?.click()"), ('search', "document.querySelector('[data-a=search]')?.click()"), ('cards', "document.querySelector('[data-a=cards]')?.click()"), ('quiz', "document.querySelector('[data-a=kquiz]')?.click()")):
+                for name, js in (('menu', "document.querySelector('[data-a=menu]')?.click()"), ('settings', "document.querySelector('[data-a=set]')?.click()"), ('toc', "document.querySelector('.bpt')?.click()"), ('search', "document.querySelector('[data-a=search]')?.click()"), ('cards', "document.querySelector('[data-a=cards]')?.click()"), ('quiz', "document.querySelector('[data-a=kquiz]')?.click()")):
                     pg.evaluate(js); pg.wait_for_timeout(350)
                     if name == 'search':
                         pg.keyboard.type('الماء'); pg.wait_for_timeout(500)

@@ -27,16 +27,17 @@ const NEGBAD = new Set(['يجوز', 'تجوز', 'يصح', 'تصح', 'يحل', '�
 const NEGOK = new Set(['يكره', 'تكره', 'يفسد', 'تفسد', 'ينقض', 'تنقض', 'يبطل', 'تبطل', 'يجب', 'تجب', 'يلزم', 'تلزم', 'يلزمه', 'تلزمه', 'يجبر'].map(rn));
 const META = [
   null,
-  { en: 'Kitab al-Tahara · Purification', d: 'الوضوء والغسل والمياه والآبار، ثم التيمم والمسح على الخفين والحيض والأنجاس.' },
-  { en: 'Kitab al-Salat · Prayer', d: 'المواقيت والأذان والشروط وصفة الصلاة، ثم السهو والتلاوة والسفر والجمعة والعيدين والجنائز.' },
-  { en: 'Kitab al-Zakat · Obligatory charity', d: 'شروط الوجوب وزكاة الأنعام والنقدين والعروض والزروع، ومصارف الزكاة وصدقة الفطر.' },
-  { en: 'Kitab al-Sawm · Fasting', d: 'رؤية الهلال وما يفسد الصوم، ثم القضاء والكفارة والأعذار، وباب الاعتكاف.' },
-  { en: 'Kitab al-Hajj · Pilgrimage', d: 'المواقيت والإحرام والمناسك، ثم القران والتمتع، وجنايات المحرم والإحصار والهدي.' }
+  { du: 'وضو، غسل، پانی اور کنویں؛ پھر تیمم، موزوں پر مسح، حیض اور نجاستیں۔', en: 'Kitab al-Tahara · Purification', d: 'الوضوء والغسل والمياه والآبار، ثم التيمم والمسح على الخفين والحيض والأنجاس.' },
+  { du: 'اوقات، اذان، شرائط اور نماز کا طریقہ؛ پھر سہو، تلاوت، سفر، جمعہ، عیدین اور جنازہ۔', en: 'Kitab al-Salat · Prayer', d: 'المواقيت والأذان والشروط وصفة الصلاة، ثم السهو والتلاوة والسفر والجمعة والعيدين والجنائز.' },
+  { du: 'وجوب کی شرائط؛ مویشی، سونا چاندی، سامانِ تجارت اور پیداوار کی زکوٰۃ؛ مصارفِ زکوٰۃ اور صدقۂ فطر۔', en: 'Kitab al-Zakat · Obligatory charity', d: 'شروط الوجوب وزكاة الأنعام والنقدين والعروض والزروع، ومصارف الزكاة وصدقة الفطر.' },
+  { du: 'چاند دیکھنا اور روزہ توڑنے والی چیزیں؛ پھر قضا، کفارہ، عذر اور اعتکاف۔', en: 'Kitab al-Sawm · Fasting', d: 'رؤية الهلال وما يفسد الصوم، ثم القضاء والكفارة والأعذار، وباب الاعتكاف.' },
+  { du: 'مواقیت، احرام اور مناسک؛ قران و تمتع؛ احرام کی جنایات، احصار اور ہدی۔', en: 'Kitab al-Hajj · Pilgrimage', d: 'المواقيت والإحرام والمناسك، ثم القران والتمتع، وجنايات المحرم والإحصار والهدي.' }
 ];
 
 /* ---------- state ---------- */
-let S = { view: 'ar', vf: 'all', mq: {}, mf: 'all', cb: {}, cp: {}, vm: {}, uf: 'noto', tk: true, srs: {}, bm: {}, fs: 1, mode: 'read', lvl: 1, theme: 'auto', khilaf: false, last: null, rc: true, day: { d: 0, n: 0 }, st: { last: 0, n: 0 } };
+let S = { view: 'ar', vf: 'all', mq: {}, mf: 'all', cb: {}, cp: {}, vm: {}, uf: 'jn', ufSet: 0, tk: true, srs: {}, bm: {}, fs: 1, mode: 'read', lvl: 1, theme: 'auto', khilaf: false, last: null, rc: true, day: { d: 0, n: 0 }, st: { last: 0, n: 0 } };
 try { const r = localStorage.getItem(KEY); if (r) Object.assign(S, JSON.parse(r)); } catch (e) {}
+if (!S.ufSet) S.uf = 'jn';
 const sd = s => S.tk ? s : strip(s);
 const T = s => esc(sd(s));
 const dw = x => S.tk ? x.w : x.bare;
@@ -195,6 +196,7 @@ const I = {
   bm: ic('<path d="M6 4h12v17l-6-4-6 4z"/>'),
   eye: ic('<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
   gear: ic('<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>'),
+  menu: ic('<path d="M4 6h16M4 12h16M4 18h16"/>'),
   list: ic('<path d="M4 6h16M4 12h16M4 18h10"/>'),
   cards: ic('<rect x="3" y="7" width="14" height="12" rx="2"/><path d="M7 4h12a2 2 0 0 1 2 2v9"/>'),
   quiz: ic('<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1 1-1.1 1.8M12 17h.01"/>'),
@@ -302,7 +304,7 @@ function kmapHtml(K) {
 }
 
 function topHtml() {
-  return '<header class="top"><div class="gutter"><div class="wrap"><a class="brand" href="#home">' + I.star + '<span class="bn"><b>الحیات علوم اسلامیہ</b><small>مطالعہ فقہ اسلامی: القدوری</small></span></a><span class="sp"></span>' +
+  return '<header class="top"><div class="gutter"><div class="wrap"><button class="ibtn" data-a="menu" aria-label="مینیو کھولیں" aria-haspopup="dialog">' + I.menu + '</button><a class="brand" href="#home">' + I.star + '<span class="bn"><b>الحیات علوم اسلامیہ</b><small>مطالعہ فقہ اسلامی: القدوری</small></span></a><span class="sp"></span>' +
     '<button class="ibtn" data-a="search" aria-label="بحث في المتن">' + I.search + '</button>' +
     '<button class="ibtn" data-a="theme" aria-label="تبديل المظهر">' + I.theme + '</button></div></div></header>';
 }
@@ -325,15 +327,7 @@ function dockHtml() {
 
 /* ---------- views ---------- */
 function applyTheme() { const r = document.documentElement; if (S.theme === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', S.theme); r.setAttribute('data-rc', S.rc ? 'on' : 'off'); }
-let jnLoaded = false;
-function applyUf() {
-  document.documentElement.dataset.uf = S.uf;
-  if (S.uf === 'jn' && !jnLoaded) {
-    jnLoaded = true; const st = document.createElement('style');
-    st.textContent = "@font-face{font-family:'Jameel Noori Nastaleeq';src:url(fonts/jameel-noori-subset.woff2) format('woff2');font-display:swap}";
-    document.head.appendChild(st);
-  }
-}
+function applyUf() { document.documentElement.dataset.uf = S.uf; }
 function applyFs() { document.documentElement.style.setProperty('--fs', (1.3 * FS[S.fs]).toFixed(3) + 'rem'); }
 function closeOverlays() { $$('.scrim,.pop,.fc').forEach(e => e.remove()); fc = null; qz = null; }
 function nextBab() { for (const K of D) for (const B of K.babs) if (B.ms.some(m => !isL(m.id))) return B; return null; }
@@ -341,13 +335,16 @@ function ringSvg(p, c) { const C = 2 * Math.PI * 18; return '<svg class="ring" v
 
 function planHtml() {
   const due = allM.filter(m => isDue(m.id)).length, nb = nextBab(), dn = doneToday(), sk = streak();
-  const K = nb ? D[nb.k - 1] : null;
-  return '<h2 class="sec-t">خطة اليوم</h2><div class="plan"><div class="pl-top"><div class="goal">' + ringSvg(dn / GOAL, ad(dn)) + '<div><b>' + ad(dn) + ' من ' + ad(GOAL) + '</b><small>بطاقات اليوم</small></div></div><div class="strk"><b>' + ad(sk) + '</b><small>' + (sk === 1 ? 'يوم متتابع' : 'أيام متتابعة') + '</small></div></div>' +
-    '<ol class="pl-steps">' +
-    '<li><span class="n">١</span><div><b>راجع ما حان موعده</b><small>' + (due ? ad(due) + ' مسألة مستحقة للمراجعة' : 'لا شيء مستحق الآن') + '</small></div><button class="go" data-a="rev">' + (due ? 'ابدأ المراجعة' : 'تدريب حر') + '</button></li>' +
-    (nb ? '<li><span class="n">٢</span><div><b>تعلّم الجديد</b><small>' + T(K.title) + ' · ' + T(nb.t) + '</small></div><a class="go" href="#' + nb.id + '">افتح الباب</a></li>' +
-      '<li><span class="n">٣</span><div><b>اختبر نفسك</b><small>أسئلة سريعة من هذا الباب</small></div><button class="go" data-a="quiz" data-b="' + nb.id + '">ابدأ الاختبار</button></li>' : '<li><span class="n">٢</span><div><b>أتقنت كل المتن</b><small>داوِم على المراجعة المتباعدة</small></div><button class="go" data-a="allquiz">اختبار شامل</button></li>') +
-    '</ol></div>';
+  const K = nb ? D[nb.k - 1] : null, pc = Math.min(100, Math.round(dn / GOAL * 100));
+  return '<h2 class="sec-t">آج کا منصوبہ</h2><div class="plan2">' +
+    '<div class="pl-top2"><div class="goal2"><div class="pgb"><b style="width:' + pc + '%"></b></div><span class="urt">آج کا ہدف: <b>' + ad(dn) + ' / ' + ad(GOAL) + '</b> کارڈ</span></div>' +
+    '<div class="strk2"><b>' + ad(sk) + '</b><span class="urt">مسلسل دن</span></div></div>' +
+    '<div class="pl-cards">' +
+    '<div class="pc c1"><span class="pi">' + I.cards + '</span><h3 class="urt">دہرائی</h3><p class="urt">' + (due ? ad(due) + ' مسائل دہرانے کے منتظر ہیں' : 'ابھی کوئی مسئلہ باقی نہیں') + '</p><button class="pb" data-a="rev">' + (due ? 'دہرائی شروع کریں' : 'آزاد مشق') + '</button></div>' +
+    (nb ? '<div class="pc c2"><span class="pi">' + I.list + '</span><h3 class="urt">نیا سبق</h3><p>' + T(K.title) + ' · ' + T(nb.t) + '</p><a class="pb" href="#' + nb.id + '">باب کھولیں</a></div>' +
+      '<div class="pc c3"><span class="pi">' + I.quiz + '</span><h3 class="urt">اپنا امتحان لیں</h3><p class="urt">اسی باب سے فوری سوالات</p><button class="pb" data-a="quiz" data-b="' + nb.id + '">آزمائش شروع کریں</button></div>'
+      : '<div class="pc c2"><span class="pi">' + I.star + '</span><h3 class="urt">ماشاء اللہ!</h3><p class="urt">آپ نے پورا متن یاد کر لیا — دہرائی جاری رکھیں۔</p><button class="pb" data-a="allquiz">جامع آزمائش</button></div>') +
+    '</div></div>';
 }
 function routeHtml() {
   let h = '<h2 class="sec-t">مسار التعلم</h2><p class="sec-d">ہر کتاب کے لیے پانچ مراحل: پڑھیں ← سمجھیں ← اصطلاحات ← یاد کریں ← آزمائیں۔ نیچے سے کسی بھی مرحلے پر براہِ راست جائیں۔</p><div class="route">';
@@ -362,31 +359,34 @@ function routeHtml() {
 }
 function home() {
   cur = 0; closeOverlays(); app.className = 'k0';
-  const totM = nK, totB = D.reduce((a, K) => a + K.babs.length, 0), totKh = D.reduce((a, K) => a + K.kh, 0), totL = allM.filter(m => isL(m.id)).length;
+  const totB = D.reduce((a, K) => a + K.babs.length, 0);
   let h = topHtml();
-  h += '<section class="hero"><div class="gutter"><div class="wrap"><div class="eyebrow">المجلد الأول · من الطهارة إلى الحج</div><h1>مختصر القدوري</h1><p class="sub">متن أبي الحسين القدوري (ت ٤٢٨ هـ) في الفقه الحنفي، مقسّمًا إلى أجزاء وأبواب ومسائل، ومعه أدوات الحفظ والمراجعة والاختبار.</p>' +
-    '<div class="chips"><span class="chip">' + ad(D.length) + ' كتب</span><span class="chip">' + ad(totB) + ' بابًا</span><span class="chip">' + ad(totM) + ' مسألة</span><span class="chip">' + ad(totKh) + ' مسألة فيها خلاف</span><span class="chip">أُتقنت ' + ad(totL) + '</span></div></div></div></section>';
-  h += '<div class="gutter"><div class="wrap">';
-  h += planHtml();
+  let cta = '<a class="cta p" href="#k1"><b>تعلم شروع کریں</b><small>کتاب الطہارۃ سے آغاز</small></a>';
   if (S.last && S.last.b) {
     const K = D[S.last.k - 1], B = K && K.babs.find(b => b.id === S.last.b);
-    if (B) h += '<a class="resume" href="#' + B.id + '"><div style="flex:1"><span>تابع من حيث توقفت</span><br><strong>' + T(K.title) + ' · ' + T(B.t) + '</strong></div><span>←</span></a>';
+    if (B) cta = '<a class="cta p" href="#' + B.id + '"><small>جہاں چھوڑا تھا وہیں سے جاری رکھیں</small><b>' + T(K.title) + ' · ' + T(B.t) + '</b></a>';
   }
-  h += routeHtml();
-  h += '<h2 class="sec-t">الكتب الخمسة</h2><div class="tiles">';
+  const stats = [[D.length, 'کتابیں'], [totB, 'ابواب'], [nK, 'مسائل'], [VOC.length, 'مفردات'], [QA.length, 'سوال جواب'], [MCQ.length, 'MCQs']];
+  h += '<section class="hero land"><div class="gutter"><div class="wrap hero-g"><div class="hero-t"><div class="eyebrow">الحیات علوم اسلامیہ · مطالعہ فقہ اسلامی</div><h1>مختصر القدوري</h1>' +
+    '<p class="sub">متن أبي الحسين القدوري (ت ٤٢٨ هـ) في الفقه الحنفي: عربی متن اعراب کے ساتھ، اردو ترجمہ، مفردات، سوال جواب اور MCQs — پڑھیں، سمجھیں، یاد کریں اور آزمائیں۔</p>' +
+    '<div class="ctas">' + cta + '<button class="cta s" data-a="search"><b>متن میں تلاش</b></button><button class="cta s" data-a="allquiz"><b>جامع آزمائش</b></button></div></div>' +
+    '<div class="hstats" aria-label="مواد کا خلاصہ">' + stats.map(x => '<div class="hs"><b>' + ad(x[0]) + '</b><span>' + x[1] + '</span></div>').join('') + '</div></div></div></section>';
+  h += '<div class="gutter"><div class="wrap">';
+  h += '<h2 class="sec-t">اپنی کتاب منتخب کریں</h2><div class="tiles">';
   D.forEach(K => {
     const l = learnedIn(K), pc = K.ms.length ? l / K.ms.length : 0;
-    h += '<a class="tile k' + K.n + '" href="#k' + K.n + '"><span class="no">الكتاب ' + ad(K.n) + ' · <span class="en">' + esc(META[K.n].en) + '</span></span><h3>' + T(K.title) + '</h3><p>' + T(META[K.n].d) + '</p>' +
-      '<div class="ft"><span>' + ad(K.parts.length) + ' أجزاء · ' + ad(K.babs.length) + ' أبواب · ' + ad(K.ms.length) + ' مسألة</span>' + ringSvg(pc) + '</div></a>';
+    h += '<a class="tile k' + K.n + '" href="#k' + K.n + '"><span class="no urt">کتاب ' + ad(K.n) + ' · <span class="en">' + esc(META[K.n].en) + '</span></span><h3>' + T(K.title) + '</h3><p class="urt">' + esc(META[K.n].du) + '</p>' +
+      '<div class="ft"><span class="urt">' + ad(K.parts.length) + ' حصے · ' + ad(K.babs.length) + ' ابواب · ' + ad(K.ms.length) + ' مسائل</span>' + ringSvg(pc) + '</div></a>';
   });
-  h += '</div><h2 class="sec-t">طريقة التعلم</h2><div class="steps">' +
-    '<div class="step"><span class="n">١</span><h4>افهم قبل أن تحفظ</h4><p>ابدأ ببطاقة «في هذا الباب» لترى الصورة كاملة، ثم اقرأ المسائل واحدة واحدة.</p></div>' +
-    '<div class="step"><span class="n">٢</span><h4>ميّز بالألوان</h4><p>الحكم له لون ثابت في كل الكتب، والأعداد بلون خاص، وكل إمام بلونه، فتتكوّن لديك خريطة ذهنية للمسألة.</p></div>' +
-    '<div class="step"><span class="n">٣</span><h4>استرجع ولا تكتفِ بالقراءة</h4><p>وضع الحفظ يخفي الأحكام والأعداد أولًا، لأن محاولة التذكر هي ما يثبّت المعلومة.</p></div>' +
-    '<div class="step"><span class="n">٤</span><h4>اختبر نفسك فورًا</h4><p>أسئلة تُولَّد من نص الباب: من القائل، وكم العدد، وما الحكم. والخطأ يعود للمراجعة تلقائيًا.</p></div>' +
-    '<div class="step"><span class="n">٥</span><h4>راجع على فترات متباعدة</h4><p>بعد يوم، ثم ثلاثة، ثم سبعة، ثم ستة عشر، ثم خمسة وثلاثين. وتُخلط الكتب في المراجعة لتتقوى الذاكرة.</p></div></div>' +
-    '<h2 class="sec-t">ألوان المتن</h2><div class="legend">' + Object.keys(IM).map(k => '<span class="lg"><span class="imc ' + k + '">' + IM[k][1] + '</span>' + IM[k][0] + '</span>').join('') + RK.map(c => '<span class="lg mt"><span class="r ' + c + '">' + RC[c].split(' / ')[0] + '</span><small>' + RC[c].split(' / ').slice(1).join(' · ') + '</small></span>').join('') + '<span class="lg mt"><span class="nm">عدد</span><small>الأعداد والنصب</small></span></div>' +
-    '<p class="note">نص المتن مأخوذ من نسخة «مختصر القدوري» في المكتبة الشاملة، وقد رُتّب هنا في أجزاء وأبواب ومسائل. صُحّحت الأخطاء الإملائية الظاهرة. التقسيم إلى أجزاء وبطاقات «في هذا الباب» والعناوين التي تحمل علامة «عنوان تنظيمي» وُضعت للتعلم وليست من أصل المتن. تلوين الأحكام آلي يعتمد على الألفاظ، فراجع المسألة نفسها قبل الاستدلال. العلامة (…) تدل على سقط ظاهر في تلك النسخة ويُراجع على المطبوع. تقدمك محفوظ في هذا المتصفح فقط.</p></div></div>';
+  h += '</div>';
+  h += routeHtml();
+  h += planHtml();
+  h += '<h2 class="sec-t">سیکھنے کا طریقہ</h2><div class="steps3">' +
+    '<div class="st3"><span class="n">۱</span><h4 class="urt">سمجھ کر پڑھیں</h4><p class="urt">پہلے «اس باب میں» کا خلاصہ دیکھیں، پھر مسائل ایک ایک کر کے پڑھیں۔ رنگوں سے حکم اور ائمہ کی رائے پہچانیں۔</p></div>' +
+    '<div class="st3"><span class="n">۲</span><h4 class="urt">خود یاد کریں</h4><p class="urt">«حفظ» موڈ میں احکام اور اعداد چھپ جاتے ہیں؛ خود یاد کرنے کی کوشش ہی معلومات کو پکا کرتی ہے۔</p></div>' +
+    '<div class="st3"><span class="n">۳</span><h4 class="urt">دہرائیں اور آزمائیں</h4><p class="urt">سوال جواب اور MCQs حل کریں؛ غلط جوابات خود بخود دہرائی میں آ جاتے ہیں۔</p></div></div>' +
+    '<h2 class="sec-t">متن کے رنگ</h2><div class="legend">' + Object.keys(IM).map(k => '<span class="lg"><span class="imc ' + k + '">' + IM[k][1] + '</span>' + IM[k][0] + '</span>').join('') + RK.map(c => '<span class="lg mt"><span class="r ' + c + '">' + RC[c].split(' / ')[0] + '</span><small>' + RC[c].split(' / ').slice(1).join(' · ') + '</small></span>').join('') + '<span class="lg mt"><span class="nm">عدد</span><small>الأعداد والنصب</small></span></div>' +
+    '<p class="note urt">عربی متن «مختصر القدوری» کے شاملہ لائبریری والے نسخے سے ہے؛ اجزاء، «اس باب میں» کارڈ اور تنظیمی عنوانات سیکھنے کی سہولت کے لیے شامل کیے گئے ہیں۔ احکام کی رنگ بندی خودکار ہے، دلیل لینے سے پہلے اصل مسئلہ دیکھ لیں۔ اعراب، اردو ترجمہ، مفردات، سوال جواب اور MCQs مصنوعی ذہانت کی مدد سے تیار ہوئے ہیں اور کسی مستند عالم سے نظرِ ثانی کے محتاج ہیں۔ آپ کی پیش رفت صرف اسی براؤزر میں محفوظ رہتی ہے۔</p></div></div>';
   app.innerHTML = h; jump(0); document.title = 'الحیات علوم اسلامیہ (مطالعہ فقہ اسلامی: القدوری)';
 }
 
@@ -394,11 +394,12 @@ function kitab(n, anchor) {
   vq = null; const K = D[n - 1]; cur = n; closeOverlays(); app.className = 'k' + n; revealed = false;
   const l = learnedIn(K), pc = K.ms.length ? Math.round(l / K.ms.length * 100) : 0;
   let h = topHtml();
-  h += '<section class="hero kit"><div class="gutter"><div class="wrap">' + railHtml(n) + '<div class="eyebrow">الكتاب ' + ad(n) + ' من ' + ad(D.length) + ' · <span class="en">' + esc(META[n].en) + '</span></div><h1>' + T(K.title) + '</h1><p class="sub">' + T(META[n].d) + '</p>' +
-    '<div class="chips"><span class="chip">' + ad(K.parts.length) + ' أجزاء</span><span class="chip">' + ad(K.babs.length) + ' أبواب</span><span class="chip">' + ad(K.ms.length) + ' مسألة</span><span class="chip">' + ad(K.kh) + ' فيها خلاف</span><span class="chip" id="prtxt">أتقنت ' + ad(l) + ' من ' + ad(K.ms.length) + '</span></div><div class="bar"><b id="prbar" style="width:' + pc + '%"></b></div></div></div></section>';
+  h += '<section class="hero kit"><div class="gutter"><div class="wrap">' + railHtml(n) + '<div class="eyebrow urt">کتاب ' + ad(n) + ' از ' + ad(D.length) + ' · <span class="en">' + esc(META[n].en) + '</span></div><h1>' + T(K.title) + '</h1><p class="sub urt">' + esc(META[n].du) + '</p>' +
+    '<div class="chips urt"><span class="chip">' + ad(K.parts.length) + ' حصے</span><span class="chip">' + ad(K.babs.length) + ' ابواب</span><span class="chip">' + ad(K.ms.length) + ' مسائل</span><span class="chip">' + ad(K.kh) + ' اختلافی</span><span class="chip" id="prtxt">یاد: ' + ad(l) + ' / ' + ad(K.ms.length) + '</span></div><div class="bar"><b id="prbar" style="width:' + pc + '%"></b></div></div></div></section>';
   h += '<div class="gutter"><div class="wrap">' + tabsHtml(K) + '</div></div>';
   h += '<div class="gutter"><div class="wrap" id="kmapw">' + (S.view === 'ar' ? kmapHtml(K) : '') + '</div></div>';
   h += '<div class="gutter"><div class="wrap cols"><aside class="side" id="side">' + tocHtml(K) + '</aside><main id="babs" style="min-width:0">' + mainHtml(K) + '</main></div></div>' + dockHtml();
+  if (S.view === 'ar') { S.last = { k: n, b: K.babs[curBab(K)].id }; save(); }
   app.innerHTML = h; app.dataset.v = S.view; document.title = strip(K.title) + ' · الحیات علوم اسلامیہ';
   observe(); goAnchor(anchor, true);
 }
@@ -540,6 +541,30 @@ function vqHtml(K) {
   if (vq.sel !== null) h += '<div class="mfb ' + (opts[vq.sel] === v.u ? 'g' : 'b') + '"><span class="urt">' + esc(v.n) + '</span></div><div class="qtools"><button class="mini go" data-a="vnext">' + (vq.i + 1 >= L.length ? 'نتیجہ دیکھیں' : 'اگلا ←') + '</button></div>';
   return h + '<div class="qtools"><button class="mini" data-a="vend">ٹیسٹ ختم کریں</button></div></div>';
 }
+const vexC = {};
+function vEx(v) {
+  const k = vk(v); if (k in vexC) return vexC[k];
+  const base = norm(strip(v.t).split(' / ')[0]).trim();
+  const terms = [base]; if (base.startsWith('ال') && base.length > 4) terms.push(base.slice(2));
+  base.split(/[\s\/،()]+/).filter(w => w.length >= 4).sort((a, b) => b.length - a.length).forEach(w => { terms.push(w); if (w.startsWith('ال') && w.length > 5) terms.push(w.slice(2)); });
+  let res = null;
+  const pool = allM.filter(m => m.k === v.k).concat(allM.filter(m => m.k !== v.k));
+  outer: for (const t of terms) {
+    if (t.length < 3) continue;
+    for (const m of pool) {
+      const { ns, idx } = nmap(m.text), i = ns.indexOf(t);
+      if (i < 0) continue;
+      const a = idx[i], z = idx[Math.min(i + t.length, idx.length) - 1] + 1;
+      let from = Math.max(0, a - 70), to = Math.min(m.text.length, z + 80);
+      if (from > 0) { const sp = m.text.indexOf(' ', from); if (sp > -1 && sp < a) from = sp + 1; }
+      if (to < m.text.length) { const sp = m.text.lastIndexOf(' ', to); if (sp > z) to = sp; }
+      res = { m, pre: m.text.slice(from, a), mid: m.text.slice(a, z), post: m.text.slice(z, to), l: from > 0, r: to < m.text.length };
+      break outer;
+    }
+  }
+  return (vexC[k] = res);
+}
+const clean = t => t.replace(/[\[\]]/g, '');
 function voHtml(K) {
   const all = VOC.filter(v => v.k === K.n), f = S.vf;
   const mastered = all.filter(v => S.vm[vk(v)]).length, pc = all.length ? Math.round(mastered / all.length * 100) : 0;
@@ -550,9 +575,14 @@ function voHtml(K) {
   const fl = [['all', 'سب', all.length], ['new', 'باقی', all.length - mastered]].concat(['t', 'a', 'o', 'q'].map(c => { const e = Object.values(VC).find(x => x[0] === c); return [c, e[1], all.filter(v => VC[v.c][0] === c).length]; })).filter(x => x[2]);
   h += '<div class="vfil" role="group" aria-label="تصفية">' + fl.map(x => '<button class="vfb c' + x[0] + '" data-a="vf" data-v="' + x[0] + '" aria-pressed="' + (f === x[0]) + '">' + x[1] + ' <b>' + ad(x[2]) + '</b></button>').join('') + '</div>';
   const list = all.filter(v => f === 'all' || (f === 'new' ? !S.vm[vk(v)] : VC[v.c][0] === f));
-  h += '<div class="vgrid">' + list.map(v => {
-    const c = VC[v.c], k = vk(v), d = S.vm[k];
-    return '<article class="vc c' + c[0] + (d ? ' done' : '') + '"><div class="vh"><span class="vcat">' + c[1] + '</span>' + (d ? '<span class="vok">✓</span>' : '') + '</div><h3 class="vt-ar">' + esc(sd(v.t)) + '</h3><p class="vu">' + esc(v.u) + '</p><div class="vn"><i>★</i><span>' + esc(v.n) + '</span></div><div class="vbt"><button class="vgo" data-a="vgo" data-q="' + esc(strip(v.t).split(' / ')[0]) + '">المتن ←</button><button class="vgo vdo" data-a="vdone" data-key="' + k + '">' + (d ? 'دوبارہ پڑھوں' : 'یاد ہے ✓') + '</button></div></article>';
+  h += '<div class="vgrid">' + list.map((v, ix) => {
+    const c = VC[v.c], k = vk(v), d = S.vm[k], ex = vEx(v);
+    return '<article class="vc c' + c[0] + (d ? ' done' : '') + '"><div class="vh"><span class="vcat">' + c[1] + '</span><span class="vno">' + ad(ix + 1) + '</span>' + (d ? '<span class="vok">✓</span>' : '') + '</div>' +
+      '<div class="vb ar"><i>عربی لفظ</i><h3 class="vt-ar">' + esc(sd(v.t)) + '</h3></div>' +
+      '<div class="vb ur"><i>اردو مفہوم</i><p class="vu">' + esc(v.u) + '</p></div>' +
+      '<div class="vb no"><i>یاد رکھیں</i><p class="vnote">' + esc(v.n) + '</p></div>' +
+      (ex ? '<div class="vb ex"><i>متن سے مثال</i><p class="vex">' + (ex.l ? '… ' : '') + esc(sd(clean(ex.pre))) + '<mark>' + esc(sd(clean(ex.mid))) + '</mark>' + esc(sd(clean(ex.post))) + (ex.r ? ' …' : '') + '</p><a class="vxl" href="#k' + ex.m.k + '-m' + ex.m.no + '">مسئلہ ' + ad(ex.m.no) + ' متن میں ←</a></div>' : '') +
+      '<div class="vbt">' + (ex ? '' : '<button class="vgo" data-a="vgo" data-q="' + esc(strip(v.t).split(' / ')[0]) + '">متن میں تلاش ←</button>') + '<button class="vgo vdo" data-a="vdone" data-key="' + k + '">' + (d ? 'دوبارہ پڑھوں' : 'یاد ہے ✓') + '</button></div></article>';
   }).join('') + '</div>';
   return h;
 }
@@ -582,16 +612,31 @@ function qaHtml(K) {
   return h;
 }
 function shufS(arr, seed) { const r = rng(seed), a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function bestQA(r) {
+  const rows = QA.filter(x => x.k === r.k && x.n === r.n); if (!rows.length) return null; if (rows.length === 1) return rows[0];
+  const w = t => new Set(t.split(/[\s،۔؟:؛()]+/).filter(x => x.length > 2)), base = w(r.q + ' ' + r.o[0]);
+  let best = rows[0], bs = -1;
+  rows.forEach(x => { const xs = w(x.q + ' ' + x.a); let sc = 0; base.forEach(t => { if (xs.has(t)) sc++; }); if (sc > bs) { bs = sc; best = x; } });
+  return best;
+}
+function mcExplain(r, v, key) {
+  const m = byId['k' + r.k + '-m' + r.n], qa = bestQA(r);
+  let h = '<div class="mfb ' + (v ? 'g' : 'b') + '"><div class="mv"><span class="mvi">' + (v ? '✓' : '✗') + '</span><b class="urt">' + (v ? 'ماشاء اللہ! آپ کا جواب درست ہے' : 'آپ کا جواب درست نہیں') + '</b></div>';
+  if (!v) h += '<p class="mrt urt"><i>درست جواب:</i> ' + esc(r.o[0]) + '</p>';
+  if (qa) h += '<div class="mex"><i>وضاحت</i><div class="ut">' + urFmt(qa.a) + '</div></div>';
+  if (m) h += '<details class="mfull"><summary>مکمل مسئلہ اردو میں</summary><div class="ut">' + urFmt(m.ur) + '</div></details><details class="mfull"><summary>عربی متن</summary><div class="mt">' + esc(sd(m.text).replace(/[\[\]]/g, '')) + '</div></details>';
+  return h + '<div class="mact"><a class="qlink" href="#k' + r.k + '-m' + r.n + '">مسئلہ ' + ad(r.n) + ' متن میں ←</a><button class="mini go" data-a="mnext" data-key="' + key + '">اگلا سوال ↓</button></div></div>';
+}
 function mcCard(r, idx) {
   const key = mqKey(r), v = S.mq[key], ord = shufS([0, 1, 2, 3], hash(key));
   let h = '<article class="mcq' + (v === undefined ? '' : v ? ' ok' : ' no') + '" id="mc-' + key + '"><div class="mcq-h"><span class="qn">' + ad(idx) + '</span><p class="qq urt">' + esc(r.q) + '</p></div><div class="mopts">';
   ord.forEach((oi, pos) => {
     const chosen = v !== undefined && S.mqc && S.mqc[key] === oi;
-    let cls = 'mo'; if (v !== undefined) { if (oi === 0) cls += ' right'; else if (chosen) cls += ' wrong'; else cls += ' dim'; }
-    h += '<button class="' + cls + '" data-a="mcq" data-key="' + key + '" data-o="' + oi + '"' + (v !== undefined ? ' disabled' : '') + '><i>' + ['ا', 'ب', 'ج', 'د'][pos] + '</i><span class="urt">' + esc(r.o[oi]) + '</span></button>';
+    let cls = 'mo', tag = ''; if (v !== undefined) { if (oi === 0) { cls += ' right'; tag = '<em class="mtag">✓ درست جواب</em>'; } else if (chosen) { cls += ' wrong'; tag = '<em class="mtag">✗ آپ کا جواب</em>'; } else cls += ' dim'; }
+    h += '<button class="' + cls + '" data-a="mcq" data-key="' + key + '" data-o="' + oi + '"' + (v !== undefined ? ' disabled' : '') + '><i>' + ['ا', 'ب', 'ج', 'د'][pos] + '</i><span class="urt">' + esc(r.o[oi]) + '</span>' + tag + '</button>';
   });
   h += '</div>';
-  if (v !== undefined) h += '<div class="mfb ' + (v ? 'g' : 'b') + '"><b class="urt">' + (v ? 'ماشاء اللہ! درست جواب' : 'درست جواب اوپر سبز رنگ میں ہے') + '</b><a class="qlink" href="#k' + r.k + '-m' + r.n + '">مسئلہ ' + ad(r.n) + ' ←</a></div>';
+  if (v !== undefined) h += mcExplain(r, v, key);
   return h + '</article>';
 }
 function mcScore(K) {
@@ -645,7 +690,7 @@ function refresh() {
 function updProgress() {
   const K = D[cur - 1]; if (!K) return;
   const l = learnedIn(K), pc = K.ms.length ? Math.round(l / K.ms.length * 100) : 0;
-  const t = $('#prtxt'), b = $('#prbar'); if (t) t.textContent = 'أتقنت ' + ad(l) + ' من ' + ad(K.ms.length); if (b) b.style.width = pc + '%';
+  const t = $('#prtxt'), b = $('#prbar'); if (t) t.textContent = 'یاد: ' + ad(l) + ' / ' + ad(K.ms.length); if (b) b.style.width = pc + '%';
   const kw = $('#kmapw'); if (kw) kw.innerHTML = kmapHtml(K);
   K.babs.forEach(B => { const c = document.querySelector('#' + B.id + ' .cnt'); if (c) c.textContent = ad(B.ms.filter(m => isL(m.id)).length) + ' / ' + ad(B.ms.length) + ' أُتقنت'; });
   K.parts.forEach(P => { const el = document.getElementById(P.id); if (el) el.outerHTML = partHtml(K, P); });
@@ -658,6 +703,32 @@ function sheet(inner) {
   sc.addEventListener('click', e => { if (e.target === sc) closeOverlays(); });
   app.appendChild(sc); return sc;
 }
+const TABN = [['ar', 'المتن'], ['ur', 'اردو'], ['vo', 'مفردات'], ['qa', 'سوال جواب'], ['mc', 'MCQs']];
+function menuHtml() {
+  let h = '<div class="dr-h"><b>مینیو</b><button class="dr-x" data-a="mclose" aria-label="بند کریں">✕</button></div><div data-close>';
+  h += '<a class="dr-home' + (cur === 0 ? ' on' : '') + '" href="#home"><span>🏠</span> مرکزی صفحہ</a>';
+  h += '</div><div class="dr-q">' +
+    '<button data-a="search"><span>🔍</span>متن میں تلاش</button><button data-a="rev"><span>🔁</span>دہرائی</button>' +
+    '<button data-a="allquiz"><span>❓</span>جامع آزمائش</button><button data-a="mset"><span>⚙</span>ترتیبات</button>' +
+    '<button data-a="theme"><span>◐</span>روشن / تاریک</button></div>';
+  h += '<h4 class="dr-t">کتابیں اور موضوعات</h4><div data-close>';
+  D.forEach(K => {
+    const l = learnedIn(K), pc = K.ms.length ? Math.round(l / K.ms.length * 100) : 0, cb = curBab(K);
+    h += '<details class="mk k' + K.n + '"' + (cur === K.n ? ' open' : '') + '><summary><i></i><span>' + T(K.title) + '</span><small>' + ad(pc) + '٪</small></summary>';
+    h += '<div class="mk-tabs">' + TABN.map(t => '<a href="#k' + K.n + '-v' + t[0] + '"' + (cur === K.n && S.view === t[0] ? ' class="on"' : '') + '>' + t[1] + '</a>').join('') + '</div>';
+    h += '<div class="mk-babs">' + K.babs.map(B => '<a href="#' + B.id + '"' + (cur === K.n && cb === B.i ? ' class="on"' : '') + '><b>' + ad(B.i + 1) + '</b><span>' + (S.view === 'ar' || S.view === 'vo' || cur !== K.n ? T(B.t) : esc(B.tu)) + '</span></a>').join('') + '</div></details>';
+  });
+  return h + '</div>';
+}
+function openMenu() {
+  if ($('.scrim.dr')) { closeOverlays(); return; }
+  closeOverlays();
+  const sc = document.createElement('div'); sc.className = 'scrim dr';
+  sc.innerHTML = '<aside class="drawer" role="dialog" aria-modal="true" aria-label="مینیو">' + menuHtml() + '</aside>';
+  sc.addEventListener('click', e => { if (e.target === sc) closeOverlays(); });
+  app.appendChild(sc);
+  const on = sc.querySelector('.mk[open] .mk-babs a.on'); if (on) { const bx = on.parentElement; bx.scrollTop = Math.max(0, on.offsetTop - bx.clientHeight / 2); }
+}
 function openToc() { sheet('<div data-close>' + tocHtml(D[cur - 1]) + '</div>'); }
 function openSettings() {
   const ex = $('.pop'); if (ex) { ex.remove(); return; }
@@ -667,7 +738,7 @@ function openSettings() {
     '<div class="row"><span>التشكيل (الإعراب)</span><button class="sw" data-a="tk" aria-pressed="' + S.tk + '" aria-label="إظهار التشكيل"></button></div>' +
     '<div class="row"><span>تلوين الأحكام والأعداد</span><button class="sw" data-a="rc" aria-pressed="' + S.rc + '" aria-label="تلوين الأحكام والأعداد"></button></div>' +
     '<div class="row"><span>مسائل الخلاف فقط</span><button class="sw" data-a="kh" aria-pressed="' + S.khilaf + '" aria-label="مسائل الخلاف فقط"></button></div>' +
-    '<div class="row"><span>خط الأردية</span><div class="seg">' + [['noto', 'نوتو نستعلیق'], ['jn', 'جمیل نوری']].map(x => '<button data-a="uf" data-v="' + x[0] + '" aria-pressed="' + (S.uf === x[0]) + '">' + x[1] + '</button>').join('') + '</div></div>' +
+    '<div class="row"><span>خط الأردية</span><div class="seg">' + [['jn', 'جمیل نوری'], ['noto', 'نوتو نستعلیق']].map(x => '<button data-a="uf" data-v="' + x[0] + '" aria-pressed="' + (S.uf === x[0]) + '">' + x[1] + '</button>').join('') + '</div></div>' +
     '<div class="row"><span>المظهر</span><div class="seg">' + [['auto', 'تلقائي'], ['light', 'فاتح'], ['dark', 'داكن']].map(x => '<button data-a="th" data-v="' + x[0] + '" aria-pressed="' + (S.theme === x[0]) + '">' + x[1] + '</button>').join('') + '</div></div>' +
     '<div class="row"><span>مسح التقدم والعلامات</span><button class="mini" style="border:1.5px solid var(--line);padding:4px 12px;border-radius:99px" data-a="reset">مسح</button></div>';
   app.appendChild(p);
@@ -884,7 +955,7 @@ app.addEventListener('click', e => {
       S.mq[key] = o === 0 ? 1 : 0; (S.mqc = S.mqc || {})[key] = o; save();
       const r = MCQ.find(x => mqKey(x) === key), card = document.getElementById('mc-' + key);
       if (card && r) { card.outerHTML = mcCard(r, +(card.querySelector('.qn').textContent.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))) || 0); }
-      const K = D[cur - 1], sc = $('#mcs'); if (sc) sc.outerHTML = mcScore(K); updTabs(); break;
+      const K = D[cur - 1], sc = $('#mcs'); if (sc) sc.outerHTML = mcScore(K); updTabs(); { const nc = document.getElementById('mc-' + key), fb = nc && nc.querySelector('.mfb'); if (fb) { const bt = fb.getBoundingClientRect().bottom; if (bt > innerHeight - 90) window.scrollBy({ top: bt - innerHeight + 110, behavior: 'smooth' }); } } break;
     }
     case 'vdone': { const k = b.dataset.key; if (S.vm[k]) delete S.vm[k]; else S.vm[k] = 1; save(); refresh(); updTabs(); break; }
     case 'vmreset': if (b.dataset.sure) { VOC.filter(x => x.k === D[cur - 1].n).forEach(x => delete S.vm[vk(x)]); save(); refresh(); updTabs(); } else { b.dataset.sure = '1'; b.textContent = 'تأكيد؟ دوبارہ دبائیں'; } break;
@@ -893,14 +964,23 @@ app.addEventListener('click', e => {
     case 'vnext': vq.i++; vq.sel = null; refresh(); updTabs(); break;
     case 'vend': vq = null; refresh(); updTabs(); break;
     case 'bab': { const K = D[cur - 1]; showPage(b.dataset.i !== undefined ? +b.dataset.i : flatIdx(K) + (+b.dataset.d)); break; }
+    case 'mnext': {
+      const cur0 = document.getElementById('mc-' + b.dataset.key); let nx = cur0 && cur0.nextElementSibling;
+      while (nx && !nx.classList.contains('mcq')) nx = nx.nextElementSibling;
+      const tgt = nx || $('.bab-nav') || $('.nextstep'); if (tgt) tgt.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      break;
+    }
     case 'vf': S.vf = v; save(); refresh(); break;
     case 'vgo': openSearch(b.dataset.q); break;
     case 'mode': S.mode = v; revealed = false; save(); refresh(); break;
     case 'reveal': revealed = !revealed; refresh(); break;
     case 'khoff': S.khilaf = false; save(); refresh(); break;
     case 'toc': openToc(); break;
+    case 'menu': openMenu(); break;
+    case 'mclose': closeOverlays(); break;
+    case 'mset': closeOverlays(); openSettings(); break;
     case 'set': openSettings(); break;
-    case 'uf': S.uf = v; applyUf(); save(); $$('.pop [data-a="uf"]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === S.uf))); break;
+    case 'uf': S.uf = v; S.ufSet = 1; applyUf(); save(); $$('.pop [data-a="uf"]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === S.uf))); break;
     case 'fs': S.fs = Math.max(0, Math.min(FS.length - 1, S.fs + (+v))); applyFs(); save(); break;
     case 'lvl': S.lvl = +v; save(); $$('.pop [data-a="lvl"]').forEach(x => x.setAttribute('aria-pressed', String(+x.dataset.v === S.lvl))); if (S.mode === 'mem') refresh(); break;
     case 'tk': { S.tk = !S.tk; save(); const y = window.scrollY; cur ? kitab(cur) : home(); jump(y); openSettings(); break; }
@@ -954,6 +1034,7 @@ function route() {
   else kitab(n, m[2] ? 'k' + n + '-' + m[2] : null);
 }
 window.addEventListener('hashchange', route);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('.scrim')) closeOverlays(); });
 document.documentElement.lang = 'ar'; document.documentElement.dir = 'rtl';
 applyTheme(); applyFs(); applyUf(); route();
 })();
