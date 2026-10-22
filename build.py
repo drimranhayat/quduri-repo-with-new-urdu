@@ -36,15 +36,35 @@ W = {
     4: (('#6d3fc0', '#6d3fc0', '#e9e1f8', '#38206b', '#f4f0fb'), ('#b69cf5', '#5a35a0', '#231a3a', '#17102b', '#110d1c')),
     5: (('#b0173f', '#b0173f', '#f9dfe6', '#5e0b22', '#fbeff2'), ('#fb7f9a', '#8f1433', '#301018', '#240a12', '#170a0f')),
 }
-def kv(t):
-    return f'--k:{t[0]};--k-h:{t[1]};--k-soft:{t[2]};--k-deep:{t[3]};--k-bg:{t[4]};'
+
+def _lum(h):
+    r, g, bl = [int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    f = lambda v: v / 12.92 if v <= .03928 else ((v + .055) / 1.055) ** 2.4
+    return .2126 * f(r) + .7152 * f(g) + .0722 * f(bl)
+def _cr(a, c):
+    la, lc = _lum(a), _lum(c); return (max(la, lc) + .05) / (min(la, lc) + .05)
+def _dk(h, t, against):
+    r, g, bl = [int(h[i:i + 2], 16) for i in (1, 3, 5)]
+    for _ in range(90):
+        c = '#%02x%02x%02x' % (r, g, bl)
+        if all(_cr(c, a) >= t for a in against): return c
+        r, g, bl = int(r * .97), int(g * .97), int(bl * .97)
+    return c
+def _fix(world):
+    (lk, lh, ls, ld, lb), (dk, dh, ds, dd, db) = world
+    lk = _dk(lk, 5.6, ['#ffffff', ls, lb]); lh = _dk(lh, 6.8, ['#ffffff'])
+    dh = _dk(dh, 6.8, ['#ffffff'])
+    return ((lk, lh, ls, ld, lb), (dk, dh, ds, dd, db))
+W = {i: _fix(w) for i, w in W.items()}
+def kv(t, dark=False):
+    return f'--k:{t[0]};--k-h:{t[1]};--k-soft:{t[2]};--k-deep:{t[3]};--k-bg:{t[4]};--k-ink:{t[0] if dark else t[3]};--on-k:{"#0b141b" if dark else "#ffffff"};'
 light = '\n'.join(f'.k{i}{{{kv(W[i][0])}}}' for i in W)
-dmedia = '\n  '.join(f':root:not([data-theme="light"]) .k{i}{{{kv(W[i][1])}}}' for i in W)
-dattr = '\n'.join(f':root[data-theme="dark"] .k{i}{{{kv(W[i][1])}}}' for i in W)
+dmedia = '\n  '.join(f':root:not([data-theme="light"]) .k{i}{{{kv(W[i][1], True)}}}' for i in W)
+dattr = '\n'.join(f':root[data-theme="dark"] .k{i}{{{kv(W[i][1], True)}}}' for i in W)
 dark = ('--bg:#0d1217;--surface:#151c23;--surface-2:#1b242d;--ink:#e6ecf1;--muted:#9aa8b5;--line:#27323c;'
         '--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);--ay:#f0c46a;--ay-bg:#2b2410;--ha:#b7c5d3;--ha-bg:#1f2a34;'
-        '--im-h:#8db0ff;--im-y:#62d08e;--im-m:#f3ae52;--im-z:#c7a0ff;'
-        '--r-must:#ff8a80;--r-sun:#5fd08c;--r-ok:#7db8f5;--r-mak:#f5b25a;--r-bad:#e48bd0;--r-num:#55d0e0;')
+        '--im-h:#a3c0ff;--im-y:#62d08e;--im-m:#f3ae52;--im-z:#c7a0ff;'
+        '--vc-a:#4fd6a0;--vc-o:#f5a742;--vc-q:#b69cf5;--r-must:#ff8a80;--r-sun:#5fd08c;--r-ok:#7db8f5;--r-mak:#f5b25a;--r-bad:#e48bd0;--r-num:#55d0e0;')
 
 
 PATS = {
@@ -87,7 +107,7 @@ print('QA', len(QAJSON), 'MCQ', len(MCJSON))
 
 fonts = ('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700'
          '&family=Noto+Nastaliq+Urdu:wght@400;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap')
-frag = (f'<title>مختصر القدوري</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n'
+frag = (f'<title>الحیات علوم اسلامیہ (مطالعہ فقہ اسلامی: القدوری)</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n'
         f'<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
         f'<link rel="stylesheet" href="{fonts}">\n<style>\n{css}\n</style>\n'
         f'<div id="app" class="k0" dir="rtl" lang="ar"></div>\n<script>\n{js}\n</script>\n')

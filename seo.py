@@ -3,8 +3,8 @@ Called from build.py after the app is built. Set SITE below if the URL changes."
 import html, json, datetime, pathlib
 
 SITE = 'https://drimranhayat.github.io/quduri-repo/'
-NAME = 'مختصر القدوري'
-DESC = ('مختصر القدوري (کتاب الطہارۃ، الصلاۃ، الزکاۃ، الصوم، الحج) مکمل عربی متن اعراب کے ساتھ، اردو ترجمہ، مفردات، '
+NAME = 'الحیات علوم اسلامیہ (مطالعہ فقہ اسلامی: القدوری)'
+DESC = ('الحیات علوم اسلامیہ — مطالعہ فقہ اسلامی: مختصر القدوري (کتاب الطہارۃ، الصلاۃ، الزکاۃ، الصوم، الحج) مکمل عربی متن اعراب کے ساتھ، اردو ترجمہ، مفردات، '
         'سوال جواب اور MCQs — فقہ حنفی سیکھنے کے لیے۔ Mukhtasar al-Quduri Arabic text with tashkeel, Urdu translation, '
         'vocabulary, Q&A and quizzes — Hanafi fiqh.')
 KEYWORDS = ('مختصر القدوری, القدوری, فقہ حنفی, کتاب الطہارۃ, کتاب الصلاۃ, کتاب الزکاۃ, کتاب الصوم, کتاب الحج, اردو ترجمہ, '
@@ -41,10 +41,10 @@ def run(root, kitabs, strip):
         '<text x="48" y="64" font-size="52" text-anchor="middle" fill="#fff" font-family="serif">ق</text></svg>', encoding='utf-8')
     (docs / 'og.svg').write_text(
         '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><rect width="1200" height="630" fill="#0b4a6f"/>'
-        '<text x="600" y="320" font-size="120" text-anchor="middle" fill="#fff" font-family="serif">مختصر القدوري</text>'
-        '<text x="600" y="420" font-size="44" text-anchor="middle" fill="#bfe3f5" font-family="sans-serif">Arabic · Urdu · Vocabulary · Q&amp;A · MCQs</text></svg>', encoding='utf-8')
+        '<text x="600" y="320" font-size="120" text-anchor="middle" fill="#fff" font-family="serif">الحیات علوم اسلامیہ</text>'
+        '<text x="600" y="390" font-size="54" text-anchor="middle" fill="#fff" font-family="serif">مطالعہ فقہ اسلامی: القدوری</text><text x="600" y="480" font-size="40" text-anchor="middle" fill="#bfe3f5" font-family="sans-serif">Arabic · Urdu · Vocabulary · Q&amp;A · MCQs</text></svg>', encoding='utf-8')
     (docs / 'manifest.webmanifest').write_text(json.dumps({
-        'name': NAME, 'short_name': 'القدوري', 'lang': 'ur', 'dir': 'rtl', 'start_url': './', 'display': 'standalone',
+        'name': NAME, 'short_name': 'الحیات', 'lang': 'ur', 'dir': 'rtl', 'start_url': './', 'display': 'standalone',
         'background_color': '#0b4a6f', 'theme_color': '#0b4a6f',
         'icons': [{'src': 'icon.svg', 'sizes': 'any', 'type': 'image/svg+xml', 'purpose': 'any maskable'}]},
         ensure_ascii=False, indent=1), encoding='utf-8')

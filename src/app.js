@@ -35,7 +35,7 @@ const META = [
 ];
 
 /* ---------- state ---------- */
-let S = { view: 'ar', vf: 'all', mq: {}, mf: 'all', vm: {}, uf: 'noto', tk: true, srs: {}, bm: {}, fs: 1, mode: 'read', lvl: 1, theme: 'auto', khilaf: false, last: null, rc: true, day: { d: 0, n: 0 }, st: { last: 0, n: 0 } };
+let S = { view: 'ar', vf: 'all', mq: {}, mf: 'all', cb: {}, cp: {}, vm: {}, uf: 'noto', tk: true, srs: {}, bm: {}, fs: 1, mode: 'read', lvl: 1, theme: 'auto', khilaf: false, last: null, rc: true, day: { d: 0, n: 0 }, st: { last: 0, n: 0 } };
 try { const r = localStorage.getItem(KEY); if (r) Object.assign(S, JSON.parse(r)); } catch (e) {}
 const sd = s => S.tk ? s : strip(s);
 const T = s => esc(sd(s));
@@ -151,9 +151,22 @@ D.forEach((K, ki) => {
         m.t.forEach(x => { if (x.r && !x.rp) B.rc[x.r]++; if (x.n) B.rc.n++; });
       } else if (it[0] === 'f') { it[2] = B.id + '-f' + B.fs.length; B.fs.push({ id: it[2], t: it[1] }); }
     });
+    B.pages = []; {
+      let st = 0, cnt = 0;
+      B.items.forEach((it, x) => {
+        const pv = B.items[x - 1];
+        if (x > st && ((it[0] === 'f' && cnt >= 4) || (it[0] === 'm' && cnt >= 8 && pv && pv[0] === 'm'))) { B.pages.push([st, x]); st = x; cnt = 0; }
+        if (it[0] === 'm') cnt++;
+      });
+      B.pages.push([st, B.items.length]);
+      const cm = r => B.items.slice(r[0], r[1]).filter(i => i[0] === 'm').length, L = B.pages.length;
+      if (L > 1 && cm(B.pages[L - 1]) < 2) { const last = B.pages.pop(); B.pages[L - 2][1] = last[1]; }
+    }
+    B.fpi = {}; B.pages.forEach((r, pi) => { for (let x = r[0]; x < r[1]; x++) { const it = B.items[x]; if (it[0] === 'm') it[2].pi = pi; else if (it[0] === 'f') B.fpi[it[2]] = pi; } });
   });
   K.parts = pl.parts.map((p, pi) => ({ id: 'k' + K.n + '-p' + pi, i: pi, t: p.t, d: p.d, bs: p.b.map(i => K.babs[i]) }));
   K.parts.forEach(p => p.bs.forEach(B => { B.part = p; }));
+  K.flat = []; K.babs.forEach(B => B.pages.forEach((r, pi) => K.flat.push([B.i, pi])));
   K.kh = K.ms.filter(m => m.khilaf).length;
   nK += K.ms.length;
 });
@@ -242,23 +255,17 @@ function ovHtml(B) {
     '<div class="ovm"><div class="rcs">' + rcChips(B) + '</div><div class="ova"><span class="cnt">' + ad(l) + ' / ' + ad(B.ms.length) + ' أُتقنت</span>' +
     '<button class="mini" data-a="babcards" data-b="' + B.id + '">بطاقات الباب</button><button class="mini fill" data-a="quiz" data-b="' + B.id + '">اختبر نفسك</button></div></div></div>';
 }
-function babHtml(K, B, mode, filt) {
+function babHtml(K, B, mode, filt, pi) {
   if (filt && !B.ms.some(m => m.khilaf)) return '';
   let h = '<section class="bab" id="' + B.id + '"><div class="bab-h"><span class="bno">' + ad(B.i + 1) + '</span><h2>' + T(B.t) + '</h2>' + (B.ed ? '<span class="tag">عنوان تنظيمي</span>' : '') + '<span class="meta">' + ad(B.ms.length) + ' مسألة</span><span class="sp"></span><button class="mini" data-a="babok" data-b="' + B.id + '">أتقنت الباب</button></div>';
-  if (!filt) h += ovHtml(B);
-  for (const it of B.items) {
+  if (!filt && !(pi > 0)) h += ovHtml(B);
+  const rg = filt ? [0, B.items.length] : B.pages[pi || 0];
+  for (const it of B.items.slice(rg[0], rg[1])) {
     if (it[0] === 'm') { if (!filt || it[2].khilaf) h += mHtml(it[2], mode); }
     else if (filt) continue;
     else if (it[0] === 'f') h += '<h3 class="fasl" id="' + it[2] + '">' + T(it[1]) + '</h3>';
     else if (it[0] === 'l') h += '<div class="lbl">' + T(it[1]) + '</div>';
     else if (it[0] === 'q') h += '<div class="ayah-q">' + T(it[1]) + '</div>';
-  }
-  const pv = K.babs[B.i - 1], nx = K.babs[B.i + 1];
-  if (!filt) {
-    h += '<nav class="bab-nav" aria-label="التنقل بين الأبواب">';
-    h += pv ? '<a class="pv" href="#' + pv.id + '"><small>السابق</small><b>' + T(pv.t) + '</b></a>' : '<span style="flex:1"></span>';
-    h += nx ? '<a class="nx" href="#' + nx.id + '"><small>التالي</small><b>' + T(nx.t) + '</b></a>' : '<span style="flex:1"></span>';
-    h += '</nav>';
   }
   return h + '</section>';
 }
@@ -276,22 +283,26 @@ function babsHtml(K) {
   if (mode === 'mem') h += '<div class="mode-hint"><b>وضع الحفظ</b><span>تُخفى الأحكام والأعداد أولًا لأنها موضع الاسترجاع. اضغط الفراغ لتظهر الكلمة.</span><button data-a="reveal">' + (revealed ? 'أعد الإخفاء' : 'أظهر الكل') + '</button></div>';
   if (filt) h += '<div class="mode-hint"><b>مسائل الخلاف فقط</b><span>' + ad(K.kh) + ' مسألة فيها قول لأحد الأئمة</span><button data-a="khoff">عرض الكل</button></div>';
   let body = '';
-  K.parts.forEach(P => {
+  if (!filt) {
+    const only = K.babs[curBab(K)], P = K.parts.find(p => p.bs.includes(only));
+    const pi = curPg(K);
+    body = (P && P.bs[0] === only && pi === 0 ? partHtml(K, P) : '') + babHtml(K, only, mode, filt, pi);
+  } else K.parts.forEach(P => {
     const bh = P.bs.map(B => babHtml(K, B, mode, filt)).join('');
     if (bh) body += partHtml(K, P) + bh;
   });
   return h + (body || '<div class="empty">لا توجد مسائل خلاف في هذا الكتاب.</div>');
 }
 function kmapHtml(K) {
-  return '<section class="kmap"><h2 class="sec-t">خريطة الكتاب</h2><div class="pcards">' + K.parts.map(P => {
+  return '<details class="kmap kmapd"><summary>خريطة الكتاب · الأجزاء والأبواب</summary><div class="pcards">' + K.parts.map(P => {
     const ms = P.bs.reduce((a, B) => a.concat(B.ms), []);
     return '<div class="pcard"><a class="ph" href="#' + P.id + '"><span class="pn2">' + ad(P.i + 1) + '</span><div><h3>' + T(P.t) + '</h3><p>' + T(P.d) + '</p></div></a><ul>' +
       P.bs.map(B => '<li><a href="#' + B.id + '"><span>' + T(B.t) + '</span><small>' + ad(B.ms.length) + '</small></a></li>').join('') + '</ul><div class="pgl"><div class="pgb"><b style="width:' + (ms.length ? Math.round(ms.filter(m => isL(m.id)).length / ms.length * 100) : 0) + '%"></b></div><small>' + ad(ms.filter(m => isL(m.id)).length) + ' / ' + ad(ms.length) + '</small></div></div>';
-  }).join('') + '</div></section>';
+  }).join('') + '</div></details>';
 }
 
 function topHtml() {
-  return '<header class="top"><div class="gutter"><div class="wrap"><a class="brand" href="#home">' + I.star + '<span>مختصر القدوري</span></a><span class="sp"></span>' +
+  return '<header class="top"><div class="gutter"><div class="wrap"><a class="brand" href="#home">' + I.star + '<span class="bn"><b>الحیات علوم اسلامیہ</b><small>مطالعہ فقہ اسلامی: القدوری</small></span></a><span class="sp"></span>' +
     '<button class="ibtn" data-a="search" aria-label="بحث في المتن">' + I.search + '</button>' +
     '<button class="ibtn" data-a="theme" aria-label="تبديل المظهر">' + I.theme + '</button></div></div></header>';
 }
@@ -376,7 +387,7 @@ function home() {
     '<div class="step"><span class="n">٥</span><h4>راجع على فترات متباعدة</h4><p>بعد يوم، ثم ثلاثة، ثم سبعة، ثم ستة عشر، ثم خمسة وثلاثين. وتُخلط الكتب في المراجعة لتتقوى الذاكرة.</p></div></div>' +
     '<h2 class="sec-t">ألوان المتن</h2><div class="legend">' + Object.keys(IM).map(k => '<span class="lg"><span class="imc ' + k + '">' + IM[k][1] + '</span>' + IM[k][0] + '</span>').join('') + RK.map(c => '<span class="lg mt"><span class="r ' + c + '">' + RC[c].split(' / ')[0] + '</span><small>' + RC[c].split(' / ').slice(1).join(' · ') + '</small></span>').join('') + '<span class="lg mt"><span class="nm">عدد</span><small>الأعداد والنصب</small></span></div>' +
     '<p class="note">نص المتن مأخوذ من نسخة «مختصر القدوري» في المكتبة الشاملة، وقد رُتّب هنا في أجزاء وأبواب ومسائل. صُحّحت الأخطاء الإملائية الظاهرة. التقسيم إلى أجزاء وبطاقات «في هذا الباب» والعناوين التي تحمل علامة «عنوان تنظيمي» وُضعت للتعلم وليست من أصل المتن. تلوين الأحكام آلي يعتمد على الألفاظ، فراجع المسألة نفسها قبل الاستدلال. العلامة (…) تدل على سقط ظاهر في تلك النسخة ويُراجع على المطبوع. تقدمك محفوظ في هذا المتصفح فقط.</p></div></div>';
-  app.innerHTML = h; jump(0); document.title = 'مختصر القدوري';
+  app.innerHTML = h; jump(0); document.title = 'الحیات علوم اسلامیہ (مطالعہ فقہ اسلامی: القدوری)';
 }
 
 function kitab(n, anchor) {
@@ -388,7 +399,7 @@ function kitab(n, anchor) {
   h += '<div class="gutter"><div class="wrap">' + tabsHtml(K) + '</div></div>';
   h += '<div class="gutter"><div class="wrap" id="kmapw">' + (S.view === 'ar' ? kmapHtml(K) : '') + '</div></div>';
   h += '<div class="gutter"><div class="wrap cols"><aside class="side" id="side">' + tocHtml(K) + '</aside><main id="babs" style="min-width:0">' + mainHtml(K) + '</main></div></div>' + dockHtml();
-  app.innerHTML = h; app.dataset.v = S.view; document.title = strip(K.title) + ' · مختصر القدوري';
+  app.innerHTML = h; app.dataset.v = S.view; document.title = strip(K.title) + ' · الحیات علوم اسلامیہ';
   observe(); goAnchor(anchor, true);
 }
 
@@ -412,7 +423,52 @@ function nextHtml(K) {
   const NK = D[K.n];
   return '<div class="nextstep"><span>مبارک! یہ کتاب مکمل ہوئی</span>' + (NK ? '<a class="btnl" href="#k' + NK.n + '">اگلی کتاب: ' + T(NK.title) + ' ←</a>' : '<a class="btnl" href="#home">مرکزی صفحہ ←</a>') + '</div>';
 }
-function mainHtml(K) { return (S.view === 'ur' ? urHtml(K) : S.view === 'vo' ? voHtml(K) : S.view === 'qa' ? qaHtml(K) : S.view === 'mc' ? mcHtml(K) : babsHtml(K)) + nextHtml(K); }
+function curBab(K) {
+  let i = S.cb[K.n];
+  if (!(i >= 0 && i < K.babs.length)) { i = 0; if (S.last && S.last.k === K.n) { const j = K.babs.findIndex(b => b.id === S.last.b); if (j >= 0) i = j; } }
+  return i;
+}
+function curPg(K) { const B = K.babs[curBab(K)], p = S.cp[K.n]; return (p >= 0 && p < B.pages.length && S.cb[K.n] === B.i) ? p : 0; }
+function flatIdx(K) { const b = curBab(K), p = curPg(K); return K.flat.findIndex(f => f[0] === b && f[1] === p); }
+function pageNos(K) {
+  const B = K.babs[curBab(K)], rg = B.pages[curPg(K)], set = new Set();
+  B.items.slice(rg[0], rg[1]).forEach(it => { if (it[0] === 'm') set.add(it[2].no); });
+  return set;
+}
+const PAGED = ['ar', 'ur', 'qa', 'mc'];
+const isPaged = () => PAGED.includes(S.view) && !(S.view === 'ar' && S.khilaf);
+const babName = (B) => S.view === 'ar' ? T(B.t) : esc(B.tu);
+function pagerHtml(K) {
+  const fi = flatIdx(K), B = K.babs[curBab(K)], np = B.pages.length;
+  return '<div class="bpg" data-p="' + B.i + '-' + curPg(K) + '"><button class="bpb" data-a="bab" data-d="-1" aria-label="پچھلا"' + (fi === 0 ? ' disabled' : '') + '>→</button>' +
+    '<button class="bpt" data-a="toc" aria-label="ابواب کی فہرست"><small>باب ' + ad(B.i + 1) + ' / ' + ad(K.babs.length) + (np > 1 ? ' · حصہ ' + ad(curPg(K) + 1) + ' / ' + ad(np) : '') + ' ▾</small><b' + (S.view === 'ar' ? '' : ' class="urt"') + '>' + babName(B) + '</b></button>' +
+    '<button class="bpb" data-a="bab" data-d="1" aria-label="اگلا"' + (fi === K.flat.length - 1 ? ' disabled' : '') + '>←</button>' +
+    '<span class="bpp"><b style="width:' + Math.round((fi + 1) / K.flat.length * 100) + '%"></b></span></div>';
+}
+function babNavHtml(K) {
+  const fi = flatIdx(K), ar = S.view === 'ar', cb = curBab(K);
+  const card = (f, dir, i) => {
+    if (!f) return '<span style="flex:1"></span>';
+    const B = K.babs[f[0]], same = f[0] === cb, np = B.pages.length;
+    const lbl = dir < 0 ? (ar ? 'السابق' : 'پچھلا') : (ar ? 'التالي' : 'اگلا');
+    const sub = (same ? (ar ? ' حصہ ' : ' حصہ ') : (ar ? ' باب ' : ' باب ')) + (same ? ad(f[1] + 1) : ad(B.i + 1) + (np > 1 ? (' · حصہ ' + ad(f[1] + 1)) : ''));
+    return '<button class="' + (dir < 0 ? 'pv' : 'nx') + '" data-a="bab" data-i="' + i + '"><small>' + (dir < 0 ? '→ ' : '') + lbl + sub + (dir > 0 ? ' ←' : '') + '</small><b' + (ar ? '' : ' class="urt"') + '>' + babName(B) + '</b></button>';
+  };
+  return '<nav class="bab-nav" aria-label="ابواب">' + card(K.flat[fi - 1], -1, fi - 1) + card(K.flat[fi + 1], 1, fi + 1) + '</nav>';
+}
+function renderMain() { const K = D[cur - 1]; $('#babs').innerHTML = mainHtml(K); observe(); }
+function showPage(fi, quiet) {
+  const K = D[cur - 1]; fi = Math.max(0, Math.min(K.flat.length - 1, fi)); const [bi, pi] = K.flat[fi];
+  S.cb[K.n] = bi; S.cp[K.n] = pi; S.last = { k: K.n, b: K.babs[bi].id }; save();
+  renderMain();
+  if (S.view === 'ar') { try { history.replaceState(null, '', '#' + K.babs[bi].id); } catch (e) {} }
+  setOn(K.babs[bi].id);
+  if (!quiet) { const t = $('#babs'); jump(Math.max(0, t.getBoundingClientRect().top + window.scrollY - 62)); }
+}
+function mainHtml(K) {
+  const pg = isPaged(), last = !pg || flatIdx(K) === K.flat.length - 1;
+  return (pg ? pagerHtml(K) : '') + (S.view === 'ur' ? urHtml(K) : S.view === 'vo' ? voHtml(K) : S.view === 'qa' ? qaHtml(K) : S.view === 'mc' ? mcHtml(K) : babsHtml(K)) + (pg ? babNavHtml(K) : '') + (last ? nextHtml(K) : '');
+}
 const URG = /(^|[\s(\[«،؛:])(جائز نہیں|ناجائز|حرام|باطل|فاسد|کافی نہیں|درست نہیں|واجب نہیں|لازم نہیں|فرض|واجب|سنتِ مؤکدہ|سنت|مستحب|مکروہ|جائز|تین|چار|پانچ|سات|آٹھ|دس|پندرہ|بیس|تیس|چالیس|ساٹھ|سو|ہزار)(?=[\s)\]»،؛:.]|$)/g;
 const URI = [['امام ابو حنیفہ رحمہ اللہ', 'h'], ['امام ابو حنیفہ', 'h'], ['امام ابو یوسف', 'y'], ['امام محمد', 'm'], ['امام زفر', 'z'], ['ابو حنیفہ', 'h'], ['ابو یوسف', 'y'], ['زفر', 'z']];
 function urFmt(t) {
@@ -436,8 +492,10 @@ function urHtml(K) {
   h += legendHtmlUr();
   K.parts.forEach(P => {
     P.bs.forEach(B => {
+      if (B !== K.babs[curBab(K)]) return;
       h += '<section class="bab ur" id="' + B.id + '"><div class="bab-h"><span class="bno">' + ad(B.i + 1) + '</span><h2 class="urt">' + esc(B.tu) + '</h2><span class="meta">' + ad(B.ms.length) + ' مسئلے</span></div>';
-      for (const it of B.items) {
+      const rg = B.pages[curPg(K)];
+      for (const it of B.items.slice(rg[0], rg[1])) {
         if (it[0] === 'm') {
           const m = it[2];
           h += '<article class="m ur" id="' + m.id + '"><div class="m-h"><span class="num">' + ad(m.no) + '</span>' +
@@ -510,13 +568,17 @@ function qaHtml(K) {
   const rows = QA.filter(r => r.k === K.n).sort((a, b) => a.n - b.n);
   let h = '<div class="urnote qa"><b>مختصر سوال جواب</b><span>' + ad(rows.length) + ' سوالات جو کتاب کے ہر مسئلے کو ڈھانپتے ہیں۔ پہلے خود جواب سوچیں، پھر سوال پر دبا کر جواب دیکھیں۔</span></div>';
   h += '<div class="qtools"><button class="mini" data-a="qall" data-v="1">سب کھولیں</button><button class="mini" data-a="qall" data-v="0">سب بند کریں</button></div>';
-  groupByBab(K, rows).forEach(([B, rs]) => {
+  let anyQ = false;
+  groupByBab(K, rows).forEach(([B, rs0]) => {
+    if (B !== K.babs[curBab(K)]) return;
+    const nos = pageNos(K), rs = rs0.filter(r => nos.has(r.n)); if (!rs.length) return; anyQ = true;
     h += '<section class="bab qab" id="' + B.id + '"><div class="bab-h"><span class="bno">' + ad(B.i + 1) + '</span><h2 class="urt">' + esc(B.tu) + '</h2><span class="meta">' + ad(rs.length) + ' سوال</span></div>';
     rs.forEach((r, i) => {
       h += '<details class="qa-i"><summary><span class="qn">' + ad(i + 1) + '</span><span class="qq urt">' + esc(r.q) + '</span></summary><div class="qaa"><div class="ut">' + urFmt(r.a) + '</div><a class="qlink" href="#k' + K.n + '-m' + r.n + '" data-ar="1">مسئلہ ' + ad(r.n) + ' متن میں ←</a></div></details>';
     });
     h += '</section>';
   });
+  if (!anyQ) h += '<div class="empty">اس باب کے لیے سوالات نہیں ہیں — اگلے باب پر جائیں۔</div>';
   return h;
 }
 function shufS(arr, seed) { const r = rng(seed), a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -544,13 +606,15 @@ function mcHtml(K) {
   h += '<div class="vfil" role="group">' + [['all', 'سب'], ['todo', 'باقی'], ['wrong', 'غلط']].map(x => '<button class="vfb" data-a="mf" data-v="' + x[0] + '" aria-pressed="' + (S.mf === x[0]) + '">' + x[1] + '</button>').join('') + '<span class="sp"></span><button class="vfb" data-a="mqreset">ری سیٹ</button></div>';
   let any = false, idx = 0;
   groupByBab(K, rows).forEach(([B, rs]) => {
-    const keep = rs.filter(r => { const v = S.mq[mqKey(r)]; return S.mf === 'all' || (S.mf === 'todo' && v === undefined) || (S.mf === 'wrong' && v === 0); });
+    if (B !== K.babs[curBab(K)]) return;
+    const nos = pageNos(K);
+    const keep = rs.filter(r => nos.has(r.n)).filter(r => { const v = S.mq[mqKey(r)]; return S.mf === 'all' || (S.mf === 'todo' && v === undefined) || (S.mf === 'wrong' && v === 0); });
     if (!keep.length) return; any = true;
     h += '<section class="bab qab"><div class="bab-h"><span class="bno">' + ad(B.i + 1) + '</span><h2 class="urt">' + esc(B.tu) + '</h2><span class="meta">' + ad(keep.length) + ' سوال</span></div>';
     keep.forEach(r => { idx++; h += mcCard(r, idx); });
     h += '</section>';
   });
-  if (!any) h += '<div class="empty">اس فلٹر میں کوئی سوال نہیں — شاباش!</div>';
+  if (!any) h += '<div class="empty">' + (rows.some(r => pageNos(K).has(r.n) && bOf(K.n, r.n) === K.babs[curBab(K)]) ? 'اس فلٹر میں کوئی سوال نہیں — شاباش!' : 'اس باب کے لیے MCQs نہیں ہیں — اگلے باب پر جائیں۔') + '</div>';
   return h;
 }
 function updTabs() { const K = D[cur - 1], t = $('.vtabs'); if (K && t) t.outerHTML = tabsHtml(K); }
@@ -805,7 +869,7 @@ app.addEventListener('click', e => {
   const b = e.target.closest('[data-a]');
   if (!b) { if (e.target.closest('[data-close] a')) closeOverlays(); return; }
   const a = b.dataset.a, v = b.dataset.v;
-  if (!['set', 'uf', 'fs', 'lvl', 'kh', 'th', 'reset', 'rc', 'tk'].includes(a) && !b.closest('.pop')) { const p = $('.pop'); if (p) p.remove(); }
+  if (!['set', 'bab', 'uf', 'fs', 'lvl', 'kh', 'th', 'reset', 'rc', 'tk'].includes(a) && !b.closest('.pop')) { const p = $('.pop'); if (p) p.remove(); }
   switch (a) {
     case 'blank': { const s = document.createElement('span'); s.className = 'rv'; s.textContent = b.dataset.w; b.replaceWith(s); break; }
     case 'ok': { const art = b.closest('.m'), id = art.dataset.id; if (isL(id)) delete S.srs[id]; else S.srs[id] = { b: 1, d: today() + 1 }; save(); art.classList.toggle('done', isL(id)); b.setAttribute('aria-pressed', String(isL(id))); updProgress(); break; }
@@ -828,6 +892,7 @@ app.addEventListener('click', e => {
     case 'vopt': { const K = D[cur - 1], v = vq.list[vq.i], o = +b.dataset.o; if (vq.sel !== null) break; const opts = vqOpts(v, vPool(K)); vq.sel = o; if (opts[o] === v.u) { vq.ok++; S.vm[vk(v)] = 1; save(); } refresh(); break; }
     case 'vnext': vq.i++; vq.sel = null; refresh(); updTabs(); break;
     case 'vend': vq = null; refresh(); updTabs(); break;
+    case 'bab': { const K = D[cur - 1]; showPage(b.dataset.i !== undefined ? +b.dataset.i : flatIdx(K) + (+b.dataset.d)); break; }
     case 'vf': S.vf = v; save(); refresh(); break;
     case 'vgo': openSearch(b.dataset.q); break;
     case 'mode': S.mode = v; revealed = false; save(); refresh(); break;
@@ -872,9 +937,20 @@ function route() {
   const h = location.hash.slice(1), m = h.match(/^k([1-5])(?:-((?:[bm]\d+(?:-f\d+)?)|p\d+|v(?:ar|ur|vo|qa|mc)))?$/);
   if (!m) { home(); return; }
   const n = +m[1];
+  if (m[2] && m[2][0] !== 'v') {
+    const K = D[n - 1], x = m[2]; let bi = -1, pi = 0, q;
+    if ((q = x.match(/^b(\d+)(?:-(f\d+))?$/))) { bi = +q[1]; if (q[2] && K.babs[bi]) pi = K.babs[bi].fpi['k' + n + '-b' + bi + '-' + q[2]] || 0; }
+    else if ((q = x.match(/^m(\d+)$/))) { const mm = byId['k' + n + '-m' + q[1]]; if (mm) { bi = mm.bi; pi = mm.pi || 0; } }
+    else if ((q = x.match(/^p(\d+)$/))) { const P = K.parts[+q[1]]; if (P) bi = P.bs[0].i; }
+    if (bi >= 0 && bi < K.babs.length) { S.cb[n] = bi; S.cp[n] = pi; S.last = { k: n, b: K.babs[bi].id }; save(); }
+  }
   if (m[2] && m[2][0] === 'v') { S.view = m[2].slice(1); save(); kitab(n); return; }
   if (m[2] && /^m\d+$/.test(m[2]) && (S.view === 'vo' || S.view === 'qa' || S.view === 'mc')) { S.view = 'ar'; cur = 0; }
-  if (cur === n && app.querySelector('#babs') && app.dataset.v === S.view) { closeOverlays(); goAnchor(m[2] ? 'k' + n + '-' + m[2] : null); }
+  if (cur === n && app.querySelector('#babs') && app.dataset.v === S.view) {
+    closeOverlays();
+    if (isPaged()) { const K = D[n - 1], pg = $('#babs .bpg'); if (!pg || pg.dataset.p !== curBab(K) + '-' + curPg(K)) renderMain(); }
+    goAnchor(m[2] ? 'k' + n + '-' + m[2] : null, true);
+  }
   else kitab(n, m[2] ? 'k' + n + '-' + m[2] : null);
 }
 window.addEventListener('hashchange', route);

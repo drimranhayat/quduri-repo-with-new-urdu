@@ -85,3 +85,15 @@ Default: Noto Nastaliq Urdu (fast, from Google Fonts). Optional: **Jameel Noori 
 ## SEO
 `seo.py` runs during `python3 build.py` and generates, in `docs/`: `robots.txt`, `sitemap.xml`, `manifest.webmanifest`, icons, and one static, crawlable page per Kitab (`docs/k1/` … `docs/k5/`) containing the Arabic text, plus title / description / canonical / Open Graph / JSON-LD tags on every page.
 After deploying: add the site in **Google Search Console** and **Bing Webmaster Tools**, and submit `https://drimranhayat.github.io/quduri-repo/sitemap.xml`. If your URL differs, edit `SITE` at the top of `seo.py` and rebuild.
+
+## Navigation
+Each tab shows **one bab (chapter) at a time**; long babs are split into short parts (about 4–8 masa'il, split at section headings). A sticky bar shows "باب ٤ / ٢٠ · حصہ ٢ / ٤" with previous/next buttons and opens the chapter list when tapped; previous/next cards sit at the bottom of every page. Links such as `#k2-m50`, `#k2-b3`, `#k3-vqa` open the right page, tab and masalah, and your place is remembered.
+
+## Accessibility / contrast
+`python3 tests/contrast.py` (needs `pip install playwright` + Chromium) measures the real text/background contrast of every visible text element in light and dark mode, on mobile and desktop widths, across all tabs and overlays. The current build passes WCAG AA (4.5:1 normal text, 3:1 large text) with 0 failures. Kitab accent colours are auto-darkened in `build.py` (`_fix`) to keep that guarantee; in dark mode text on accent colours uses `--on-k`.
+
+## Navigation
+Each tab shows **one bab (chapter) at a time**; long babs are split into short parts (about 4–8 masa'il, split at section headings). A sticky bar shows "باب ٤ / ٢٠ · حصہ ٢ / ٤" with previous/next buttons and opens the chapter list when tapped; previous/next cards sit at the bottom of every page. Links such as `#k2-m50`, `#k2-b3`, `#k3-vqa` open the right page, tab and masalah, and your place is remembered.
+
+## Accessibility / contrast
+`python3 tests/contrast.py` (needs `pip install playwright` and Chromium) measures the real text/background contrast of every visible text element in light and dark mode, on mobile and desktop widths, across all tabs and overlays. The current build passes WCAG AA (4.5:1 normal text, 3:1 large text) with 0 failures. Kitab accent colours are auto-darkened in `build.py` (`_fix`) to keep that guarantee; in dark mode, text on accent colours uses `--on-k`.
