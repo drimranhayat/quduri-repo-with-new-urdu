@@ -1,7 +1,6 @@
 import json, sys
 from playwright.sync_api import sync_playwright
-import pathlib
-URL = sys.argv[1] if len(sys.argv) > 1 else (pathlib.Path(__file__).resolve().parent.parent / 'docs' / 'index.html').as_uri()
+URL = sys.argv[1] if len(sys.argv) > 1 else 'file:///home/claude/quduri/dist/test.html'
 
 JS = r"""
 () => {
@@ -86,7 +85,7 @@ def run():
                 pg.evaluate(f"document.documentElement.setAttribute('data-theme','{theme}')"); pg.wait_for_timeout(300)
                 tag = lambda s: f'{theme}/{vp}/{s}'
                 collect(pg, tag('home'), acc)
-                for k in range(1, 6):
+                for k in range(1, int(__import__("os").environ.get("NK","6"))+1):
                     pg.evaluate(f"location.hash='#k{k}-vvo'"); pg.wait_for_timeout(200)
                     pg.evaluate("location.hash='#k%d'" % k); pg.wait_for_timeout(300)
                     pg.evaluate("document.querySelector('[data-v=ar]')?.click()"); pg.wait_for_timeout(200)

@@ -2,7 +2,7 @@ import re
 import json, re, pathlib, sys
 
 root = pathlib.Path(__file__).parent
-order = ['k1a', 'k1b', 'k2a', 'k2b', 'k3', 'k4', 'k5a', 'k5b']
+order = sorted((p.stem for p in (root / 'data').glob('k*.txt')), key=lambda x: (int(re.match(r'k(\d+)', x).group(1)), x))
 
 kitabs = []
 for name in order:
@@ -37,6 +37,14 @@ W = {
     5: (('#b0173f', '#b0173f', '#f9dfe6', '#5e0b22', '#fbeff2'), ('#fb7f9a', '#8f1433', '#301018', '#240a12', '#170a0f')),
 }
 
+EXTRA = {
+    6: (('#0f766e', '#0f766e', '#d9f2ef', '#073f3a', '#eef8f7'), ('#4fd6c8', '#0d6b63', '#0f2b29', '#071f1d', '#0a1514')),
+    7: (('#c2410c', '#c2410c', '#fbe3d6', '#6a2406', '#fcf1ea'), ('#ff9d6b', '#9a3412', '#32190d', '#241108', '#18100b')),
+    8: (('#4338ca', '#4338ca', '#e0e1fa', '#231d71', '#f1f1fc'), ('#9fa5ff', '#3d36a8', '#1c1d3b', '#12122c', '#0e0e1b')),
+    9: (('#4d7c0f', '#4d7c0f', '#e6f1d3', '#26400a', '#f4f9ec'), ('#a3d94f', '#3e6a0c', '#1d2a0d', '#141d08', '#0e140a')),
+    10: (('#a21caf', '#a21caf', '#f5dcf8', '#560d5d', '#fbf0fc'), ('#e58bf2', '#82188d', '#2d1030', '#210a24', '#170b19')),
+    11: (('#475569', '#475569', '#e3e8ee', '#1f2937', '#f3f5f8'), ('#a9b8cc', '#3b4859', '#1e252e', '#141a21', '#0e1216')),
+}
 def _lum(h):
     r, g, bl = [int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)]
     f = lambda v: v / 12.92 if v <= .03928 else ((v + .055) / 1.055) ** 2.4
@@ -55,12 +63,15 @@ def _fix(world):
     lk = _dk(lk, 5.6, ['#ffffff', ls, lb]); lh = _dk(lh, 6.8, ['#ffffff'])
     dh = _dk(dh, 6.8, ['#ffffff'])
     return ((lk, lh, ls, ld, lb), (dk, dh, ds, dd, db))
+W.update(EXTRA)
 W = {i: _fix(w) for i, w in W.items()}
+NK = len(order) and max(int(re.match(r'k(\d+)', x).group(1)) for x in order)
+def widx(n): return n if n <= 11 else ((n - 1) % 11) + 1
 def kv(t, dark=False):
     return f'--k:{t[0]};--k-h:{t[1]};--k-soft:{t[2]};--k-deep:{t[3]};--k-bg:{t[4]};--k-ink:{t[0] if dark else t[3]};--on-k:{"#0b141b" if dark else "#ffffff"};'
-light = '\n'.join(f'.k{i}{{{kv(W[i][0])}}}' for i in W)
-dmedia = '\n  '.join(f':root:not([data-theme="light"]) .k{i}{{{kv(W[i][1], True)}}}' for i in W)
-dattr = '\n'.join(f':root[data-theme="dark"] .k{i}{{{kv(W[i][1], True)}}}' for i in W)
+light = '\n'.join(f'.k{i}{{{kv(W[widx(i)][0])}}}' for i in range(1, NK + 1)) + '\n.k0{' + kv(W[0][0]) + '}'
+dmedia = '\n  '.join(f':root:not([data-theme="light"]) .k{i}{{{kv(W[widx(i) if i else 0][1], True)}}}' for i in range(0, NK + 1))
+dattr = '\n'.join(f':root[data-theme="dark"] .k{i}{{{kv(W[widx(i) if i else 0][1], True)}}}' for i in range(0, NK + 1))
 dark = ('--bg:#0d1217;--surface:#151c23;--surface-2:#1b242d;--ink:#e6ecf1;--muted:#9aa8b5;--line:#27323c;'
         '--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);--ay:#f0c46a;--ay-bg:#2b2410;--ha:#b7c5d3;--ha-bg:#1f2a34;'
         '--im-h:#a3c0ff;--im-y:#62d08e;--im-m:#f3ae52;--im-z:#c7a0ff;'
@@ -77,7 +88,7 @@ PATS = {
 def pat(i):
     svg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E" + PATS[i].replace('<','%3C').replace('>','%3E') + "%3C/svg%3E\")"
     return f'.k{i} .hero::before{{background-image:{svg}}}.tile.k{i}::before{{background-image:{svg}}}'
-patcss = '\n'.join(pat(i) for i in PATS)
+patcss = '\n'.join(pat(i).replace('.k' + str(i) + ' ', '.k' + str(n) + ' ').replace('.tile.k' + str(i) + '::', '.tile.k' + str(n) + '::') for n in range(1, NK + 1) for i in [((n - 1) % 5) + 1])
 import base64
 _fp = root / 'fonts' / 'jameel-noori-subset.woff2'
 jn_face = ''
