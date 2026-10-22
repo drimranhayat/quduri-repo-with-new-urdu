@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://drimranhayat.github.io/quduri-repo-with-new-urdu/sitemap.xml
