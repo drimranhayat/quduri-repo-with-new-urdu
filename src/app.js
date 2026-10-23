@@ -65,7 +65,15 @@ const META = [
   { du: "عتاق؛ الفاظ، سعایہ، تدبیر اور استیلاد۔", en: "Kitab al-Itaq · Manumission", d: "أحكام العتق والتدبير والاستيلاد." },
   { du: "مکاتب؛ کتابت، عجز، موت، فاسد کتابت اور ام ولد و مدبر کی کتابت۔", en: "Kitab al-Mukatab · Contract Manumission", d: "أحكام الكتابة." },
   { du: "ولاء؛ ولاءِ عتاقہ، ولاءِ موالات، عصبہ اور عورتوں کی ولاء۔", en: "Kitab al-Wala' · Patronage", d: "أحكام الولاء." },
-  { du: "جنایات؛ قتل کی اقسام، قصاص، اطراف، صلح اور اجتماعِ قاتلین۔", en: "Kitab al-Jinayat · Homicide & Qisas", d: "أنواع القتل والقصاص." }
+  { du: "جنایات؛ قتل کی اقسام، قصاص، اطراف، صلح اور اجتماعِ قاتلین۔", en: "Kitab al-Jinayat · Homicide & Qisas", d: "أنواع القتل والقصاص." },
+  { du: "دیات؛ دیت کی مقداریں، اعضا و شجاج، ضمان، قسامہ اور عاقلہ۔", en: "Kitab al-Diyat · Blood Money", d: "أحكام الدية والأروش والقسامة والمعاقل." },
+  { du: "حدود؛ زنا، شراب، قذف اور تعزیر۔", en: "Kitab al-Hudud · Prescribed Punishments", d: "أحكام حد الزنا والشرب والقذف والتعزير." },
+  { du: "سرقہ؛ نصاب، حرز، ہاتھ کاٹنا اور ڈاکہ زنی۔", en: "Kitab al-Sariqah · Theft", d: "أحكام السرقة وقطع الطريق." },
+  { du: "اشربہ؛ حرام و حلال مشروبات اور شراب کا سرکہ۔", en: "Kitab al-Ashribah · Beverages", d: "أحكام الأشربة المحرمة والمباحة." },
+  { du: "شکار اور ذبائح؛ شکاری جانور، تیر، شرائطِ ذبح، حلال و حرام جانور۔", en: "Kitab al-Sayd wal-Dhaba'ih · Hunting & Slaughter", d: "أحكام الصيد والذبائح وما يحل أكله." },
+  { du: "اضحیہ؛ وجوب، وقت، جانور کے عیوب اور گوشت کے احکام۔", en: "Kitab al-Udhiyah · Sacrifice", d: "أحكام الأضحية." },
+  { du: "ایمان؛ قسم کی اقسام، الفاظ، کفارہ، نذر اور حنث کے مسائل۔", en: "Kitab al-Aiman · Oaths", d: "أحكام اليمين والكفارة والنذر." },
+  { du: "دعویٰ؛ مدعی، قسم، تعارضِ بینات، تحالف اور نسب کے دعوے۔", en: "Kitab al-Da'wa · Claims", d: "أحكام الدعوى والبينات والتحالف." }
 ];
 
 /* ---------- state ---------- */
@@ -406,13 +414,22 @@ function home() {
     '<div class="ctas">' + cta + '<button class="cta s" data-a="search"><b>متن میں تلاش</b></button><button class="cta s" data-a="allquiz"><b>جامع آزمائش</b></button></div></div>' +
     '<div class="hstats" aria-label="مواد کا خلاصہ">' + stats.map(x => '<div class="hs"><b>' + ad(x[0]) + '</b><span>' + x[1] + '</span></div>').join('') + '</div></div></div></section>';
   h += '<div class="gutter"><div class="wrap">';
-  h += '<h2 class="sec-t">اپنی کتاب منتخب کریں</h2><div class="tiles">';
-  D.forEach(K => {
+  const GROUPS = [['عبادات', 'طہارت، نماز، زکوٰۃ، روزہ، حج', 1, 5], ['مالی معاملات', 'خرید و فروخت، رہن، اجارہ، شرکت، مضاربت، وکالت، کفالت، صلح', 6, 17],
+    ['امانات و عاریت اور متفرق', 'ہبہ، وقف، غصب، ودیعت، عاریت، لقطہ اور دیگر ابواب', 18, 29], ['نکاح و خاندان', 'نکاح، رضاعت، طلاق، ظہار، نفقہ، عتق، مکاتب، ولاء', 30, 38],
+    ['جنایات و حدود', 'قتل، دیت، حدود، چوری، اشربہ', 39, 43], ['ذبائح، قسمیں اور دعویٰ', 'شکار و ذبیحہ، قربانی، قسمیں، دعویٰ', 44, 47],
+    ['قضا و شہادت', 'گواہی، آدابِ قاضی، تقسیم', 48, 52], ['سیر، حظر اور وصایا', 'اکراہ، سیر، بغاوت، حظر و اباحت، وصایا', 53, 55], ['میراث', 'فرائض', 56, 99]];
+  const lastK = S.last && S.last.k, tile = K => {
     const l = learnedIn(K), pc = K.ms.length ? l / K.ms.length : 0;
-    h += '<a class="tile k' + K.n + '" href="#k' + K.n + '"><span class="no urt">کتاب ' + ad(K.n) + ' · <span class="en">' + esc(META[K.n].en) + '</span></span><h3>' + T(K.title) + '</h3><p class="urt">' + esc(META[K.n].du) + '</p>' +
+    return '<a class="tile k' + K.n + '" href="#k' + K.n + '"><span class="no urt">کتاب ' + ad(K.n) + ' · <span class="en">' + esc(META[K.n].en) + '</span></span><h3>' + T(K.title) + '</h3><p class="urt">' + esc(META[K.n].du) + '</p>' +
       '<div class="ft"><span class="urt">' + ad(K.parts.length) + ' حصے · ' + ad(K.babs.length) + ' ابواب · ' + ad(K.ms.length) + ' مسائل</span>' + ringSvg(pc) + '</div></a>';
+  };
+  h += '<h2 class="sec-t">اپنی کتاب منتخب کریں</h2>';
+  const gl = GROUPS.map((g, gi) => ({ g, gi, ks: D.filter(K => K.n >= g[2] && K.n <= g[3]) })).filter(x => x.ks.length);
+  h += '<nav class="gchips" aria-label="گروہ">' + gl.map(x => '<button data-a="gj" data-g="' + x.gi + '">' + x.g[0] + '<b>' + ad(x.ks.length) + '</b></button>').join('') + '</nav>';
+  gl.forEach((x, i) => {
+    const hasLast = lastK && x.ks.some(K => K.n === lastK), done = x.ks.reduce((a, K) => a + learnedIn(K), 0), tot = x.ks.reduce((a, K) => a + K.ms.length, 0);
+    h += '<details class="grp" id="g' + x.gi + '"' + (i === 0 || hasLast ? ' open' : '') + '><summary><span class="gt"><b class="urt">' + x.g[0] + '</b><small class="urt">' + x.g[1] + '</small></span><span class="gc urt">' + ad(x.ks.length) + ' کتابیں · ' + ad(done) + '/' + ad(tot) + '</span></summary><div class="tiles">' + x.ks.map(tile).join('') + '</div></details>';
   });
-  h += '</div>';
   h += routeHtml();
   h += planHtml();
   h += '<h2 class="sec-t">سیکھنے کا طریقہ</h2><div class="steps3">' +
@@ -1021,6 +1038,7 @@ app.addEventListener('click', e => {
     case 'rc': S.rc = !S.rc; applyTheme(); save(); b.setAttribute('aria-pressed', String(S.rc)); break;
     case 'kh': S.khilaf = !S.khilaf; save(); b.setAttribute('aria-pressed', String(S.khilaf)); refresh(); break;
     case 'th': S.theme = v; applyTheme(); save(); $$('.pop [data-a="th"]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === S.theme))); break;
+    case 'gj': { const d = document.getElementById('g' + b.dataset.g); if (d) { d.open = true; d.scrollIntoView({ behavior: 'smooth', block: 'start' }); } break; }
     case 'theme': S.theme = S.theme === 'auto' ? 'dark' : S.theme === 'dark' ? 'light' : 'auto'; applyTheme(); save(); break;
     case 'reset': if (b.dataset.sure) { S.srs = {}; S.bm = {}; S.last = null; S.day = { d: 0, n: 0 }; S.st = { last: 0, n: 0 }; save(); const p = $('.pop'); if (p) p.remove(); cur ? kitab(cur) : home(); } else { b.dataset.sure = '1'; b.textContent = 'تأكيد المسح'; } break;
     case 'search': openSearch(); break;

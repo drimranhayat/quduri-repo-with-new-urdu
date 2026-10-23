@@ -653,3 +653,18 @@ button,.vt,.mo,summary{-webkit-tap-highlight-color:transparent;touch-action:mani
 .st3 h4{margin:8px 0 2px;font-size:1.2rem}.st3 p{margin:0;color:var(--muted);line-height:2.1;font-size:1rem}
 .note.urt{line-height:2.2}
 .pc.c2 .pb,.pc.c2 .pi{color:var(--on-k)}
+.gchips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.gchips button { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--surface); color: var(--ink); border: 1.5px solid var(--line); font-family: var(--f-display); font-size: 1.05rem; cursor: pointer; }
+.gchips button b { background: var(--ink); color: var(--surface); border-radius: 999px; min-width: 24px; padding: 0 7px; font-size: .85rem; text-align: center; font-family: var(--f-ui); }
+.gchips button:hover { border-color: var(--ink); }
+.grp { margin: 0 0 14px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 22px; scroll-margin-top: 76px; }
+.grp > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; color: var(--ink); }
+.grp > summary::-webkit-details-marker { display: none; }
+.grp > summary::after { content: "▾"; font-size: 1.3rem; transition: transform .2s; margin-inline-start: 4px; }
+.grp:not([open]) > summary::after { transform: rotate(90deg); }
+.gt { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.gt b { font-family: var(--f-display); font-size: 1.45rem; font-weight: 400; line-height: 1.5; }
+.gt small { color: var(--muted); font-size: .98rem; line-height: 1.6; }
+.gc { color: var(--ink); font-size: .95rem; white-space: nowrap; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 2px 12px; }
+.grp > .tiles { padding: 4px 14px 16px; }
+@media (max-width: 560px) { .gc { display: none; } .grp > .tiles { padding: 4px 10px 12px; } }
