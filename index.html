@@ -988,22 +988,6 @@ section[id]{scroll-margin-top:112px}
 .st3.s1{--k:#1b64c8;--on-k:#fff}.st3.s2{--k:#b83a09;--on-k:#fff}.st3.s3{--k:#0b7a57;--on-k:#fff}
 .allroute{margin-top:20px;border:1.5px solid var(--line);border-radius:16px;background:var(--surface)}
 .allroute>summary{cursor:pointer;padding:12px 16px;font-family:var(--f-ur);font-size:1.1rem}
-/* footer */
-.foot{margin-top:40px;background:#0f2a3d;color:#eaf2f8;border-top:6px solid #1fa37a;padding-block:8px 0}
-.foot .wrap{padding-block:26px 16px}
-.ft-g{display:grid;gap:22px;grid-template-columns:1fr}
-@media(min-width:800px){.ft-g{grid-template-columns:1.5fr 1fr 1fr 1fr}}
-.ft-t{font-family:var(--f-display);font-size:1.7rem;line-height:1.6;color:#fff}
-.ft-b p{margin:4px 0 12px;line-height:2;color:#cfe0ec;font-size:.98rem}
-.ft-site{display:inline-block;padding:8px 18px;border-radius:99px;background:#1fa37a;color:#04231a;font-weight:700;text-decoration:none;font-family:var(--f-ui);letter-spacing:.02em}
-.ft-site:hover{background:#3fd1a3}
-.ft-c{display:flex;flex-direction:column;gap:2px}
-.ft-c h5{margin:0 0 6px;font-size:1.1rem;color:#7ee2bd;font-weight:700}
-.ft-c a{display:flex;flex-direction:column;padding:6px 10px;border-radius:10px;color:#eaf2f8;text-decoration:none;border-inline-start:3px solid transparent}
-.ft-c a:hover{background:rgba(255,255,255,.1);border-inline-start-color:#1fa37a}
-.ft-c a b{font-weight:600;font-family:var(--f-ur)}.ft-c a small{color:#a9c3d6;font-family:var(--f-ui);direction:ltr;text-align:start}
-.ft-bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 20px;margin-top:20px;padding-top:14px;border-top:1px solid rgba(255,255,255,.2);color:#b9cfdf;font-size:.9rem;line-height:1.9}
-.foot a:focus-visible{outline:3px solid #7ee2bd;outline-offset:2px}
 #kmapw .ub{color:var(--ink);opacity:1}
 .tp .ub,.toc .ub,.pcard .ub{color:var(--ink);opacity:1}
 /* compact header v25 */
@@ -1068,6 +1052,47 @@ section[id]{scroll-margin-top:112px}
 .hprog .hp-top b{color:#ffd166}
 .hp-row span{background:rgba(0,0,0,.28);color:#fff}.hp-row b{color:#7ee2bd}
 .hero.land .hero-t .sub{max-width:none}.hero.land .hero-t{min-width:0}
+
+/* v28 footer */
+.foot{margin-top:44px;background:linear-gradient(180deg,#0b2538,#071827);color:#eaf2f8;border-top:5px solid #ffd166;padding:0}
+.foot .wrap{padding-block:30px 18px}
+.ft-main{display:grid;gap:26px;grid-template-columns:1fr}
+@media(min-width:900px){.ft-main{grid-template-columns:1.25fr .85fr 1.3fr;gap:36px}}
+.ft-badge{display:inline-block;background:#ffd166;color:#2b1d00;font-weight:700;font-size:1.05rem;line-height:1.8;padding:0 14px;border-radius:10px}
+.ft-t{font-family:var(--f-ur);font-weight:700;font-size:clamp(1.5rem,5vw,2rem);line-height:1.8;color:#fff;margin-top:6px}
+.ft-b p{margin:2px 0 14px;line-height:2.1;color:#d4e3ee;font-size:1rem;max-width:56ch}
+.ft-site{display:inline-flex;flex-direction:column;gap:0;padding:8px 20px;border-radius:14px;background:#7ee2bd;color:#032a1f;text-decoration:none;line-height:1.6}
+.ft-site span{font-weight:700;font-size:1.05rem}.ft-site b{font-family:var(--f-ui);font-size:.95rem;direction:ltr;letter-spacing:.02em}
+.ft-site:hover{background:#a2f0d3}
+.ft-c h5{margin:0 0 10px;font-size:1.25rem;color:#ffd166;font-weight:700;padding-bottom:6px;border-bottom:2px solid rgba(255,255,255,.18)}
+.ft-c,.ft-gr>div{display:flex;flex-direction:column;gap:8px}
+.ft-gr>div{flex-direction:row;flex-wrap:wrap}
+.ft-p{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;background:rgba(255,255,255,.08);border:1.5px solid var(--c);color:var(--c);text-decoration:none;font-size:1.02rem;line-height:1.7;cursor:pointer}
+.ft-p i{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none}
+.ft-p span{color:#fff}
+.ft-p:hover{background:var(--c)}.ft-p:hover span{color:#10202c}.ft-p:hover i{background:#10202c}
+.ft-c:not(.ft-gr) .ft-p{align-self:flex-start;border-radius:12px}
+.ft-bot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px;margin-top:26px;padding-top:14px;border-top:1px solid rgba(255,255,255,.2);color:#c3d6e4;font-size:.95rem;line-height:1.9}
+.ft-bot a{color:#7ee2bd}
+.ft-bot .ft-top{padding:3px 14px;border-radius:99px;background:rgba(255,255,255,.12);color:#fff;text-decoration:none}.ft-bot .ft-top:hover{background:#fff;color:#10202c}
+.ft-n{margin:6px 0 0;color:#a9c3d6;font-size:.85rem;line-height:1.9}
+.foot a:focus-visible{outline:3px solid #ffd166;outline-offset:2px}
+/* v29 */
+.libbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.libbar>span{color:var(--muted);font-size:1.02rem;flex:1 1 220px}
+.lbtn{all:unset;cursor:pointer;padding:5px 16px;border-radius:99px;font-size:1rem;background:var(--k-deep,#123a57);color:#fff;border:1.5px solid transparent}
+.lbtn+.lbtn{background:var(--surface);color:var(--ink);border-color:var(--line)}
+:root[data-theme=dark] .lbtn:not(.lbtn+.lbtn){background:#fff;color:#111}
+.lbtn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+@media(max-width:700px){.road{grid-template-columns:1fr 1fr;gap:8px}.stg{padding:8px 8px;gap:0 6px}.stg .sn{width:28px;height:28px;font-size:.85rem}.stg b{font-size:1rem}.stg small{font-size:.74rem}}
+.totop{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));inset-inline-start:16px;width:46px;height:46px;border-radius:50%;border:0;background:#ffd166;color:#2b1d00;font-size:1.4rem;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer;opacity:0;pointer-events:none;transform:translateY(10px);transition:.2s;z-index:45}
+.totop.on{opacity:1;pointer-events:auto;transform:none}
+.k0 .foot{margin-bottom:0}
+#app.k0{padding-bottom:0}
+/* v30 final polish */
+.totop{visibility:hidden;color:#2b1d00!important}.totop.on{visibility:visible}
+.hero.land .hs{background:rgba(0,0,0,.28)}
+.tnav a[aria-current=page]{background:rgba(255,255,255,.2);opacity:1}
 
 </style>
 <div id="app" class="k0" dir="rtl" lang="ar"></div>
@@ -1519,7 +1544,7 @@ function home() {
       '<div class="ft"><span class="urt">' + ad(K.parts.length) + ' حصے · ' + ad(K.babs.length) + ' ابواب · ' + ad(K.ms.length) + ' مسائل</span>' + ringSvg(pc) + '</div></a>';
   };
   h += '<section id="lib" data-sec="lib"><h2 class="sec-t"><span>کتابیں</span></h2>';
-  h += '<nav class="gchips" aria-label="گروہ">' + gl.map((x, i) => '<button class="' + x.c + '" data-a="gj" data-g="' + x.gi + '"><i>' + ad(i + 1) + '</i>' + x.g[0] + '<b>' + ad(x.ks.length) + '</b></button>').join('') + '</nav>';
+  h += '<div class="libbar"><span class="urt">کسی گروپ کو کھول کر اس کی کتابیں دیکھیں:</span><button class="lbtn urt" data-a="gall" data-o="1">سب کھولیں</button><button class="lbtn urt" data-a="gall" data-o="0">سب بند کریں</button></div>';
   gl.forEach((x, i) => {
     const hasLast = lastK && x.ks.some(K => K.n === lastK);
     h += '<details class="grp ' + x.c + '" id="g' + x.gi + '"' + (i === 0 || hasLast ? ' open' : '') + '><summary><i class="gnum">' + ad(i + 1) + '</i><span class="gt"><b class="urt">' + x.g[0] + '</b><small class="urt">' + x.g[1] + '</small></span><span class="gc urt">' + ad(x.ks.length) + ' کتابیں · ' + ad(x.done) + '/' + ad(x.tot) + '</span></summary>' + (x.g[4] ? x.g[4].map((sg, si) => { const ks = x.ks.filter(K => K.n >= sg[1] && K.n <= sg[2]); return ks.length ? '<h4 class="sgrp"><i>' + ad(i + 1) + '.' + ad(si + 1) + '</i><span class="urt">' + sg[0] + '</span><small class="urt">' + ad(ks.length) + ' کتابیں</small></h4><div class="tiles">' + ks.map(tile).join('') + '</div>' : ''; }).join('') : '<div class="tiles">' + x.ks.map(tile).join('') + '</div>') + '</details>';
@@ -1536,14 +1561,20 @@ function home() {
   app.innerHTML = h; jump(0); document.title = 'الحیات مرکز علوم اسلامیہ (مطالعۂ فقہِ اسلامی: القدوری)'; spy();
 }
 function footHtml() {
-  const L = (u, t, s) => '<a href="' + u + '" target="_blank" rel="noopener"><b>' + t + '</b><small>' + s + '</small></a>';
-  return '<footer class="foot"><div class="gutter"><div class="wrap"><div class="ft-g"><div class="ft-b"><div class="ft-t urt">ڈاکٹر عمران حیات کی تدریسی پیشکش</div><p class="urt">«الحیات مرکز علوم اسلامیہ» کے تحت فقہ اسلامی کے مطالعے کا ایک مفت، سادہ اور منظم تعلیمی منصوبہ۔ مختصر القدوری کا اعراب شدہ متن، اردو ترجمہ، مفردات، سوال جواب اور MCQs۔</p><a class="ft-site" href="https://drimranhayat.com" target="_blank" rel="noopener">drimranhayat.com</a></div>' +
-    '<nav class="ft-c" aria-label="سرکاری روابط"><h5 class="urt">سرکاری روابط</h5>' + L('https://drimranhayat.com', 'ذاتی ویب سائٹ', 'drimranhayat.com') + '</nav>' +
-    '<nav class="ft-c" aria-label="اس سائٹ میں"><h5 class="urt">اس سائٹ میں</h5><a href="#home" data-a="sj" data-s="plan"><b>آج کا منصوبہ</b></a><a href="#home" data-a="sj" data-s="road"><b>سیکھنے کا راستہ</b></a><a href="#home" data-a="sj" data-s="lib"><b>تمام کتابیں</b></a><a href="#home" data-a="sj" data-s="guide"><b>رہنمائی اور رنگوں کی وضاحت</b></a></nav>' +
-    '<nav class="ft-c" aria-label="ماخذ"><h5 class="urt">ماخذ</h5><a href="https://shamela.ws/book/124336" target="_blank" rel="noopener"><b>المکتبة الشاملة</b><small>کتاب ۱۲۴۳۳۶</small></a></nav></div>' +
-    '<div class="ft-bot urt"><span>© ' + new Date().getFullYear() + ' ڈاکٹر عمران حیات · الحیات مرکز علوم اسلامیہ</span><span>اعراب، ترجمہ اور سوالات کسی مستند عالم سے نظرِ ثانی کے محتاج ہیں۔</span></div></div></div></footer>';
+  const gc = ['#ffd166', '#7ee2bd', '#9ecbff', '#ffb4a2', '#e0b8ff', '#b8f0a0', '#ffc27a', '#8fe3e8', '#f7a8d0', '#c3cbff'];
+  const nav = [['plan', 'آج کا منصوبہ', '#ffd166'], ['road', 'سیکھنے کا راستہ', '#7ee2bd'], ['lib', 'تمام کتابیں', '#9ecbff'], ['guide', 'رہنمائی اور رنگوں کی وضاحت', '#e0b8ff']];
+  return '<footer class="foot"><div class="gutter"><div class="wrap">' +
+    '<div class="ft-main"><div class="ft-b"><div class="ft-badge urt">الحیات مرکز علوم اسلامیہ</div><div class="ft-t urt">ڈاکٹر عمران حیات کی تدریسی پیشکش</div><p class="urt">فقہ اسلامی کے مطالعے کا ایک مفت، سادہ اور منظم تعلیمی منصوبہ: «مختصر القدوری» کا اعراب شدہ متن، اردو ترجمہ، مفردات، سوال جواب اور MCQs۔</p>' +
+    '<a class="ft-site" href="https://drimranhayat.com" target="_blank" rel="noopener"><span class="urt">ذاتی ویب سائٹ</span><b>drimranhayat.com ↗</b></a></div>' +
+    '<nav class="ft-c" aria-label="اس سائٹ میں"><h5 class="urt">اس سائٹ میں</h5>' + nav.map(n => '<a class="ft-p" style="--c:' + n[2] + '" href="#home" data-a="sj" data-s="' + n[0] + '"><i></i><span class="urt">' + n[1] + '</span></a>').join('') + '</nav>' +
+    '<nav class="ft-c ft-gr" aria-label="کتابوں کے گروپ"><h5 class="urt">کتابوں کے گروپ</h5><div>' + GROUPS.map((g, i) => '<a class="ft-p" style="--c:' + gc[i % 10] + '" href="#home" data-a="gj" data-g="' + i + '"><i></i><span class="urt">' + g[0] + '</span></a>').join('') + '</div></nav></div>' +
+    '<div class="ft-bot"><span class="urt">© ' + new Date().getFullYear() + ' ڈاکٹر عمران حیات · الحیات مرکز علوم اسلامیہ · جملہ حقوق محفوظ</span><span class="urt">متن کا ماخذ: <a href="https://shamela.ws/book/124336" target="_blank" rel="noopener">المکتبۃ الشاملۃ (۱۲۴۳۳۶)</a></span><a class="ft-top urt" href="#home" data-a="sj" data-s="plan">اوپر جائیں ↑</a></div>' +
+    '<p class="ft-n urt">اعراب، ترجمہ اور سوالات کسی مستند عالم سے نظرِ ثانی کے محتاج ہیں۔</p></div></div></footer>';
 }
 function spy() {
+  $$('details.grp').forEach(d => d.addEventListener('toggle', () => { if (d.open && !app.dataset.all) $$('details.grp[open]').forEach(o => { if (o !== d) o.open = false; }); }));
+  if (!$('.totop')) { const t = document.createElement('button'); t.className = 'totop'; t.setAttribute('aria-label', 'اوپر جائیں'); t.textContent = '↑'; t.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' })); document.body.appendChild(t); }
+  if (!window.__tt) { window.__tt = 1; addEventListener('scroll', () => { const t = $('.totop'); if (t) t.classList.toggle('on', scrollY > 700 && !cur); }, { passive: true }); }
   const links = $$('.snav a'), secs = $$('[data-sec]');
   if (!('IntersectionObserver' in window) || !secs.length) return;
   const io = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle('on', a.dataset.s === e.target.dataset.sec)); }); }, { rootMargin: '-110px 0px -65% 0px' });
@@ -2149,6 +2180,7 @@ app.addEventListener('click', e => {
     case 'kh': S.khilaf = !S.khilaf; save(); b.setAttribute('aria-pressed', String(S.khilaf)); refresh(); break;
     case 'th': S.theme = v; applyTheme(); save(); $$('.pop [data-a="th"]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === S.theme))); break;
     case 'gj': { const d = document.getElementById('g' + b.dataset.g); if (d) { d.open = true; d.scrollIntoView({ behavior: 'smooth', block: 'start' }); } break; }
+    case 'gall': { app.dataset.all = '1'; $$('details.grp').forEach(d => d.open = b.dataset.o === '1'); setTimeout(() => { delete app.dataset.all; }, 50); break; }
     case 'sj': { e.preventDefault(); const d = document.getElementById(b.dataset.s); if (d) d.scrollIntoView({ behavior: 'smooth', block: 'start' }); break; }
     case 'theme': S.theme = S.theme === 'auto' ? 'dark' : S.theme === 'dark' ? 'light' : 'auto'; applyTheme(); save(); break;
     case 'reset': if (b.dataset.sure) { S.srs = {}; S.bm = {}; S.last = null; S.day = { d: 0, n: 0 }; S.st = { last: 0, n: 0 }; save(); const p = $('.pop'); if (p) p.remove(); cur ? kitab(cur) : home(); } else { b.dataset.sure = '1'; b.textContent = 'تأكيد المسح'; } break;
