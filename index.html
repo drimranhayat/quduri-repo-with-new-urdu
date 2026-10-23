@@ -1043,6 +1043,31 @@ section[id]{scroll-margin-top:112px}
 .pl-btns .pb:hover{filter:brightness(1.1)}.pl-btns .pb:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 .pl-btns .pb .pi{display:grid;place-items:center;width:28px;height:28px}.pl-btns .pb .pi svg{width:22px;height:22px}
 .pl-btns .c1{background:#b83a09}.pl-btns .c2{background:#2d4f6c}.pl-btns .c3{background:#6d33dd}
+/* v27 professional header */
+.hero.land{background:linear-gradient(120deg,#0b2538 0%,#123a57 55%,#0e4a4a 100%)}
+.hero.land .wrap{padding-block:12px 12px}
+.inst{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:4px}
+.inst span{font-family:var(--f-ur);font-weight:700;line-height:1.7;border-radius:10px;padding:2px 14px;font-size:clamp(1.1rem,3.6vw,1.45rem)}
+.inst .in1{background:#ffd166;color:#2b1d00}
+.inst .in2{background:#7ee2bd;color:#032a1f}
+.hero.land h1{font-size:clamp(1.7rem,6vw,2.5rem);line-height:2;margin:0;padding-top:6px;color:#fff}
+.hero.land h1 .h1k{font-family:var(--f-ur);font-size:.45em;color:#ffd166;margin-inline-end:.4em;font-weight:700}
+.hero.land h1 .ub{display:inline;font-size:.45em;color:#cfe3f0;margin-inline-start:.5em}
+.hero.land .sub{color:#e4eef5;font-size:.95rem;line-height:1.8}
+.hero.land .ctas{gap:8px;margin-top:8px}
+.hero.land .cta{border:0;color:#04141f;min-height:42px;border-radius:14px;font-family:var(--f-ur)}
+.hero.land .cta.p{background:#ffd166;color:#2b1d00}.hero.land .cta.p:hover{background:#ffe08f}
+.hero.land .cta.s:nth-child(2){background:#7ee2bd;color:#032a1f}.hero.land .cta.s:nth-child(2):hover{background:#a2f0d3}
+.hero.land .cta.s:nth-child(3){background:#c9b8ff;color:#1b0b4a}.hero.land .cta.s:nth-child(3):hover{background:#dccfff}
+.hero.land .cta b{font-size:1rem}
+.hero.land .hs{background:rgba(255,255,255,.1);border:0;border-bottom:3px solid var(--ac);border-radius:10px}
+.hero.land .hs b{color:var(--ac);font-size:1.05rem}.hero.land .hs span{color:#fff}
+.hstats .hs:nth-child(1){--ac:#ffd166}.hstats .hs:nth-child(2){--ac:#7ee2bd}.hstats .hs:nth-child(3){--ac:#9ecbff}.hstats .hs:nth-child(4){--ac:#ffb4a2}.hstats .hs:nth-child(5){--ac:#e0b8ff}.hstats .hs:nth-child(6){--ac:#b8f0a0}
+@media(min-width:900px){.hero.land .hs b{font-size:1.2rem}.hero.land .hs span{font-size:.8rem}}
+.hprog{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25)}
+.hprog .hp-top b{color:#ffd166}
+.hp-row span{background:rgba(0,0,0,.28);color:#fff}.hp-row b{color:#7ee2bd}
+.hero.land .hero-t .sub{max-width:none}.hero.land .hero-t{min-width:0}
 
 </style>
 <div id="app" class="k0" dir="rtl" lang="ar"></div>
@@ -1474,8 +1499,8 @@ function home() {
     if (B) cta = '<a class="cta p" href="#' + B.id + '"><small>جہاں چھوڑا تھا وہیں سے جاری رکھیں</small><b>' + KT(K) + ' · ' + BT(B) + '</b></a>';
   }
   const stats = [[D.length, 'کتابیں'], [totB, 'ابواب'], [nK, 'مسائل'], [VOC.length, 'مفردات'], [QA.length, 'سوال جواب'], [MCQ.length, 'MCQs']];
-  h += '<section class="hero land"><div class="gutter"><div class="wrap hero-g"><div class="hero-t"><div class="eyebrow">الحیات مرکز علوم اسلامیہ : مطالعۂ فقہِ اسلامی</div>' +
-    '<h1>مُخْتَصَرُ الْقُدُورِيِّ<span class="ub">(مختصر القدوری)</span></h1>' +
+  h += '<section class="hero land"><div class="gutter"><div class="wrap hero-g"><div class="hero-t"><div class="inst"><span class="in1">الحیات مرکز علوم اسلامیہ</span><span class="in2">مطالعۂ فقہِ اسلامی</span></div>' +
+    '<h1><span class="h1k">متن:</span> مُخْتَصَرُ الْقُدُورِيِّ<span class="ub">(مختصر القدوری)</span></h1>' +
     '<p class="sub urt">فقہِ حنفی کا بنیادی متن: اعراب کے ساتھ عربی عبارت، اردو ترجمہ، مفردات، سوال جواب اور MCQs — پڑھیں، سمجھیں، یاد کریں اور آزمائیں۔</p>' +
     '<div class="ctas">' + cta + '<button class="cta s" data-a="search"><b>متن میں تلاش</b></button><button class="cta s" data-a="allquiz"><b>جامع آزمائش</b></button></div></div>' +
     '<div class="hprog"><div class="hp-top">' + ringSvg(pAll) + '<div><b class="urt">آپ کی پیش رفت</b><span class="urt">' + ad(mast) + ' / ' + ad(nK) + ' مسائل یاد</span></div></div>' +
