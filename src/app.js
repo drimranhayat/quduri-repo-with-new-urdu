@@ -91,6 +91,8 @@ try { const r = localStorage.getItem(KEY); if (r) Object.assign(S, JSON.parse(r)
 if (!S.ufSet) S.uf = 'jn';
 const sd = s => S.tk ? s : strip(s);
 const T = s => esc(sd(s));
+const ub = u => u ? ' <span class="ub">(' + esc(u) + ')</span>' : '';
+const KT = K => T(K.title) + ub(K.tu), BT = B => T(B.t) + ub(B.tu), PT = P => T(P.t) + ub(P.u), FT = f => T(f.t) + ub(f.tu);
 const dw = x => S.tk ? x.w : x.bare;
 const today = () => { const d = new Date(); return Math.floor((d.getTime() - d.getTimezoneOffset() * 6e4) / 864e5); };
 if (S.learned) { Object.keys(S.learned).forEach(id => { if (!S.srs[id]) S.srs[id] = { b: 1, d: today() }; }); delete S.learned; }
@@ -201,7 +203,7 @@ D.forEach((K, ki) => {
         const m = { id: 'k' + K.n + '-m' + mi, k: K.n, no: mi, bi, text: it[1], ur: it[3] };
         prep(m); it[2] = m; K.ms.push(m); B.ms.push(m);
         m.t.forEach(x => { if (x.r && !x.rp) B.rc[x.r]++; if (x.n) B.rc.n++; });
-      } else if (it[0] === 'f') { it[2] = B.id + '-f' + B.fs.length; B.fs.push({ id: it[2], t: it[1] }); }
+      } else if (it[0] === 'f') { it[2] = B.id + '-f' + B.fs.length; B.fs.push({ id: it[2], t: it[1], tu: it[3] }); }
     });
     B.pages = []; {
       let st = 0, cnt = 0;
@@ -216,7 +218,7 @@ D.forEach((K, ki) => {
     }
     B.fpi = {}; B.pages.forEach((r, pi) => { for (let x = r[0]; x < r[1]; x++) { const it = B.items[x]; if (it[0] === 'm') it[2].pi = pi; else if (it[0] === 'f') B.fpi[it[2]] = pi; } });
   });
-  K.parts = pl.parts.map((p, pi) => ({ id: 'k' + K.n + '-p' + pi, i: pi, t: p.t, d: p.d, bs: p.b.map(i => K.babs[i]) }));
+  K.parts = pl.parts.map((p, pi) => ({ id: 'k' + K.n + '-p' + pi, i: pi, t: p.t, u: p.u, d: p.d, bs: p.b.map(i => K.babs[i]) }));
   K.parts.forEach(p => p.bs.forEach(B => { B.part = p; }));
   K.flat = []; K.babs.forEach(B => B.pages.forEach((r, pi) => K.flat.push([B.i, pi])));
   K.kh = K.ms.filter(m => m.khilaf).length;
@@ -300,7 +302,7 @@ function rcChips(B) {
 }
 function fasStrip(B) {
   if (B.fs.length < 3) return '';
-  return '<ol class="route" aria-label="مسار الباب">' + B.fs.map((f, i) => '<li><a href="#' + f.id + '"><b>' + ad(i + 1) + '</b><span>' + T(f.t) + '</span></a></li>').join('') + '</ol>';
+  return '<ol class="route" aria-label="مسار الباب">' + B.fs.map((f, i) => '<li><a href="#' + f.id + '"><b>' + ad(i + 1) + '</b><span>' + FT(f) + '</span></a></li>').join('') + '</ol>';
 }
 function ovHtml(B) {
   const l = B.ms.filter(m => isL(m.id)).length;
@@ -310,13 +312,13 @@ function ovHtml(B) {
 }
 function babHtml(K, B, mode, filt, pi) {
   if (filt && !B.ms.some(m => m.khilaf)) return '';
-  let h = '<section class="bab" id="' + B.id + '"><div class="bab-h"><span class="bno">' + ad(B.i + 1) + '</span><h2>' + T(B.t) + '</h2>' + (B.ed ? '<span class="tag">عنوان تنظيمي</span>' : '') + '<span class="meta">' + ad(B.ms.length) + ' مسألة</span><span class="sp"></span><button class="mini" data-a="babok" data-b="' + B.id + '">أتقنت الباب</button></div>';
+  let h = '<section class="bab" id="' + B.id + '"><div class="bab-h"><span class="bno">' + ad(B.i + 1) + '</span><h2>' + BT(B) + '</h2>' + (B.ed ? '<span class="tag">عنوان تنظيمي</span>' : '') + '<span class="meta">' + ad(B.ms.length) + ' مسألة</span><span class="sp"></span><button class="mini" data-a="babok" data-b="' + B.id + '">أتقنت الباب</button></div>';
   if (!filt && !(pi > 0)) h += ovHtml(B);
   const rg = filt ? [0, B.items.length] : B.pages[pi || 0];
   for (const it of B.items.slice(rg[0], rg[1])) {
     if (it[0] === 'm') { if (!filt || it[2].khilaf) h += mHtml(it[2], mode); }
     else if (filt) continue;
-    else if (it[0] === 'f') h += '<h3 class="fasl" id="' + it[2] + '">' + T(it[1]) + '</h3>';
+    else if (it[0] === 'f') h += '<h3 class="fasl" id="' + it[2] + '">' + T(it[1]) + ub(it[3]) + '</h3>';
     else if (it[0] === 'l') h += '<div class="lbl">' + T(it[1]) + '</div>';
     else if (it[0] === 'q') h += '<div class="ayah-q">' + T(it[1]) + '</div>';
   }
@@ -324,7 +326,7 @@ function babHtml(K, B, mode, filt, pi) {
 }
 function partHtml(K, P) {
   const n = P.bs.reduce((a, B) => a + B.ms.length, 0), l = P.bs.reduce((a, B) => a + B.ms.filter(m => isL(m.id)).length, 0);
-  return '<div class="part" id="' + P.id + '"><span class="pn">الجزء ' + ad(P.i + 1) + ' من ' + ad(K.parts.length) + '</span><h2>' + T(P.t) + '</h2><p>' + T(P.d) + '</p><div class="pb" title="أُتقنت ' + ad(l) + ' من ' + ad(n) + '"><b style="width:' + (n ? Math.round(l / n * 100) : 0) + '%"></b></div></div>';
+  return '<div class="part" id="' + P.id + '"><span class="pn">الجزء ' + ad(P.i + 1) + ' من ' + ad(K.parts.length) + '</span><h2>' + PT(P) + '</h2><p>' + T(P.d) + '</p><div class="pb" title="أُتقنت ' + ad(l) + ' من ' + ad(n) + '"><b style="width:' + (n ? Math.round(l / n * 100) : 0) + '%"></b></div></div>';
 }
 function legendHtml() {
   return '<div class="lgm"><b>الرموز:</b>' + Object.keys(IM).map(k => '<span style="display:inline-flex;align-items:center;gap:6px"><span class="imc ' + k + '">' + IM[k][1] + '</span>' + IM[k][0] + '</span>').join('') +
@@ -349,23 +351,25 @@ function babsHtml(K) {
 function kmapHtml(K) {
   return '<details class="kmap kmapd"><summary>خريطة الكتاب · الأجزاء والأبواب</summary><div class="pcards">' + K.parts.map(P => {
     const ms = P.bs.reduce((a, B) => a.concat(B.ms), []);
-    return '<div class="pcard"><a class="ph" href="#' + P.id + '"><span class="pn2">' + ad(P.i + 1) + '</span><div><h3>' + T(P.t) + '</h3><p>' + T(P.d) + '</p></div></a><ul>' +
-      P.bs.map(B => '<li><a href="#' + B.id + '"><span>' + T(B.t) + '</span><small>' + ad(B.ms.length) + '</small></a></li>').join('') + '</ul><div class="pgl"><div class="pgb"><b style="width:' + (ms.length ? Math.round(ms.filter(m => isL(m.id)).length / ms.length * 100) : 0) + '%"></b></div><small>' + ad(ms.filter(m => isL(m.id)).length) + ' / ' + ad(ms.length) + '</small></div></div>';
+    return '<div class="pcard"><a class="ph" href="#' + P.id + '"><span class="pn2">' + ad(P.i + 1) + '</span><div><h3>' + PT(P) + '</h3><p>' + T(P.d) + '</p></div></a><ul>' +
+      P.bs.map(B => '<li><a href="#' + B.id + '"><span>' + BT(B) + '</span><small>' + ad(B.ms.length) + '</small></a></li>').join('') + '</ul><div class="pgl"><div class="pgb"><b style="width:' + (ms.length ? Math.round(ms.filter(m => isL(m.id)).length / ms.length * 100) : 0) + '%"></b></div><small>' + ad(ms.filter(m => isL(m.id)).length) + ' / ' + ad(ms.length) + '</small></div></div>';
   }).join('') + '</div></details>';
 }
 
 function topHtml() {
-  return '<header class="top"><div class="gutter"><div class="wrap"><button class="ibtn" data-a="menu" aria-label="مینیو کھولیں" aria-haspopup="dialog">' + I.menu + '</button><a class="brand" href="#home">' + I.star + '<span class="bn"><b>الحیات علوم اسلامیہ</b><small>مطالعہ فقہ اسلامی: القدوری</small></span></a><span class="sp"></span>' +
-    '<button class="ibtn" data-a="search" aria-label="بحث في المتن">' + I.search + '</button>' +
-    '<button class="ibtn" data-a="theme" aria-label="تبديل المظهر">' + I.theme + '</button></div></div></header>';
+  return '<header class="top"><div class="gutter"><div class="wrap"><button class="ibtn" data-a="menu" aria-label="مینیو کھولیں" aria-haspopup="dialog">' + I.menu + '</button>' +
+    '<a class="brand" href="#home">' + I.star + '<span class="bn"><b>الحیات علوم اسلامیہ</b><small>مطالعہ فقہ اسلامی: القدوری</small></span></a>' +
+    '<nav class="tnav" aria-label="اہم لنک"><a href="#home"' + (cur === 0 ? ' aria-current="page"' : '') + '>مرکزی صفحہ</a><button data-a="menu">کتابیں</button><button data-a="rev">دہرائی</button><button data-a="allquiz">آزمائش</button></nav><span class="sp"></span>' +
+    '<button class="ibtn" data-a="search" aria-label="متن میں تلاش">' + I.search + '</button>' +
+    '<button class="ibtn" data-a="theme" aria-label="روشن یا تاریک انداز">' + I.theme + '</button></div></div></header>';
 }
 function railHtml(n) {
-  return '<nav class="rail" aria-label="كتب المتن">' + D.map(K => '<a class="pill k' + K.n + '" href="#k' + K.n + '"' + (K.n === n ? ' aria-current="true"' : '') + '><i></i>' + T(K.title) + '</a>').join('') + '</nav>';
+  return '<nav class="rail" aria-label="كتب المتن">' + D.map(K => '<a class="pill k' + K.n + '" href="#k' + K.n + '"' + (K.n === n ? ' aria-current="true"' : '') + '><i></i>' + KT(K) + '</a>').join('') + '</nav>';
 }
 function tocHtml(K) {
-  return '<div class="toc"><h5>فهرس ' + T(K.title) + '</h5>' + K.parts.map(P => '<a class="tp" href="#' + P.id + '"><span class="pn3">' + ad(P.i + 1) + '</span><span>' + T(P.t) + '</span></a>' +
-    P.bs.map(B => '<a href="#' + B.id + '" data-b="' + B.id + '" class="' + (B.ed ? 'ed' : '') + '"><span>' + T(B.t) + '</span><small>' + ad(B.ms.length) + '</small></a>' +
-      (B.fs.length > 1 ? B.fs.map(f => '<a class="sb" href="#' + f.id + '"><span>' + T(f.t) + '</span></a>').join('') : '')).join('')).join('') + '</div>';
+  return '<div class="toc"><h5>فهرس ' + KT(K) + '</h5>' + K.parts.map(P => '<a class="tp" href="#' + P.id + '"><span class="pn3">' + ad(P.i + 1) + '</span><span>' + PT(P) + '</span></a>' +
+    P.bs.map(B => '<a href="#' + B.id + '" data-b="' + B.id + '" class="' + (B.ed ? 'ed' : '') + '"><span>' + BT(B) + '</span><small>' + ad(B.ms.length) + '</small></a>' +
+      (B.fs.length > 1 ? B.fs.map(f => '<a class="sb" href="#' + f.id + '"><span>' + FT(f) + '</span></a>').join('') : '')).join('')).join('') + '</div>';
 }
 function dockHtml() {
   return '<div class="dock" role="toolbar" aria-label="أدوات الدراسة">' +
@@ -392,70 +396,94 @@ function planHtml() {
     '<div class="strk2"><b>' + ad(sk) + '</b><span class="urt">مسلسل دن</span></div></div>' +
     '<div class="pl-cards">' +
     '<div class="pc c1"><span class="pi">' + I.cards + '</span><h3 class="urt">دہرائی</h3><p class="urt">' + (due ? ad(due) + ' مسائل دہرانے کے منتظر ہیں' : 'ابھی کوئی مسئلہ باقی نہیں') + '</p><button class="pb" data-a="rev">' + (due ? 'دہرائی شروع کریں' : 'آزاد مشق') + '</button></div>' +
-    (nb ? '<div class="pc c2"><span class="pi">' + I.list + '</span><h3 class="urt">نیا سبق</h3><p>' + T(K.title) + ' · ' + T(nb.t) + '</p><a class="pb" href="#' + nb.id + '">باب کھولیں</a></div>' +
+    (nb ? '<div class="pc c2"><span class="pi">' + I.list + '</span><h3 class="urt">نیا سبق</h3><p>' + KT(K) + ' · ' + BT(nb) + '</p><a class="pb" href="#' + nb.id + '">باب کھولیں</a></div>' +
       '<div class="pc c3"><span class="pi">' + I.quiz + '</span><h3 class="urt">اپنا امتحان لیں</h3><p class="urt">اسی باب سے فوری سوالات</p><button class="pb" data-a="quiz" data-b="' + nb.id + '">آزمائش شروع کریں</button></div>'
       : '<div class="pc c2"><span class="pi">' + I.star + '</span><h3 class="urt">ماشاء اللہ!</h3><p class="urt">آپ نے پورا متن یاد کر لیا — دہرائی جاری رکھیں۔</p><button class="pb" data-a="allquiz">جامع آزمائش</button></div>') +
     '</div></div>';
 }
 function routeHtml() {
-  let h = '<h2 class="sec-t">مسار التعلم</h2><p class="sec-d">ہر کتاب کے لیے پانچ مراحل: پڑھیں ← سمجھیں ← اصطلاحات ← یاد کریں ← آزمائیں۔ نیچے سے کسی بھی مرحلے پر براہِ راست جائیں۔</p><div class="route">';
+  let h = '<details class="allroute"><summary><b class="urt">تمام کتابوں کا تفصیلی راستہ</b><small class="urt">ہر کتاب کے پانچ قدم اور پیش رفت — کھولنے کے لیے دبائیں</small></summary><div class="route">';
   D.forEach(K => {
     const l = learnedIn(K), tm = K.ms.length, nv = VOC.filter(v => v.k === K.n), mv = nv.filter(v => S.vm[vk(v)]).length, st = mqStat(K), nq = QA.filter(v => v.k === K.n).length;
     const steps = [['ar', 'المتن', ad(l) + '/' + ad(tm), tm ? l / tm : 0], ['ur', 'اردو', 'ترجمہ', 0], ['vo', 'مفردات', ad(mv) + '/' + ad(nv.length), nv.length ? mv / nv.length : 0], ['qa', 'سوال جواب', ad(nq) + ' سوال', 0], ['mc', 'MCQs', ad(st.a) + '/' + ad(st.n), st.n ? st.a / st.n : 0]];
     const tot = (steps[0][3] + steps[2][3] + steps[4][3]) / 3;
-    h += '<div class="rk k' + K.n + '"><a class="rk-h" href="#k' + K.n + '"><h3>' + T(K.title) + '</h3><span class="rk-p">' + ad(Math.round(tot * 100)) + '٪</span></a><div class="pgb"><b style="width:' + Math.round(tot * 100) + '%"></b></div><div class="rk-s">' +
+    h += '<div class="rk k' + K.n + '"><a class="rk-h" href="#k' + K.n + '"><h3>' + KT(K) + '</h3><span class="rk-p">' + ad(Math.round(tot * 100)) + '٪</span></a><div class="pgb"><b style="width:' + Math.round(tot * 100) + '%"></b></div><div class="rk-s">' +
       steps.map((x, i) => '<a href="#k' + K.n + '-v' + x[0] + '"><i>' + ad(i + 1) + '</i><span class="rl">' + x[1] + '</span><small>' + x[2] + '</small>' + (x[3] >= 1 ? '<em>✓</em>' : '') + '</a>').join('') + '</div></div>';
   });
-  return h + '</div>';
+  return h + '</div></details>';
 }
+const GROUPS = [['عبادات', 'طہارت، نماز، زکوٰۃ، روزہ، حج', 1, 5], ['مالی معاملات', 'خرید و فروخت، رہن، اجارہ، شرکت، مضاربت، وکالت، کفالت، صلح', 6, 17, [['خرید و فروخت اور حقوقِ تصرف', 6, 9], ['اجارہ اور شفعہ', 10, 11], ['شراکت اور نیابت', 12, 14], ['ضمانت اور صلح', 15, 17]]],
+  ['امانات و عاریت اور متفرق', 'ہبہ، وقف، غصب، ودیعت، عاریت، لقطہ اور دیگر ابواب', 18, 29, [['عطیہ اور وقف', 18, 19], ['غصب اور امانتیں', 20, 22], ['لاوارث، گمشدہ اور خنثیٰ', 23, 26], ['زمین اور اجازتِ تجارت', 27, 29]]], ['نکاح و خاندان', 'نکاح، رضاعت، طلاق، ظہار، نفقہ، عتق، مکاتب، ولاء', 30, 38, [['نکاح اور رضاعت', 30, 31], ['طلاق اور اس کے متعلقات', 32, 35], ['آزادی اور ولاء', 36, 38]]],
+  ['جنایات و حدود', 'قتل، دیت، حدود، چوری، اشربہ', 39, 43, [['قتل اور دیت', 39, 40], ['حدود، چوری اور اشربہ', 41, 43]]], ['ذبائح، قسمیں اور دعویٰ', 'شکار و ذبیحہ، قربانی، قسمیں، دعویٰ', 44, 47],
+  ['قضا، شہادت اور تقسیم', 'شہادات، آدابِ قاضی، قسمہ', 48, 50], ['اکراہ، سیر اور بغاوت', 'اکراہ، جہاد و سیر، باغی', 51, 53],
+  ['حظر، اباحت اور وصایا', 'حلال و حرام معاملات، وصیت', 54, 55], ['میراث', 'فرائض', 56, 99]];
+const gInfo = () => GROUPS.map((g, gi) => ({ g, gi, ks: D.filter(K => K.n >= g[2] && K.n <= g[3]) })).filter(x => x.ks.length).map(x => (x.done = x.ks.reduce((a, K) => a + learnedIn(K), 0), x.tot = x.ks.reduce((a, K) => a + K.ms.length, 0), x.c = 'k' + (x.gi + 1), x));
 function home() {
   cur = 0; closeOverlays(); app.className = 'k0';
-  const totB = D.reduce((a, K) => a + K.babs.length, 0);
+  const totB = D.reduce((a, K) => a + K.babs.length, 0), mast = allM.filter(m => isL(m.id)).length, pAll = nK ? mast / nK : 0, sk = streak(), dn = doneToday(), due = allM.filter(m => isDue(m.id)).length;
   let h = topHtml();
   let cta = '<a class="cta p" href="#k1"><b>تعلم شروع کریں</b><small>کتاب الطہارۃ سے آغاز</small></a>';
   if (S.last && S.last.b) {
     const K = D[S.last.k - 1], B = K && K.babs.find(b => b.id === S.last.b);
-    if (B) cta = '<a class="cta p" href="#' + B.id + '"><small>جہاں چھوڑا تھا وہیں سے جاری رکھیں</small><b>' + T(K.title) + ' · ' + T(B.t) + '</b></a>';
+    if (B) cta = '<a class="cta p" href="#' + B.id + '"><small>جہاں چھوڑا تھا وہیں سے جاری رکھیں</small><b>' + KT(K) + ' · ' + BT(B) + '</b></a>';
   }
   const stats = [[D.length, 'کتابیں'], [totB, 'ابواب'], [nK, 'مسائل'], [VOC.length, 'مفردات'], [QA.length, 'سوال جواب'], [MCQ.length, 'MCQs']];
-  h += '<section class="hero land"><div class="gutter"><div class="wrap hero-g"><div class="hero-t"><div class="eyebrow">الحیات علوم اسلامیہ · مطالعہ فقہ اسلامی</div><h1>مختصر القدوري</h1>' +
-    '<p class="sub">متن أبي الحسين القدوري (ت ٤٢٨ هـ) في الفقه الحنفي: عربی متن اعراب کے ساتھ، اردو ترجمہ، مفردات، سوال جواب اور MCQs — پڑھیں، سمجھیں، یاد کریں اور آزمائیں۔</p>' +
+  h += '<section class="hero land"><div class="gutter"><div class="wrap hero-g"><div class="hero-t"><div class="eyebrow">الحیات علوم اسلامیہ · مطالعہ فقہ اسلامی</div>' +
+    '<h1>مُخْتَصَرُ الْقُدُورِيِّ<span class="ub">(مختصر القدوری)</span></h1>' +
+    '<p class="sub urt">فقہِ حنفی کا بنیادی متن: اعراب کے ساتھ عربی عبارت، اردو ترجمہ، مفردات، سوال جواب اور MCQs — پڑھیں، سمجھیں، یاد کریں اور آزمائیں۔</p>' +
     '<div class="ctas">' + cta + '<button class="cta s" data-a="search"><b>متن میں تلاش</b></button><button class="cta s" data-a="allquiz"><b>جامع آزمائش</b></button></div></div>' +
-    '<div class="hstats" aria-label="مواد کا خلاصہ">' + stats.map(x => '<div class="hs"><b>' + ad(x[0]) + '</b><span>' + x[1] + '</span></div>').join('') + '</div></div></div></section>';
+    '<div class="hprog"><div class="hp-top">' + ringSvg(pAll) + '<div><b class="urt">آپ کی پیش رفت</b><span class="urt">' + ad(mast) + ' / ' + ad(nK) + ' مسائل یاد</span></div></div>' +
+    '<div class="hp-row"><span class="urt"><b>' + ad(sk) + '</b> مسلسل دن</span><span class="urt"><b>' + ad(dn) + '/' + ad(GOAL) + '</b> آج کا ہدف</span><span class="urt"><b>' + ad(due) + '</b> دہرائی</span></div></div></div></div>' +
+    '<div class="gutter"><div class="wrap"><div class="hstats" aria-label="مواد کا خلاصہ">' + stats.map(x => '<div class="hs"><b>' + ad(x[0]) + '</b><span class="urt">' + x[1] + '</span></div>').join('') + '</div></div></div></section>';
+  const gl = gInfo(), lastK = S.last && S.last.k;
+  h += '<nav class="snav" aria-label="صفحے کے حصے"><div class="gutter"><div class="wrap"><a href="#home" data-a="sj" data-s="plan">آج کا منصوبہ</a><a href="#home" data-a="sj" data-s="road">سیکھنے کا راستہ</a><a href="#home" data-a="sj" data-s="lib">کتابیں</a><a href="#home" data-a="sj" data-s="guide">رہنمائی</a></div></div></nav>';
   h += '<div class="gutter"><div class="wrap">';
-  const GROUPS = [['عبادات', 'طہارت، نماز، زکوٰۃ، روزہ، حج', 1, 5], ['مالی معاملات', 'خرید و فروخت، رہن، اجارہ، شرکت، مضاربت، وکالت، کفالت، صلح', 6, 17],
-    ['امانات و عاریت اور متفرق', 'ہبہ، وقف، غصب، ودیعت، عاریت، لقطہ اور دیگر ابواب', 18, 29], ['نکاح و خاندان', 'نکاح، رضاعت، طلاق، ظہار، نفقہ، عتق، مکاتب، ولاء', 30, 38],
-    ['جنایات و حدود', 'قتل، دیت، حدود، چوری، اشربہ', 39, 43], ['ذبائح، قسمیں اور دعویٰ', 'شکار و ذبیحہ، قربانی، قسمیں، دعویٰ', 44, 47],
-    ['قضا، شہادت اور تقسیم', 'شہادات، آدابِ قاضی، قسمہ', 48, 50], ['اکراہ، سیر اور بغاوت', 'اکراہ، جہاد و سیر، باغی', 51, 53],
-    ['حظر، اباحت اور وصایا', 'حلال و حرام معاملات، وصیت', 54, 55], ['میراث', 'فرائض', 56, 99]];
-  const lastK = S.last && S.last.k, tile = K => {
+  h += '<section id="plan" data-sec="plan">' + planHtml() + '</section>';
+  h += '<section id="road" data-sec="road"><h2 class="sec-t"><span>سیکھنے کا راستہ</span></h2><p class="sec-d urt">دس مرحلوں میں پورا متن: عبادات سے شروع کر کے میراث تک۔ کسی بھی مرحلے پر کلک کریں تو اس کی کتابیں کھل جائیں گی۔</p><ol class="road">' +
+    gl.map((x, i) => '<li><button class="stg ' + x.c + '" data-a="gj" data-g="' + x.gi + '"><i class="sn">' + ad(i + 1) + '</i><b class="urt">' + x.g[0] + '</b><small class="urt">' + ad(x.ks.length) + ' کتابیں · ' + ad(x.tot) + ' مسائل</small><span class="pgb"><b style="width:' + (x.tot ? Math.round(x.done / x.tot * 100) : 0) + '%"></b></span></button></li>').join('') + '</ol>' +
+    '<div class="meth"><span class="urt">ہر کتاب میں پانچ قدم:</span>' + VIEWS.map((v, i) => '<a class="mp" href="#k' + (S.last ? S.last.k : 1) + '-v' + v[0] + '"><i>' + ad(i + 1) + '</i><b class="urt">' + v[3] + '</b><small>' + v[2] + '</small></a>').join('') + '</div></section>';
+  const tile = K => {
     const l = learnedIn(K), pc = K.ms.length ? l / K.ms.length : 0;
-    return '<a class="tile k' + K.n + '" href="#k' + K.n + '"><span class="no urt">کتاب ' + ad(K.n) + ' · <span class="en">' + esc(META[K.n].en) + '</span></span><h3>' + T(K.title) + '</h3><p class="urt">' + esc(META[K.n].du) + '</p>' +
+    return '<a class="tile k' + K.n + '" href="#k' + K.n + '"><span class="no urt">کتاب ' + ad(K.n) + ' · <span class="en">' + esc(META[K.n].en) + '</span></span><h3>' + T(K.title) + '<span class="ub">(' + esc(K.tu) + ')</span></h3><p class="urt">' + esc(META[K.n].du) + '</p>' +
       '<div class="ft"><span class="urt">' + ad(K.parts.length) + ' حصے · ' + ad(K.babs.length) + ' ابواب · ' + ad(K.ms.length) + ' مسائل</span>' + ringSvg(pc) + '</div></a>';
   };
-  h += '<h2 class="sec-t">اپنی کتاب منتخب کریں</h2>';
-  const gl = GROUPS.map((g, gi) => ({ g, gi, ks: D.filter(K => K.n >= g[2] && K.n <= g[3]) })).filter(x => x.ks.length);
-  h += '<nav class="gchips" aria-label="گروہ">' + gl.map(x => '<button data-a="gj" data-g="' + x.gi + '">' + x.g[0] + '<b>' + ad(x.ks.length) + '</b></button>').join('') + '</nav>';
+  h += '<section id="lib" data-sec="lib"><h2 class="sec-t"><span>کتابیں</span></h2>';
+  h += '<nav class="gchips" aria-label="گروہ">' + gl.map((x, i) => '<button class="' + x.c + '" data-a="gj" data-g="' + x.gi + '"><i>' + ad(i + 1) + '</i>' + x.g[0] + '<b>' + ad(x.ks.length) + '</b></button>').join('') + '</nav>';
   gl.forEach((x, i) => {
-    const hasLast = lastK && x.ks.some(K => K.n === lastK), done = x.ks.reduce((a, K) => a + learnedIn(K), 0), tot = x.ks.reduce((a, K) => a + K.ms.length, 0);
-    h += '<details class="grp" id="g' + x.gi + '"' + (i === 0 || hasLast ? ' open' : '') + '><summary><span class="gt"><b class="urt">' + x.g[0] + '</b><small class="urt">' + x.g[1] + '</small></span><span class="gc urt">' + ad(x.ks.length) + ' کتابیں · ' + ad(done) + '/' + ad(tot) + '</span></summary><div class="tiles">' + x.ks.map(tile).join('') + '</div></details>';
+    const hasLast = lastK && x.ks.some(K => K.n === lastK);
+    h += '<details class="grp ' + x.c + '" id="g' + x.gi + '"' + (i === 0 || hasLast ? ' open' : '') + '><summary><i class="gnum">' + ad(i + 1) + '</i><span class="gt"><b class="urt">' + x.g[0] + '</b><small class="urt">' + x.g[1] + '</small></span><span class="gc urt">' + ad(x.ks.length) + ' کتابیں · ' + ad(x.done) + '/' + ad(x.tot) + '</span></summary>' + (x.g[4] ? x.g[4].map((sg, si) => { const ks = x.ks.filter(K => K.n >= sg[1] && K.n <= sg[2]); return ks.length ? '<h4 class="sgrp"><i>' + ad(i + 1) + '.' + ad(si + 1) + '</i><span class="urt">' + sg[0] + '</span><small class="urt">' + ad(ks.length) + ' کتابیں</small></h4><div class="tiles">' + ks.map(tile).join('') + '</div>' : ''; }).join('') : '<div class="tiles">' + x.ks.map(tile).join('') + '</div>') + '</details>';
   });
+  h += '</section>';
+  h += '<section id="guide" data-sec="guide"><h2 class="sec-t"><span>رہنمائی</span></h2><div class="steps3">' +
+    '<div class="st3 s1"><span class="n">۱</span><h4 class="urt">سمجھ کر پڑھیں</h4><p class="urt">پہلے «اس باب میں» کا خلاصہ دیکھیں، پھر مسائل ایک ایک کر کے پڑھیں۔ رنگوں سے حکم اور ائمہ کی رائے پہچانیں۔</p></div>' +
+    '<div class="st3 s2"><span class="n">۲</span><h4 class="urt">خود یاد کریں</h4><p class="urt">«حفظ» موڈ میں احکام اور اعداد چھپ جاتے ہیں؛ خود یاد کرنے کی کوشش ہی معلومات کو پکا کرتی ہے۔</p></div>' +
+    '<div class="st3 s3"><span class="n">۳</span><h4 class="urt">دہرائیں اور آزمائیں</h4><p class="urt">سوال جواب اور MCQs حل کریں؛ غلط جوابات خود بخود دہرائی میں آ جاتے ہیں۔</p></div></div>' +
+    '<h3 class="sub-t urt">متن کے رنگ</h3><div class="legend">' + Object.keys(IM).map(k => '<span class="lg"><span class="imc ' + k + '">' + IM[k][1] + '</span>' + IM[k][0] + '</span>').join('') + RK.map(c => '<span class="lg mt"><span class="r ' + c + '">' + RC[c].split(' / ')[0] + '</span><small>' + RC[c].split(' / ').slice(1).join(' · ') + '</small></span>').join('') + '<span class="lg mt"><span class="nm">عدد</span><small>الأعداد والنصب</small></span></div></section>';
   h += routeHtml();
-  h += planHtml();
-  h += '<h2 class="sec-t">سیکھنے کا طریقہ</h2><div class="steps3">' +
-    '<div class="st3"><span class="n">۱</span><h4 class="urt">سمجھ کر پڑھیں</h4><p class="urt">پہلے «اس باب میں» کا خلاصہ دیکھیں، پھر مسائل ایک ایک کر کے پڑھیں۔ رنگوں سے حکم اور ائمہ کی رائے پہچانیں۔</p></div>' +
-    '<div class="st3"><span class="n">۲</span><h4 class="urt">خود یاد کریں</h4><p class="urt">«حفظ» موڈ میں احکام اور اعداد چھپ جاتے ہیں؛ خود یاد کرنے کی کوشش ہی معلومات کو پکا کرتی ہے۔</p></div>' +
-    '<div class="st3"><span class="n">۳</span><h4 class="urt">دہرائیں اور آزمائیں</h4><p class="urt">سوال جواب اور MCQs حل کریں؛ غلط جوابات خود بخود دہرائی میں آ جاتے ہیں۔</p></div></div>' +
-    '<h2 class="sec-t">متن کے رنگ</h2><div class="legend">' + Object.keys(IM).map(k => '<span class="lg"><span class="imc ' + k + '">' + IM[k][1] + '</span>' + IM[k][0] + '</span>').join('') + RK.map(c => '<span class="lg mt"><span class="r ' + c + '">' + RC[c].split(' / ')[0] + '</span><small>' + RC[c].split(' / ').slice(1).join(' · ') + '</small></span>').join('') + '<span class="lg mt"><span class="nm">عدد</span><small>الأعداد والنصب</small></span></div>' +
-    '<p class="note urt">عربی متن «مختصر القدوری» کے شاملہ لائبریری والے نسخے سے ہے؛ اجزاء، «اس باب میں» کارڈ اور تنظیمی عنوانات سیکھنے کی سہولت کے لیے شامل کیے گئے ہیں۔ احکام کی رنگ بندی خودکار ہے، دلیل لینے سے پہلے اصل مسئلہ دیکھ لیں۔ اعراب، اردو ترجمہ، مفردات، سوال جواب اور MCQs مصنوعی ذہانت کی مدد سے تیار ہوئے ہیں اور کسی مستند عالم سے نظرِ ثانی کے محتاج ہیں۔ آپ کی پیش رفت صرف اسی براؤزر میں محفوظ رہتی ہے۔</p></div></div>';
-  app.innerHTML = h; jump(0); document.title = 'الحیات علوم اسلامیہ (مطالعہ فقہ اسلامی: القدوری)';
+  h += '<p class="note urt" id="note" data-sec="note">عربی متن «مختصر القدوری» کے شاملہ لائبریری والے نسخے سے ہے؛ اجزاء، «اس باب میں» کارڈ اور تنظیمی عنوانات سیکھنے کی سہولت کے لیے شامل کیے گئے ہیں۔ احکام کی رنگ بندی خودکار ہے، دلیل لینے سے پہلے اصل مسئلہ دیکھ لیں۔ اعراب، اردو ترجمہ، مفردات، سوال جواب اور MCQs مصنوعی ذہانت کی مدد سے تیار ہوئے ہیں اور کسی مستند عالم سے نظرِ ثانی کے محتاج ہیں۔ آپ کی پیش رفت صرف اسی براؤزر میں محفوظ رہتی ہے۔</p></div></div>';
+  h += footHtml();
+  app.innerHTML = h; jump(0); document.title = 'الحیات علوم اسلامیہ (مطالعہ فقہ اسلامی: القدوری)'; spy();
+}
+function footHtml() {
+  const L = (u, t, s) => '<a href="' + u + '" target="_blank" rel="noopener"><b>' + t + '</b><small>' + s + '</small></a>';
+  return '<footer class="foot"><div class="gutter"><div class="wrap"><div class="ft-g"><div class="ft-b"><div class="ft-t urt">ڈاکٹر عمران حیات کی تدریسی پیشکش</div><p class="urt">«الحیات علوم اسلامیہ» کے تحت فقہ اسلامی کے مطالعے کا ایک مفت، سادہ اور منظم تعلیمی منصوبہ۔ مختصر القدوری کا اعراب شدہ متن، اردو ترجمہ، مفردات، سوال جواب اور MCQs۔</p><a class="ft-site" href="https://drimranhayat.com" target="_blank" rel="noopener">drimranhayat.com</a></div>' +
+    '<nav class="ft-c" aria-label="سرکاری روابط"><h5 class="urt">سرکاری روابط</h5>' + L('https://drimranhayat.com', 'سرکاری ویب سائٹ', 'drimranhayat.com') + L('https://github.com/drimranhayat', 'گِٹ ہب پروفائل', 'github.com/drimranhayat') + L('https://github.com/drimranhayat/quduri-repo-with-new-urdu', 'ماخذ کوڈ', 'GitHub repository') + '</nav>' +
+    '<nav class="ft-c" aria-label="اس سائٹ میں"><h5 class="urt">اس سائٹ میں</h5><a href="#home" data-a="sj" data-s="plan"><b>آج کا منصوبہ</b></a><a href="#home" data-a="sj" data-s="road"><b>سیکھنے کا راستہ</b></a><a href="#home" data-a="sj" data-s="lib"><b>تمام کتابیں</b></a><a href="#home" data-a="sj" data-s="guide"><b>رہنمائی اور رنگوں کی وضاحت</b></a></nav>' +
+    '<nav class="ft-c" aria-label="ماخذ"><h5 class="urt">ماخذ اور نوٹ</h5><a href="https://shamela.ws/book/124336" target="_blank" rel="noopener"><b>المکتبة الشاملة</b><small>کتاب ۱۲۴۳۳۶</small></a><a href="#home" data-a="sj" data-s="note"><b>نظرِ ثانی کا نوٹ</b></a></nav></div>' +
+    '<div class="ft-bot urt"><span>© ' + new Date().getFullYear() + ' ڈاکٹر عمران حیات · الحیات علوم اسلامیہ</span><span>اعراب، ترجمہ اور سوالات کسی مستند عالم سے نظرِ ثانی کے محتاج ہیں۔</span></div></div></div></footer>';
+}
+function spy() {
+  const links = $$('.snav a'), secs = $$('[data-sec]');
+  if (!('IntersectionObserver' in window) || !secs.length) return;
+  const io = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle('on', a.dataset.s === e.target.dataset.sec)); }); }, { rootMargin: '-110px 0px -65% 0px' });
+  secs.forEach(x => io.observe(x));
 }
 
 function kitab(n, anchor) {
   vq = null; const K = D[n - 1]; cur = n; closeOverlays(); app.className = 'k' + n; revealed = false;
   const l = learnedIn(K), pc = K.ms.length ? Math.round(l / K.ms.length * 100) : 0;
   let h = topHtml();
-  h += '<section class="hero kit"><div class="gutter"><div class="wrap">' + railHtml(n) + '<div class="eyebrow urt">کتاب ' + ad(n) + ' از ' + ad(D.length) + ' · <span class="en">' + esc(META[n].en) + '</span></div><h1>' + T(K.title) + '</h1><p class="sub urt">' + esc(META[n].du) + '</p>' +
+  h += '<section class="hero kit"><div class="gutter"><div class="wrap">' + railHtml(n) + '<div class="eyebrow urt">کتاب ' + ad(n) + ' از ' + ad(D.length) + ' · <span class="en">' + esc(META[n].en) + '</span></div><h1>' + KT(K) + '</h1><p class="sub urt">' + esc(META[n].du) + '</p>' +
     '<div class="chips urt"><span class="chip">' + ad(K.parts.length) + ' حصے</span><span class="chip">' + ad(K.babs.length) + ' ابواب</span><span class="chip">' + ad(K.ms.length) + ' مسائل</span><span class="chip">' + ad(K.kh) + ' اختلافی</span><span class="chip" id="prtxt">یاد: ' + ad(l) + ' / ' + ad(K.ms.length) + '</span></div><div class="bar"><b id="prbar" style="width:' + pc + '%"></b></div></div></div></section>';
   h += '<div class="gutter"><div class="wrap">' + tabsHtml(K) + '</div></div>';
   h += '<div class="gutter"><div class="wrap" id="kmapw">' + (S.view === 'ar' ? kmapHtml(K) : '') + '</div></div>';
@@ -483,7 +511,7 @@ function nextHtml(K) {
   const i = VIEWS.findIndex(v => v[0] === S.view), nx = VIEWS[i + 1];
   if (nx) return '<div class="nextstep"><span>اگلا مرحلہ</span><button data-a="view" data-v="' + nx[0] + '"><b>' + ad(i + 2) + '</b> ' + nx[2] + ' — ' + nx[3] + ' ←</button></div>';
   const NK = D[K.n];
-  return '<div class="nextstep"><span>مبارک! یہ کتاب مکمل ہوئی</span>' + (NK ? '<a class="btnl" href="#k' + NK.n + '">اگلی کتاب: ' + T(NK.title) + ' ←</a>' : '<a class="btnl" href="#home">مرکزی صفحہ ←</a>') + '</div>';
+  return '<div class="nextstep"><span>مبارک! یہ کتاب مکمل ہوئی</span>' + (NK ? '<a class="btnl" href="#k' + NK.n + '">اگلی کتاب: ' + KT(NK) + ' ←</a>' : '<a class="btnl" href="#home">مرکزی صفحہ ←</a>') + '</div>';
 }
 function curBab(K) {
   let i = S.cb[K.n];
@@ -774,10 +802,11 @@ function menuHtml() {
     '<button data-a="theme"><span>◐</span>روشن / تاریک</button></div>';
   h += '<h4 class="dr-t">کتابیں اور موضوعات</h4><div data-close>';
   D.forEach(K => {
+    const gg = GROUPS.findIndex(g => g[2] === K.n); if (gg >= 0) h += '<h5 class="dr-g k' + (gg + 1) + '"><i>' + ad(gg + 1) + '</i>' + GROUPS[gg][0] + '</h5>';
     const l = learnedIn(K), pc = K.ms.length ? Math.round(l / K.ms.length * 100) : 0, cb = curBab(K);
-    h += '<details class="mk k' + K.n + '"' + (cur === K.n ? ' open' : '') + '><summary><i></i><span>' + T(K.title) + '</span><small>' + ad(pc) + '٪</small></summary>';
+    h += '<details class="mk k' + K.n + '"' + (cur === K.n ? ' open' : '') + '><summary><i></i><span>' + KT(K) + '</span><small>' + ad(pc) + '٪</small></summary>';
     h += '<div class="mk-tabs">' + TABN.map(t => '<a href="#k' + K.n + '-v' + t[0] + '"' + (cur === K.n && S.view === t[0] ? ' class="on"' : '') + '>' + t[1] + '</a>').join('') + '</div>';
-    h += '<div class="mk-babs">' + K.babs.map(B => '<a href="#' + B.id + '"' + (cur === K.n && cb === B.i ? ' class="on"' : '') + '><b>' + ad(B.i + 1) + '</b><span>' + (S.view === 'ar' || S.view === 'vo' || cur !== K.n ? T(B.t) : esc(B.tu)) + '</span></a>').join('') + '</div></details>';
+    h += '<div class="mk-babs">' + K.babs.map(B => '<a href="#' + B.id + '"' + (cur === K.n && cb === B.i ? ' class="on"' : '') + '><b>' + ad(B.i + 1) + '</b><span>' + (S.view === 'ar' || S.view === 'vo' || cur !== K.n ? BT(B) : esc(B.tu)) + '</span></a>').join('') + '</div></details>';
   });
   return h + '</div>';
 }
@@ -834,7 +863,7 @@ function resItem(m, toks) {
   const si = Math.max(0, i - 60), ei = Math.min(mp.length, si + 190);
   const s0 = mp[si] || 0, e0 = ei >= mp.length ? m.text.length : mp[ei];
   const piece2 = sd(m.text.slice(s0, e0));
-  return '<a class="k' + m.k + '" href="#' + m.id + '"><small>' + T(K.title) + ' · ' + T(B.t) + ' · مسألة ' + ad(m.no) + '</small><p>' + (s0 ? '… ' : '') + (toks ? hl(piece2, toks) : esc(piece2)) + (e0 < m.text.length ? ' …' : '') + '</p></a>';
+  return '<a class="k' + m.k + '" href="#' + m.id + '"><small>' + KT(K) + ' · ' + BT(B) + ' · مسألة ' + ad(m.no) + '</small><p>' + (s0 ? '… ' : '') + (toks ? hl(piece2, toks) : esc(piece2)) + (e0 < m.text.length ? ' …' : '') + '</p></a>';
 }
 function bmList(sc) {
   const res = $('#res', sc), all = allM.filter(m => S.bm[m.id]);
@@ -870,7 +899,7 @@ function drawCard() {
   const m = fc.deck[0], B = D[m.k - 1].babs[m.bi];
   el.className = 'fc k' + m.k;
   const isNew = fc.nw.has(m.id), c = S.srs[m.id];
-  const head = '<div class="q"><span>' + T(D[m.k - 1].title) + ' · ' + T(B.t) + ' · مسألة ' + ad(m.no) + '</span><em class="bdg ' + (isNew ? 'nw' : 'rv2') + '">' + (isNew ? 'جديدة' : c && c.d < today() ? 'متأخرة' : 'مراجعة') + '</em></div>';
+  const head = '<div class="q"><span>' + KT(D[m.k - 1]) + ' · ' + BT(B) + ' · مسألة ' + ad(m.no) + '</span><em class="bdg ' + (isNew ? 'nw' : 'rv2') + '">' + (isNew ? 'جديدة' : c && c.d < today() ? 'متأخرة' : 'مراجعة') + '</em></div>';
   const n = Math.min(m.t.length, m.ts + 5);
   let body;
   m.mk = null;
@@ -1049,6 +1078,7 @@ app.addEventListener('click', e => {
     case 'kh': S.khilaf = !S.khilaf; save(); b.setAttribute('aria-pressed', String(S.khilaf)); refresh(); break;
     case 'th': S.theme = v; applyTheme(); save(); $$('.pop [data-a="th"]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === S.theme))); break;
     case 'gj': { const d = document.getElementById('g' + b.dataset.g); if (d) { d.open = true; d.scrollIntoView({ behavior: 'smooth', block: 'start' }); } break; }
+    case 'sj': { e.preventDefault(); const d = document.getElementById(b.dataset.s); if (d) d.scrollIntoView({ behavior: 'smooth', block: 'start' }); break; }
     case 'theme': S.theme = S.theme === 'auto' ? 'dark' : S.theme === 'dark' ? 'light' : 'auto'; applyTheme(); save(); break;
     case 'reset': if (b.dataset.sure) { S.srs = {}; S.bm = {}; S.last = null; S.day = { d: 0, n: 0 }; S.st = { last: 0, n: 0 }; save(); const p = $('.pop'); if (p) p.remove(); cur ? kitab(cur) : home(); } else { b.dataset.sure = '1'; b.textContent = 'تأكيد المسح'; } break;
     case 'search': openSearch(); break;
