@@ -1,0 +1,1745 @@
+{
+  "revision": "topic001-coverage-2026-10-17",
+  "qaCount": 104,
+  "mcqCount": 135,
+  "teachingPoints": 135,
+  "scope": "Coverage of the forty selected published texts and their main explanatory distinctions. All source benefits and available vocabulary remain readable in their panels. Incidental descriptive details do not each require an isolated question. This is an editorial coverage audit, not independent scholarly certification or exhaustive coverage of every chain, variant or legal debate.",
+  "records": [
+    {
+      "number": 1,
+      "id": "65050",
+      "title": "Revelation at the age of forty",
+      "qaCount": 1,
+      "mcqCount": 2,
+      "primary": "https://sunnah.com/bukhari:3851",
+      "source": "https://hadeethenc.com/en/browse/hadith/65050",
+      "page": "hadith/01-revelation-at-the-age-of-forty.html",
+      "points": [
+        {
+          "point": "Age at first revelation and the lengths of the Makkan and Madinan periods",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            2
+          ]
+        },
+        {
+          "point": "Migration by command and the sequence ending in his death",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "66304",
+      "title": "The call after the pause",
+      "qaCount": 4,
+      "mcqCount": 4,
+      "primary": "https://sunnah.com/bukhari:4",
+      "source": "https://hadeethenc.com/en/browse/hadith/66304",
+      "page": "hadith/02-the-call-after-the-pause.html",
+      "points": [
+        {
+          "point": "Renewal after the pause, distinguished from the first revelation",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "The angel at Hira, the Prophet's fear and the command to arise",
+          "qa": [
+            1,
+            3
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Proclamation, glorifying Allah and abandoning idol worship",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Purification of garments and the prayer-related benefit",
+          "qa": [
+            4
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Revelation becoming continuous after the renewed call",
+          "qa": [
+            1,
+            3
+          ],
+          "mcq": [
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "10840",
+      "title": "The ways revelation came",
+      "qaCount": 3,
+      "mcqCount": 4,
+      "primary": "https://sunnah.com/bukhari:2",
+      "source": "https://hadeethenc.com/en/browse/hadith/10840",
+      "page": "hadith/03-the-ways-revelation-came.html",
+      "points": [
+        {
+          "point": "Two modes of reception: bell-like sound and the angel in human form",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            3
+          ]
+        },
+        {
+          "point": "Difficulty of reception without loss of the conveyed message",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Aishah's cold-day observation and the physical burden",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            4
+          ]
+        },
+        {
+          "point": "Al-Harith as questioner and Aishah as narrator and observer",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "10841",
+      "title": "The weight of revelation",
+      "qaCount": 1,
+      "mcqCount": 2,
+      "primary": "https://sunnah.com/muslim:2334",
+      "source": "https://hadeethenc.com/en/browse/hadith/10841",
+      "page": "hadith/04-the-weight-of-revelation.html",
+      "points": [
+        {
+          "point": "Visible distress, facial change and the gravity of revelation",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "10843",
+      "title": "Listening before reciting",
+      "qaCount": 2,
+      "mcqCount": 4,
+      "primary": "https://sunnah.com/bukhari:5",
+      "source": "https://hadeethenc.com/en/browse/hadith/10843",
+      "page": "hadith/05-listening-before-reciting.html",
+      "points": [
+        {
+          "point": "Concern to memorize, divine assurance and listening before recitation",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "point": "Reciting faithfully after Jibril's departure",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2,
+            4
+          ]
+        },
+        {
+          "point": "Demonstrated lip movements and care in transmitting an observed action",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "65051",
+      "title": "Recognizing the surah divisions",
+      "qaCount": 1,
+      "mcqCount": 2,
+      "primary": "https://sunnah.com/abudawud:788",
+      "source": "https://hadeethenc.com/en/browse/hadith/65051",
+      "page": "hadith/06-recognizing-the-surah-divisions.html",
+      "points": [
+        {
+          "point": "Basmalah as the revealed marker of surah boundaries",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "The stated exception between al-Anfal and at-Tawbah",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "65231",
+      "title": "Revelation as an enduring sign",
+      "qaCount": 4,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/bukhari:4981",
+      "source": "https://hadeethenc.com/en/browse/hadith/65231",
+      "page": "hadith/07-revelation-as-an-enduring-sign.html",
+      "points": [
+        {
+          "point": "Miracles as support for earlier prophets and the Quran's enduring guidance",
+          "qa": [
+            1,
+            3
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Emphasis on the Quran without denying other miracles",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Hope for many followers and al-Nawawi's historical observation",
+          "qa": [
+            2,
+            4
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "4217",
+      "title": "Revelation near the end of his life",
+      "qaCount": 1,
+      "mcqCount": 2,
+      "primary": "https://sunnah.com/bukhari:4982",
+      "source": "https://hadeethenc.com/en/browse/hadith/4217",
+      "page": "hadith/08-revelation-near-the-end-of-his-life.html",
+      "points": [
+        {
+          "point": "Abundance of revelation near the end of life and completion of the Shariah",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "4947",
+      "title": "Obedience and the path to Paradise",
+      "qaCount": 1,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/bukhari:7280",
+      "source": "https://hadeethenc.com/en/browse/hadith/4947",
+      "page": "hadith/09-obedience-and-the-path-to-paradise.html",
+      "points": [
+        {
+          "point": "Refusal explained through obedience and disobedience",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Obedience to the Messenger as obedience to Allah",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Concern for guiding the community toward Paradise",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "3272",
+      "title": "Believing in the Messenger",
+      "qaCount": 3,
+      "mcqCount": 4,
+      "primary": "https://sunnah.com/muslim:153",
+      "source": "https://hadeethenc.com/en/browse/hadith/3272",
+      "page": "hadith/10-believing-in-the-messenger.html",
+      "points": [
+        {
+          "point": "Hearing the message, dying without belief and the stated warning",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Those not reached by the call and leaving their case to Allah",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Universality, including people of earlier scriptures",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Opportunity for belief before the final onset of death",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "66529",
+      "title": "Holding firmly to the Sunnah",
+      "qaCount": 5,
+      "mcqCount": 5,
+      "primary": "https://sunnah.com/abudawud:4607",
+      "source": "https://hadeethenc.com/en/browse/hadith/66529",
+      "page": "hadith/11-holding-firmly-to-the-sunnah.html",
+      "points": [
+        {
+          "point": "The serious exhortation and request for lasting advice",
+          "qa": [
+            5
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Fearing Allah through duties and avoidance of prohibitions",
+          "qa": [
+            4
+          ],
+          "mcq": [
+            4
+          ]
+        },
+        {
+          "point": "Obedience independent of social status, without disobeying Allah",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Future discord and adherence to the Sunnah and four guided caliphs",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            5
+          ]
+        },
+        {
+          "point": "Religious innovation distinguished from new worldly tools",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "65005",
+      "title": "The authority of the Prophetic teaching",
+      "qaCount": 1,
+      "mcqCount": 2,
+      "primary": "https://sunnah.com/tirmidhi:2664",
+      "source": "https://hadeethenc.com/en/browse/hadith/65005",
+      "page": "hadith/12-the-authority-of-the-prophetic-teaching.html",
+      "points": [
+        {
+          "point": "The claim that the Quran alone makes the Sunnah unnecessary",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Authority of Prophetic prohibitions as conveying from Allah",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "4792",
+      "title": "Deeds must belong to the religion",
+      "qaCount": 2,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/bukhari:2697",
+      "source": "https://hadeethenc.com/en/browse/hadith/4792",
+      "page": "hadith/13-deeds-must-belong-to-the-religion.html",
+      "points": [
+        {
+          "point": "Introducing an unsupported religious act and performing it",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Conformity rather than good intention alone as the criterion",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Religious additions distinguished from new worldly means",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "4725",
+      "title": "Commands within our ability",
+      "qaCount": 4,
+      "mcqCount": 5,
+      "primary": "https://sunnah.com/bukhari:7288",
+      "source": "https://hadeethenc.com/en/browse/hadith/4725",
+      "page": "hadith/14-commands-within-our-ability.html",
+      "points": [
+        {
+          "point": "Avoid prohibitions and perform commands within ability",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Necessary learning distinguished from obstinate questioning",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Excessive questioning and disagreement with earlier prophets",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            4
+          ]
+        },
+        {
+          "point": "Avoidance includes small amounts and means leading to a prohibition",
+          "qa": [
+            3,
+            4
+          ],
+          "mcq": [
+            3,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "6078",
+      "title": "Following a balanced Sunnah",
+      "qaCount": 3,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/muslim:1401",
+      "source": "https://hadeethenc.com/en/browse/hadith/6078",
+      "page": "hadith/15-following-a-balanced-sunnah.html",
+      "points": [
+        {
+          "point": "The companions' concern and mistaken reasoning about forgiveness",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Prayer and sleep, fasting and eating, and marriage within the Sunnah",
+          "qa": [
+            1,
+            3
+          ],
+          "mcq": [
+            1,
+            3
+          ]
+        },
+        {
+          "point": "Moderation sustains obligatory and voluntary worship and others' rights",
+          "qa": [
+            2,
+            3
+          ],
+          "mcq": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "65121",
+      "title": "The Prophet knew Allah best",
+      "qaCount": 3,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/bukhari:20",
+      "source": "https://hadeethenc.com/en/browse/hadith/65121",
+      "page": "hadith/16-the-prophet-knew-allah-best.html",
+      "points": [
+        {
+          "point": "Knowledge and fear of Allah support manageable Prophetic guidance",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Consistency instead of exhausting severity",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Spiritual standing does not replace continued effort and gratitude",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Mentioning a virtue to correct a misunderstanding without arrogance",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "5518",
+      "title": "Understanding the religion",
+      "qaCount": 3,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/bukhari:71",
+      "source": "https://hadeethenc.com/en/browse/hadith/5518",
+      "page": "hadith/17-understanding-the-religion.html",
+      "points": [
+        {
+          "point": "Understanding religion as Allah's gift and a reason to seek knowledge",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "The Prophet as distributor and Allah as the true Giver",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Continuing adherence to truth despite opposition",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "4233",
+      "title": "Guidance is like life-giving rain",
+      "qaCount": 2,
+      "mcqCount": 4,
+      "primary": "https://sunnah.com/bukhari:79",
+      "source": "https://hadeethenc.com/en/browse/hadith/4233",
+      "page": "hadith/18-guidance-is-like-life-giving-rain.html",
+      "points": [
+        {
+          "point": "Guidance and knowledge compared to the same life-giving rain",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            4
+          ]
+        },
+        {
+          "point": "Fertile ground: understanding, acting and teaching",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Water-retaining ground: preservation benefiting other people",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Barren ground: neither retaining nor conveying benefit",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "6820",
+      "title": "Conveying what we hear accurately",
+      "qaCount": 3,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/tirmidhi:2657",
+      "source": "https://hadeethenc.com/en/browse/hadith/6820",
+      "page": "hadith/19-conveying-what-we-hear-accurately.html",
+      "points": [
+        {
+          "point": "The supplication honoring faithful hearing, preservation and conveyance",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Recipient's greater understanding without altering the transmitted text",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            3
+          ]
+        },
+        {
+          "point": "Preservation through memory and writing, distinct from deduction",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "3686",
+      "title": "Convey faithfully and avoid falsehood",
+      "qaCount": 2,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/bukhari:3461",
+      "source": "https://hadeethenc.com/en/browse/hadith/3686",
+      "page": "hadith/20-convey-faithfully-and-avoid-falsehood.html",
+      "points": [
+        {
+          "point": "Convey even a little with knowledge and responsible attribution",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            3
+          ]
+        },
+        {
+          "point": "Accounts of the Children of Israel and their stated limit",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "The warning against intentional falsehood and need to verify reports",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "65043",
+      "title": "Never attribute a deliberate lie",
+      "qaCount": 1,
+      "mcqCount": 2,
+      "primary": "https://sunnah.com/bukhari:110",
+      "source": "https://hadeethenc.com/en/browse/hadith/65043",
+      "page": "hadith/21-never-attribute-a-deliberate-lie.html",
+      "points": [
+        {
+          "point": "Deliberately inventing speech or actions attributed to the Prophet",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            2
+          ]
+        },
+        {
+          "point": "Good purposes do not justify fabrication; verify before circulation",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "65077",
+      "title": "Recording the Prophetic teaching",
+      "qaCount": 3,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/abudawud:3646",
+      "source": "https://hadeethenc.com/en/browse/hadith/65077",
+      "page": "hadith/22-recording-the-prophetic-teaching.html",
+      "points": [
+        {
+          "point": "The objection about anger and pleasure and the assurance of truth",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            2
+          ]
+        },
+        {
+          "point": "Writing as a means of preserving the teaching",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "The oath reinforcing an important assurance",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "10849",
+      "title": "Writing and its historical context",
+      "qaCount": 3,
+      "mcqCount": 5,
+      "primary": "https://sunnah.com/muslim:3004",
+      "source": "https://hadeethenc.com/en/browse/hadith/10849",
+      "page": "hadith/23-writing-and-its-historical-context.html",
+      "points": [
+        {
+          "point": "The writing restriction, its Quran exception and permitted truthful narration",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            4
+          ]
+        },
+        {
+          "point": "Later permission and the publisher's preferred reconciliation",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            5
+          ]
+        },
+        {
+          "point": "Alternative same-scroll explanation distinguished from the preferred account",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Hammam's explicit uncertainty retained in transmission",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "6982",
+      "title": "Responsibility for doubtful reports",
+      "qaCount": 2,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/muslim/introduction",
+      "source": "https://hadeethenc.com/en/browse/hadith/6982",
+      "page": "hadith/24-responsibility-for-doubtful-reports.html",
+      "points": [
+        {
+          "point": "Responsibility of the fabricator and the knowing or strongly suspecting relay",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            3
+          ]
+        },
+        {
+          "point": "Verification before transmission, without equating every doubt with fabrication",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            3
+          ]
+        },
+        {
+          "point": "Mentioning a fabrication clearly to warn against it",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "id": "5913",
+      "title": "Learn the Quran and teach it",
+      "qaCount": 2,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/bukhari:5027",
+      "source": "https://hadeethenc.com/en/browse/hadith/5913",
+      "page": "hadith/25-learn-the-quran-and-teach-it.html",
+      "points": [
+        {
+          "point": "Recitation, memorization, measured reading, meanings and rulings",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            3
+          ]
+        },
+        {
+          "point": "Teaching benefits others and remains joined to acting on knowledge",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "10113",
+      "title": "The diligent and the struggling reader",
+      "qaCount": 2,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/muslim:798",
+      "source": "https://hadeethenc.com/en/browse/hadith/10113",
+      "page": "hadith/26-the-diligent-and-the-struggling-reader.html",
+      "points": [
+        {
+          "point": "The proficient reader's rank with the angel-scribes",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Rewards for recitation and persevering through difficulty",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Two rewards do not establish superiority over proficiency or encourage errors",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "5907",
+      "title": "Keep returning to the Quran",
+      "qaCount": 1,
+      "mcqCount": 1,
+      "primary": "https://sunnah.com/muslim:791",
+      "source": "https://hadeethenc.com/en/browse/hadith/5907",
+      "page": "hadith/27-keep-returning-to-the-quran.html",
+      "points": [
+        {
+          "point": "Regular recitation and review after memorization",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Tethered camels as the comparison for continued attention",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "id": "3772",
+      "title": "Wisdom that is practised and taught",
+      "qaCount": 3,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/bukhari:73",
+      "source": "https://hadeethenc.com/en/browse/hadith/3772",
+      "page": "hadith/28-wisdom-that-is-practised-and-taught.html",
+      "points": [
+        {
+          "point": "Malicious envy distinguished from wishing for a similar blessing",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Permissible worldly aspiration and commendable religious aspiration",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Rightful spending and wisdom applied in judgment and teaching",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "The accompanying Ibn Umar narration about Quran recitation night and day",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "65285",
+      "title": "We hear and we obey",
+      "qaCount": 7,
+      "mcqCount": 7,
+      "primary": "https://sunnah.com/muslim:125",
+      "source": "https://hadeethenc.com/en/browse/hadith/65285",
+      "page": "hadith/29-we-hear-and-we-obey.html",
+      "points": [
+        {
+          "point": "Concern about inward accountability and seeking clarification",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Hearing, obeying, seeking forgiveness and returning to Allah",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Belief in Allah, angels, Books and all messengers",
+          "qa": [
+            4
+          ],
+          "mcq": [
+            4
+          ]
+        },
+        {
+          "point": "Capacity, involuntary thoughts and chosen conduct",
+          "qa": [
+            1,
+            3
+          ],
+          "mcq": [
+            2,
+            3
+          ]
+        },
+        {
+          "point": "Individual accountability for earned good and incurred evil",
+          "qa": [
+            5
+          ],
+          "mcq": [
+            7
+          ]
+        },
+        {
+          "point": "Supplications concerning forgetfulness, error, burdens, pardon, mercy and help",
+          "qa": [
+            6
+          ],
+          "mcq": [
+            5
+          ]
+        },
+        {
+          "point": "Affirmative divine response and mercy toward the community",
+          "qa": [
+            6
+          ],
+          "mcq": [
+            5
+          ]
+        },
+        {
+          "point": "Abrogated ruling while the verse remains recited, as explained by the publisher",
+          "qa": [
+            7
+          ],
+          "mcq": [
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "10851",
+      "title": "The Quran as an intercessor",
+      "qaCount": 3,
+      "mcqCount": 4,
+      "primary": "https://sunnah.com/muslim:804",
+      "source": "https://hadeethenc.com/en/browse/hadith/10851",
+      "page": "hadith/30-the-quran-as-an-intercessor.html",
+      "points": [
+        {
+          "point": "Quran intercession for those who recite and follow its guidance",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Al-Baqarah and Al Imran as the two bright surahs",
+          "qa": [
+            1,
+            3
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Clouds, shade and birds as images of defending and shading their companion",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Blessing in engagement with al-Baqarah and grief in abandoning it",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Al-Baqarah's stated merit concerning magic without added ritual guarantees",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "id": "10119",
+      "title": "Being elevated through the Book",
+      "qaCount": 2,
+      "mcqCount": 2,
+      "primary": "https://sunnah.com/muslim:817",
+      "source": "https://hadeethenc.com/en/browse/hadith/10119",
+      "page": "hadith/31-being-elevated-through-the-book.html",
+      "points": [
+        {
+          "point": "Elevation through belief, rulings and ethical response to the Book",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Arrogant rejection despite fluent recitation and consequences in both worlds",
+          "qa": [
+            1,
+            2
+          ],
+          "mcq": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "id": "65059",
+      "title": "Recognizing the greatest verse",
+      "qaCount": 1,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/muslim:810",
+      "source": "https://hadeethenc.com/en/browse/hadith/65059",
+      "page": "hadith/32-recognizing-the-greatest-verse.html",
+      "points": [
+        {
+          "point": "Ubayy's initial deference, identification of Ayat al-Kursi and confirmation",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            3
+          ]
+        },
+        {
+          "point": "Recognition of knowledge and supplication for its benefit",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Memorizing, reflecting on and acting upon the greatest verse",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "5795",
+      "title": "Religion is a path of ease",
+      "qaCount": 4,
+      "mcqCount": 4,
+      "primary": "https://sunnah.com/bukhari:39",
+      "source": "https://hadeethenc.com/en/browse/hadith/5795",
+      "page": "hadith/33-religion-is-a-path-of-ease.html",
+      "points": [
+        {
+          "point": "Ease between neglect and excess, without abandoning excellence",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Genuine incapacity, approximation and glad tidings",
+          "qa": [
+            4
+          ],
+          "mcq": [
+            4
+          ]
+        },
+        {
+          "point": "Morning, afternoon and part of the night as a sustainable journey",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "A lawful concession such as tayammum when its conditions apply",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "id": "6389",
+      "title": "Choose ease within lawful limits",
+      "qaCount": 2,
+      "mcqCount": 2,
+      "primary": "https://sunnah.com/bukhari:3560",
+      "source": "https://hadeethenc.com/en/browse/hadith/6389",
+      "page": "hadith/34-choose-ease-within-lawful-limits.html",
+      "points": [
+        {
+          "point": "Choosing ease only within lawful limits",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Personal forgiveness distinguished from concern for Allah's sanctities",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "id": "11282",
+      "title": "Concern for the community",
+      "qaCount": 2,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/bukhari:1128",
+      "source": "https://hadeethenc.com/en/browse/hadith/11282",
+      "page": "hadith/35-concern-for-the-community.html",
+      "points": [
+        {
+          "point": "Leaving a liked deed out of concern about its becoming obligatory",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "The publisher's qualification of the report about regular Duha prayer",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Aishah's own practice distinguished from the Prophet's words",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "id": "3373",
+      "title": "Calling others to guidance",
+      "qaCount": 2,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/muslim:2674",
+      "source": "https://hadeethenc.com/en/browse/hadith/3373",
+      "page": "hadith/36-calling-others-to-guidance.html",
+      "points": [
+        {
+          "point": "Reward for guidance without diminishing followers' rewards",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Sin for misguidance without diminishing followers' responsibility",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Influence through actions as well as explicit invitations",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "3506",
+      "title": "Setting a beneficial example",
+      "qaCount": 5,
+      "mcqCount": 5,
+      "primary": "https://sunnah.com/muslim:1017",
+      "source": "https://hadeethenc.com/en/browse/hadith/3506",
+      "page": "hadith/37-setting-a-beneficial-example.html",
+      "points": [
+        {
+          "point": "Poverty, compassion and the appeal leading to practical relief",
+          "qa": [
+            1,
+            3
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Quranic reminders of human origin, kinship and preparing for tomorrow",
+          "qa": [
+            4
+          ],
+          "mcq": [
+            4
+          ]
+        },
+        {
+          "point": "Different gifts, including half a date, within one's means",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "The initiating donor and further gifts accumulating for those in need",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Good precedent rooted in established charity, rather than invented rituals",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Evil precedent and undiminished responsibility of those who follow it",
+          "qa": [
+            5
+          ],
+          "mcq": [
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "3395",
+      "title": "Avoiding excess in religion",
+      "qaCount": 1,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/ibnmajah:3029",
+      "source": "https://hadeethenc.com/en/browse/hadith/3395",
+      "page": "hadith/38-avoiding-excess-in-religion.html",
+      "points": [
+        {
+          "point": "Seven small pebbles and the demonstrated measure at Jamrat al-Aqabah",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            3
+          ]
+        },
+        {
+          "point": "The general warning against excess and the fate of earlier nations",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "4801",
+      "title": "Learning together and helping others",
+      "qaCount": 7,
+      "mcqCount": 9,
+      "primary": "https://sunnah.com/muslim:2699",
+      "source": "https://hadeethenc.com/en/browse/hadith/4801",
+      "page": "hadith/39-learning-together-and-helping-others.html",
+      "points": [
+        {
+          "point": "Relief of worldly hardship and relief on the Day of Judgment",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1
+          ]
+        },
+        {
+          "point": "Ease for a person in difficulty and ease in both worlds",
+          "qa": [
+            5
+          ],
+          "mcq": [
+            6
+          ]
+        },
+        {
+          "point": "Concealing a private fault and Allah's concealment in both worlds",
+          "qa": [
+            7
+          ],
+          "mcq": [
+            9
+          ]
+        },
+        {
+          "point": "Concealment must not shield persistent harmful conduct",
+          "qa": [
+            2
+          ],
+          "mcq": [
+            4,
+            9
+          ]
+        },
+        {
+          "point": "Allah's aid and practical help through action, money, supplication and advice",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            7
+          ]
+        },
+        {
+          "point": "Sincere pursuit of knowledge and an easier path to Paradise",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            2
+          ]
+        },
+        {
+          "point": "Joint Quran recitation and study: tranquillity, mercy, angels and Allah's mention",
+          "qa": [
+            3
+          ],
+          "mcq": [
+            3
+          ]
+        },
+        {
+          "point": "Al-Nawawi's commentary on similar gatherings in a school",
+          "qa": [
+            6
+          ],
+          "mcq": [
+            8
+          ]
+        },
+        {
+          "point": "Deeds rather than ancestry as the basis of advancement",
+          "qa": [
+            4
+          ],
+          "mcq": [
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "id": "66272",
+      "title": "Sent as a mercy",
+      "qaCount": 2,
+      "mcqCount": 3,
+      "primary": "https://sunnah.com/muslim:2599",
+      "source": "https://hadeethenc.com/en/browse/hadith/66272",
+      "page": "hadith/40-sent-as-a-mercy.html",
+      "points": [
+        {
+          "point": "Refusal of the request for curses and a mission of mercy",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            1,
+            2
+          ]
+        },
+        {
+          "point": "Cursing as exclusion from mercy and disciplined everyday speech",
+          "qa": [
+            1,
+            2
+          ],
+          "mcq": [
+            1,
+            2
+          ]
+        },
+        {
+          "point": "Goodness for people generally, especially believers",
+          "qa": [
+            1
+          ],
+          "mcq": [
+            3
+          ]
+        }
+      ]
+    }
+  ]
+}

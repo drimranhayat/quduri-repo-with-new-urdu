@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://drimranhayat.github.io/Al_Hayat_Topic_01_Focused_Content/sitemap.xml

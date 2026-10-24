@@ -1,142 +1,136 @@
-import re
-import json, re, pathlib, sys
+from pathlib import Path
+import json,html,re,hashlib,shutil
+BASE=Path(__file__).parent;OUT=BASE;RAW=BASE/'source-data';E=lambda s:html.escape(str(s),quote=True)
+SECTIONS=[{'title':'Receiving revelation','subtitle':'How revelation came and was preserved','icon':'spark'}, {'title':'Following the Messenger','subtitle':'Authority, obedience and the Prophetic way','icon':'shield'}, {'title':'Learning and transmission','subtitle':'Understand carefully and transmit faithfully','icon':'book'}, {'title':'Living by the Quran','subtitle':'Learn, retain and respond to revelation','icon':'leaf'}, {'title':'A balanced Prophetic path','subtitle':'Mercy, moderation and beneficial example','icon':'heart'}]
+ids=['65050','66304','10840','10841','10843','65051','65231','4217','4947','3272','66529','65005','4792','4725','6078','65121','5518','4233','6820','3686','65043','65077','10849','6982','5913','10113','5907','3772','65285','10851','10119','65059','5795','6389','11282','3373','3506','3395','4801','66272']
+titles=['Revelation at the age of forty','The call after the pause','The ways revelation came','The weight of revelation','Listening before reciting','Recognizing the surah divisions','Revelation as an enduring sign','Revelation near the end of his life','Obedience and the path to Paradise','Believing in the Messenger','Holding firmly to the Sunnah','The authority of the Prophetic teaching','Deeds must belong to the religion','Commands within our ability','Following a balanced Sunnah','The Prophet knew Allah best','Understanding the religion','Guidance is like life-giving rain','Conveying what we hear accurately','Convey faithfully and avoid falsehood','Never attribute a deliberate lie','Recording the Prophetic teaching','Writing and its historical context','Responsibility for doubtful reports','Learn the Quran and teach it','The diligent and the struggling reader','Keep returning to the Quran','Wisdom that is practised and taught','We hear and we obey','The Quran as an intercessor','Being elevated through the Book','Recognizing the greatest verse','Religion is a path of ease','Choose ease within lawful limits','Concern for the community','Calling others to guidance','Setting a beneficial example','Avoiding excess in religion','Learning together and helping others','Sent as a mercy']
+refs={
+'65050':('Sahih al-Bukhari 3851','bukhari:3851'),'66304':('Sahih al-Bukhari 4','bukhari:4'),'10840':('Sahih al-Bukhari 2','bukhari:2'),'10841':('Sahih Muslim 2334','muslim:2334'),'10843':('Sahih al-Bukhari 5','bukhari:5'),'65051':('Sunan Abi Dawud 788','abudawud:788'),'65231':('Sahih al-Bukhari 4981','bukhari:4981'),'4217':('Sahih al-Bukhari 4982','bukhari:4982'),
+'4947':('Sahih al-Bukhari 7280','bukhari:7280'),'3272':('Sahih Muslim 153','muslim:153'),'66529':('Sunan Abi Dawud 4607','abudawud:4607'),'65005':('Jami at-Tirmidhi 2664','tirmidhi:2664'),'4792':('Sahih al-Bukhari 2697','bukhari:2697'),'4725':('Sahih al-Bukhari 7288','bukhari:7288'),'6078':('Sahih Muslim 1401','muslim:1401'),'65121':('Sahih al-Bukhari 20','bukhari:20'),
+'5518':('Sahih al-Bukhari 71','bukhari:71'),'4233':('Sahih al-Bukhari 79','bukhari:79'),'6820':('Jami at-Tirmidhi 2657','tirmidhi:2657'),'3686':('Sahih al-Bukhari 3461','bukhari:3461'),'65043':('Sahih al-Bukhari 110','bukhari:110'),'65077':('Sunan Abi Dawud 3646','abudawud:3646'),'10849':('Sahih Muslim 3004','muslim:3004'),'6982':('Sahih Muslim Introduction','muslim/introduction'),
+'5913':('Sahih al-Bukhari 5027','bukhari:5027'),'10113':('Sahih Muslim 798','muslim:798'),'5907':('Sahih Muslim 791','muslim:791'),'3772':('Sahih al-Bukhari 73','bukhari:73'),'65285':('Sahih Muslim 125','muslim:125'),'10851':('Sahih Muslim 804','muslim:804'),'10119':('Sahih Muslim 817','muslim:817'),'65059':('Sahih Muslim 810','muslim:810'),
+'5795':('Sahih al-Bukhari 39','bukhari:39'),'6389':('Sahih al-Bukhari 3560','bukhari:3560'),'11282':('Sahih al-Bukhari 1128','bukhari:1128'),'3373':('Sahih Muslim 2674','muslim:2674'),'3506':('Sahih Muslim 1017','muslim:1017'),'3395':('Sunan Ibn Majah 3029','ibnmajah:3029'),'4801':('Sahih Muslim 2699','muslim:2699'),'66272':('Sahih Muslim 2599','muslim:2599')}
+rows=[]
+for i,(id,title) in enumerate(zip(ids,titles),1):
+ en=json.loads((RAW/f'{id}-en.json').read_text());ur=json.loads((RAW/f'{id}-ur.json').read_text())
+ assert str(en['id'])==id and str(ur['id'])==id
+ assert en['grade'].lower().startswith('authentic'),(id,en['grade'])
+ assert all(en.get(k) for k in ['hadeeth','hadeeth_ar','explanation']) and ur.get('hadeeth') and ur.get('explanation')
+ ref,route=refs[id];sec=(i-1)//8+1;slug=f'{i:02d}-'+re.sub('[^a-z0-9]+','-',title.lower()).strip('-')
+ rows.append({'id':id,'number':i,'title':title,'section':sec,'sectionTitle':SECTIONS[sec-1]['title'],'slug':slug,'ref':ref,'primary':'https://sunnah.com/'+route,'source':f'https://hadeethenc.com/en/browse/hadith/{id}','sourceUr':f'https://hadeethenc.com/ur/browse/hadith/{id}','ar':en['hadeeth_ar'],'en':en['hadeeth'],'ur':ur['hadeeth'],'grade':en['grade'],'gradeAr':en.get('grade_ar',''),'attribution':en['attribution'],'explanation':en['explanation'],'explanationUr':ur['explanation'],'hints':en.get('hints',[]),'hintsUr':ur.get('hints',[]),'explanationAr':en.get('explanation_ar',''),'hintsAr':en.get('hints_ar',[]),'words':en.get('words_meanings_ar',[]),'publisher':'HadeethEnc.com','retrieved':'2026-10-17'})
+assert len(rows)==40 and len({d['id'] for d in rows})==40
+from learning_builder import build_learning
+LEARNING=build_learning(rows)
+(BASE/'learning-content.json').write_text(json.dumps(LEARNING,ensure_ascii=False,indent=2))
+(OUT/'hadith').mkdir(exist_ok=True);(OUT/'assets').mkdir(exist_ok=True)
+(OUT/'assets'/'data.js').write_text('window.HADITH_DATA='+json.dumps(rows,ensure_ascii=False).replace('</','<\\/')+';window.SECTIONS='+json.dumps(SECTIONS,ensure_ascii=False)+';window.LEARNING_DATA='+json.dumps(LEARNING,ensure_ascii=False).replace('</','<\\/')+';')
+(OUT/'content.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2))
 
-root = pathlib.Path(__file__).parent
-order = sorted((p.stem for p in (root / 'data').glob('k*.txt')), key=lambda x: (int(re.match(r'k(\d+)', x).group(1)), x))
+def head(title,prefix='',desc='Study 40 source-linked hadith on revelation and following the Sunnah, with Arabic, Urdu and English text, explanations, bookmarks and references.'):
+ return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{E(title)}</title><meta name="description" content="{E(desc)}"><meta name="theme-color" content="#194b36"><link rel="icon" href="{prefix}assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="{prefix}assets/style.css"><link rel="stylesheet" href="{prefix}assets/mobile.css?v=20261017"><script>document.documentElement.classList.add('js');try{{document.documentElement.dataset.theme=JSON.parse(localStorage.getItem('alhayat-topic001-v1-theme'))||'light'}}catch(e){{}}</script></head>'''
+def header(prefix='',single=False):
+ return f'''<a class="skip" href="#reader">Skip to hadith</a><header class="site-header"><a href="{prefix}index.html" class="brand"><span class="brand-mark" aria-hidden="true">ح</span><span>Al-Hayat<small>FORTY HADITH SERIES</small></span></a><nav class="topnav" aria-label="Main navigation"><a href="{prefix}index.html#reader">The collection</a>{'<a href="../index.html#reader">Study library</a>' if single else '<button class="nav-btn js-only" id="saved-nav">Saved <span data-saved-count></span></button>'}<a href="{prefix}index.html#methodology">Our sources</a><button class="nav-btn js-only" data-dialog="settings">Reading settings</button><button class="theme-btn js-only" id="theme" aria-label="Switch to night mode">☾</button></nav></header>'''
+def dialogs(prefix=''):
+ outline=''.join(f'<li><a href="{prefix}index.html#hadith-{d["id"]}" data-outline-link="{d["id"]}"><span>{d["number"]:02d}</span><b>{E(d["title"])}</b></a></li>' for d in rows)
+ return f'''<dialog id="outline"><div class="dialog-head"><h2>All forty hadith</h2><button class="close-dialog" data-close="true" aria-label="Close contents">×</button></div><p>A complete reading path in five sections.</p><label class="show-source" for="contents-search">Find a hadith by title or number</label><input id="contents-search" class="contents-search" type="search"><ol class="outline-list">{outline}</ol></dialog><dialog id="settings"><div class="dialog-head"><h2>Make room for reading</h2><button class="close-dialog" data-close="true" aria-label="Close reading settings">×</button></div><div class="settings-grid"><p>Choose the languages you want to read. Arabic and translations retain their distinct colors in both themes.</p><label><input id="show-ar" type="checkbox" data-language="ar" checked>Arabic text</label><label><input id="show-en" type="checkbox" data-language="en" checked>English translation</label><label><input id="show-ur" type="checkbox" data-language="ur" checked>Urdu translation</label><label for="font-scale">Text size <input id="font-scale" type="range" min="0.85" max="1.35" step="0.05" value="1"></label></div><div class="settings-actions"><button class="button" id="export-notes">Export study backup ↓</button><label class="button">Import backup ↑<input id="import-notes" type="file" accept="application/json,.json" hidden></label><button class="button" id="print">Print this page</button></div><p>Your bookmarks, notes and progress stay in this browser. Export a backup to keep a copy. Imports merge bookmarks and progress, and keep any existing notes.</p></dialog><div id="toast" role="status" aria-live="polite" hidden></div>'''
+def li_list(items,cls=''):
+ return '<ul class="'+cls+'">'+''.join('<li>'+E(x)+'</li>' for x in items)+'</ul>' if items else '<p class="show-source">No separate benefits supplied for this language; see the explanation above.</p>'
 
-kitabs = []
-for name in order:
-    plain = [l for l in (root / 'data_plain' / f'{name}.txt').read_text(encoding='utf-8').splitlines() if l.strip()]
-    urdu = [l.strip() for l in (root / 'ur' / f'{name}.txt').read_text(encoding='utf-8').splitlines() if l.strip()]
-    assert len(plain) == len(urdu), (name, len(plain), len(urdu))
-    vows = [l.strip() for l in (root / 'data' / f'{name}.txt').read_text(encoding='utf-8').splitlines() if l.strip()]
-    assert len(vows) == len(plain), name
-    for line, ur in zip(vows, urdu):
-        if line.startswith('@kitab'):
-            n, title = [x.strip() for x in line[6:].split('|', 1)]
-            kitabs.append({'n': int(n), 'title': title, 'tu': ur.split('|', 1)[1].strip(), 'babs': []})
-        elif line.startswith('@bab'):
-            title = line[4:].split('|', 1)[1].strip()
-            kitabs[-1]['babs'].append({'t': title, 'tu': ur.split('|', 1)[1].strip(), 'ed': not re.sub('[\u064B-\u0652\u0670]', '', title).startswith('باب'), 'items': []})
-        elif line.startswith('~ '):
-            kitabs[-1]['babs'][-1]['items'].append(['f', line[2:].strip(), None, ur[2:].strip()])
-        elif line.startswith('# '):
-            kitabs[-1]['babs'][-1]['items'].append(['l', line[2:].strip(), None, ur[2:].strip()])
-        elif line.startswith('> '):
-            kitabs[-1]['babs'][-1]['items'].append(['q', line[2:].strip(), None, ur[2:].strip()])
-        else:
-            kitabs[-1]['babs'][-1]['items'].append(['m', line, None, ur])
+def icon(name):
+ paths={
+ 'book':'<path d="M3 5c3-1 6-1 9 1 3-2 6-2 9-1v14c-3-1-6-1-9 1-3-2-6-2-9-1z"/><path d="M12 6v14"/>',
+ 'spark':'<path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/>',
+ 'shield':'<path d="M12 3 20 6v6c0 5-8 9-8 9s-8-4-8-9V6z"/><path d="m8 12 3 3 5-6"/>',
+ 'list':'<path d="M9 6h12M9 12h12M9 18h12"/><path d="M3 6h1M3 12h1M3 18h1"/>',
+ 'leaf':'<path d="M20 3C7 2 2 9 6 16s16 5 14-13Z"/><path d="M4 21 16 8"/>',
+ 'heart':'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>',
+ 'language':'<path d="M3 5h12M9 3v2M5 5c0 6 7 10 7 10M13 5c0 6-4 9-10 11M13 21l4-10 4 10M14.5 17h5"/>',
+ 'bulb':'<path d="M9 18h6M9 21h6M8 14a6 6 0 1 1 8 0c-1 1-1 2-1 4H9c0-2 0-3-1-4Z"/>',
+ 'link':'<path d="m10 13 4-4M8 16l-2 2a4 4 0 0 1-6-6l5-5a4 4 0 0 1 6 0M16 8l2-2a4 4 0 0 1 6 6l-5 5a4 4 0 0 1-6 0" transform="translate(1 0) scale(.9)"/>',
+ 'note':'<path d="M12 4H4v16h16v-8M16 3l5 5-10 10H6v-5z"/>',
+ 'settings':'<path d="M5 3v18M12 3v18M19 3v18M2 7h6M9 16h6M16 9h6"/>',
+ 'star':'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"/>',
+ 'copy':'<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/>',
+ 'question':'<circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 0c0 2-3 2-3 5M12 17h.01"/>',
+ 'quiz':'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="m7 8 1 1 2-2M12 8h5m-10 6 1 1 2-2M12 14h5"/>',
+ 'info':'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/>',
+ 'grid':'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'}
+ return '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+paths.get(name,paths['book'])+'</svg>'
+def panel(key,title,kind,contents,id,extra=''):
+ return f'<details class="extra-panel tone-{kind} {extra}" data-stage="{key}" name="extras-{id}"><summary><span class="menu-icon">{icon(key)}</span><span>{title}</span><span class="expand-icon" aria-hidden="true">+</span></summary><div class="panel-content">{contents}</div></details>'
 
-# colour worlds: (light k, k-h, soft, deep, bg) | (dark k, k-h, soft, deep, bg)
-W = {
-    0: (('#34506f', '#34506f', '#e4ebf3', '#162a40', '#f2f5f8'), ('#8fb0d6', '#2a4566', '#1c2937', '#0c1722', '#0d1217')),
-    1: (('#0369a1', '#0369a1', '#dceff9', '#053a58', '#eef6fb'), ('#5bbcf0', '#0a5f8f', '#12293a', '#08202f', '#0a141b')),
-    2: (('#15803d', '#15803d', '#dff3e6', '#0a4a24', '#eff8f2'), ('#5fd08c', '#146b36', '#11291b', '#08200f', '#0a150e')),
-    3: (('#a16207', '#a16207', '#f8ecc8', '#523003', '#fbf6e8'), ('#f0bd4a', '#86520a', '#2b2106', '#221a05', '#16120a')),
-    4: (('#6d3fc0', '#6d3fc0', '#e9e1f8', '#38206b', '#f4f0fb'), ('#b69cf5', '#5a35a0', '#231a3a', '#17102b', '#110d1c')),
-    5: (('#b0173f', '#b0173f', '#f9dfe6', '#5e0b22', '#fbeff2'), ('#fb7f9a', '#8f1433', '#301018', '#240a12', '#170a0f')),
-}
+def proof_markup(proof,css='',idattr=''):
+ if not proof:return ''
+ return f'<details class="source-evidence {css}" {idattr}><summary>Check the supporting passage</summary><blockquote lang="en">{E(proof["text"])}</blockquote><p class="learning-credit">{E(proof["label"])} · <a href="{E(proof["url"])}" target="_blank" rel="noopener noreferrer">Open source ↗</a></p></details>'
+def qa_markup(d):
+ bank=LEARNING[d['id']];parts=[f'<p class="learning-intro">{len(bank["qa"])} explanatory answers and {len(bank["mcq"])} practice questions cover the teaching points below. Open an answer and check its supporting passage.</p>'];group=None
+ parts.append('<details class="source-evidence"><summary>What this study set covers</summary><ul>'+''.join('<li>'+E(p['point'])+'</li>' for p in bank['coverage']['topics'])+'</ul><p class="learning-credit">Coverage concerns this published selection and its necessary explanation. Scholarly debates and full chains are not exhausted by a quiz.</p></details>')
+ for j,item in enumerate(bank['qa'],1):
+  if item['group']!=group:
+   group=item['group'];parts.append('<h4 class="learning-group">'+E(group)+'</h4>')
+  parts.append(f'<details class="qa-item" id="{item['id']}"><summary><span class="q-number">{j:02d}</span>{E(item["q"])}</summary><div class="qa-answer {"arabic" if item["lang"]=="ar" else ""}" lang="{item["lang"]}">{E(item["a"])}</div>'+proof_markup(item.get('evidence'))+f'<p class="learning-credit">{E(item["origin"])} · <a href="{d["source"]}" target="_blank" rel="noopener noreferrer">Source record {d["id"]} ↗</a></p></details>')
+ return ''.join(parts)
+def mcq_markup(d):
+ bank=LEARNING[d['id']];parts=[f'<p class="learning-intro">Practice the key points of this hadith. Choose one answer, then read the explanation and check the source passage. These editorial exercises are separate from the transmitted hadith.</p><div class="quiz-header"><span id="quiz-score-{d["id"]}" role="status">0 of {len(bank["mcq"])} attempted</span><button class="quiz-reset" data-quiz-reset="{d["id"]}">Try this set again</button></div>']
+ for j,q in enumerate(bank['mcq']):
+  opts=''.join(f'<button type="button" class="quiz-option" data-quiz="{d["id"]}" data-q="{j}" data-option="{k}" aria-pressed="false"><span>{chr(65+k)}</span>{E(option)}</button>' for k,option in enumerate(q['options']))
+  parts.append(f'<section class="quiz-question" role="group" aria-labelledby="{q["id"]}-title"><p class="quiz-category">{E(q["category"])} · {j+1} of {len(bank["mcq"])}</p><h4 id="{q["id"]}-title">{E(q["q"])}</h4><details class="quiz-hint"><summary>Show a hint</summary><p>{E(q["hint"])}</p></details><div class="quiz-options">{opts}</div><p class="quiz-feedback" id="{q["id"]}-feedback" role="status" hidden></p>'+proof_markup(q['evidence'],'quiz-evidence',f'id="{q["id"]}-evidence" hidden')+'</section>')
+ return ''.join(parts)
+def card(d,single=False):
+ id=d['id'];notespecial=''
+ if id=='10849':notespecial='<p class="error-note">Read this report alongside the preceding permission to write, and the published explanation below. The writing restriction must not be isolated from its historical context.</p>'
+ if id=='6982':notespecial='<p class="error-note">This report is in Muslim’s introduction. Its Authentic label here is explicitly the assessment supplied by HadeethEnc, not an assumption about every report in that introduction.</p>'
+ if id=='3506':notespecial='<p class="show-source">The explanation relates this report to initiating a charitable response. Read it together with the report on rejected additions to religion, rather than using an isolated phrase as a ruling.</p>'
+ vocab=''.join('<li><b>'+E(w.get('word',''))+'</b> — '+E(w.get('meaning',''))+'</li>' for w in d['words'] if isinstance(w,dict))
+ english=notespecial+'<div class="explanation" lang="en">'+E(d['explanation'])+'</div>'
+ urdu='<div class="urdu" lang="ur" dir="rtl">'+E(d['explanationUr'])+'</div><h4>Benefits from the source</h4>'+li_list(d['hintsUr'],'urdu')
+ arabic='<div class="arabic" lang="ar" dir="rtl">'+E(d['explanationAr'])+'</div>'+li_list(d['hintsAr'],'arabic')+('<h4>Arabic vocabulary</h4><ul class="arabic">'+vocab+'</ul>' if vocab else '')
+ sources=f'<div class="source-links"><a href="{d["source"]}" target="_blank" rel="noopener noreferrer">HadeethEnc English ↗</a><a href="{d["sourceUr"]}" target="_blank" rel="noopener noreferrer">HadeethEnc Urdu ↗</a><a href="{d["primary"]}" target="_blank" rel="noopener noreferrer">Primary collection ↗</a></div><p class="publisher-credit">Arabic, translations, explanations and benefits: HadeethEnc.com. Record {id}. API v1 snapshot 17 October 2026. Source grade: {E(d["grade"])}.<br>The publisher selection may be shorter than the full primary narration. Primary links can use another wording or numbering variant.</p>'
+ sources+='<p class="publisher-credit">Companion reporter(s): '+E(d['narrator'])+'. Open the primary collection to examine the complete chain for its version.</p>'
+ if id=='3772':sources=sources.replace('</div>', '<a href="https://sunnah.com/bukhari:5025" target="_blank" rel="noopener noreferrer">Ibn Umar report · Bukhari 5025 ↗</a></div>',1)
+ notes=f'<label class="show-source" for="note-{id}">Your own reflection — separate from the hadith and source explanation</label><textarea id="note-{id}" data-note="{id}" maxlength="10000"></textarea><div class="note-tools"><small class="show-source" data-note-status>Stored in this browser</small></div>'
+ extras='<nav class="learning-route js-only" aria-label="Learning route"><button data-stage-go="read">1 · Read</button><button data-stage-go="book">2 · Explanation</button><button data-stage-go="question">3 · Q&amp;A</button><button data-stage-go="quiz">4 · Practice</button></nav><div class="study-menu">'+panel('book','English explanation','blue',english,id)+panel('language','Urdu explanation','purple',urdu,id)+panel('leaf','Arabic explanation and vocabulary','green',arabic,id)+panel('bulb','Lessons and benefits','amber',li_list(d['hints']),id)+panel('shield','Sources and authenticity','teal',sources,id)+panel('note','My personal notes','rose',notes,id,'js-only')+panel('question','Questions and answers · '+str(len(LEARNING[id]['qa'])),'indigo',qa_markup(d),id)+panel('quiz','MCQ practice · '+str(len(LEARNING[id]['mcq'])),'coral',mcq_markup(d),id,'js-only')+'</div>'
+ return f'''<article class="hadith-card" id="hadith-{id}" data-id="{id}"><div class="card-head"><div class="title-group"><span class="number">{d['number']:02d}</span><div><h3>{E(d['title'])}</h3><small>{E(d['sectionTitle'])}</small></div></div><span class="grade" title="Grading supplied by HadeethEnc">Sahih</span></div><div class="card-body"><section class="language-block language-ar" aria-label="Arabic text"><span class="lang-label ar-label">Arabic · Published text</span><p class="arabic" lang="ar" dir="rtl">{E(d['ar'])}</p></section><section class="language-block language-en" aria-label="English translation"><span class="lang-label en-label">English · Translation</span>{'<p class="editorial-note">'+E(d.get('narrator_note',''))+'</p>' if d.get('narrator_note') else ''}<p class="en-text" lang="en">{E(d['en'])}</p></section><section class="language-block language-ur" aria-label="Urdu translation"><span class="lang-label ur-label">Urdu · Translation</span><p class="urdu" lang="ur" dir="rtl">{E(d['ur'])}</p></section></div><button class="button reveal-button" data-reveal="{id}" aria-expanded="false">Reveal translations</button><div class="citation-row"><div><a class="citation" href="{E(d['primary'])}" target="_blank" rel="noopener noreferrer">{E(d['ref'])} ↗</a><small>Source attribution: {E(d['attribution'])}</small></div><div class="action-row js-only"><button data-save="{id}" aria-pressed="false">☆ Save</button><button data-copy="{id}">{icon("copy")}Copy text</button><button data-link="{id}">{icon("link")}Copy link</button></div></div>{extras}<nav class="stage-controls js-only" aria-label="Learning steps"><button data-stage-move="-1">← Back step</button><a href="{'../' if single else ''}index.html#reader">Main menu</a><button data-stage-move="1">Next step →</button><span class="stage-status" role="status">Step 1 of 4 · Read</span></nav><div class="reader-actions"><label class="read-toggle js-only"><input type="checkbox" data-read="{id}"> Mark as read</label>{'<a href="../index.html#hadith-'+id+'">Back to collection</a>' if single else '<a href="hadith/'+d['slug']+'.html">Read on its own →</a>'}</div></article>'''
+def about():
+ return '''<section class="about-block" id="methodology"><details class="collection-info extra-panel tone-teal"><summary><span class="menu-icon">ⓘ</span><span>About this collection and its sources</span><span class="expand-icon" aria-hidden="true">+</span></summary><div class="panel-content"><div class="about-grid"><div><h3>What you are reading</h3><p>This is Topic 001 of the Al-Hayat Forty Hadith Series: Revelation and Following the Sunnah. Forty distinct source records are arranged in five editorial learning sections. Every included record is labelled Authentic by HadeethEnc; the source assessment is identified rather than presented as a new grading by this website.</p><p>Most selections are attributed to Bukhari or Muslim. The selection also includes six source-authenticated reports from the Sunan collections. A report in Muslim’s introduction is identified separately. No independent specialist review is claimed.</p><h3>Translations and explanations</h3><p>Published Arabic, English and Urdu texts, explanations and benefits are reproduced from <a href="https://hadeethenc.com/en/home" target="_blank" rel="noopener">HadeethEnc.com</a>. Original source fields are retained in the repository. Editorial headings and learning order are separate from transmitted text. Personal notes are your own writing.</p></div><div><h3>References and context</h3><p>Each entry links to its HadeethEnc record and a primary-collection reference on <a href="https://sunnah.com" target="_blank" rel="noopener">Sunnah.com</a>. Numbering and wording can vary across editions. The displayed text follows HadeethEnc’s published selection, with attribution retained; complete isnads are not added by this site. Read connected evidence before deriving legal conclusions.</p><h3>Publication and corrections</h3><p>Content snapshot: 17 October 2026. Source interface: API v1. The API supplies no separate translation-revision number; the retrieval date is not represented as a publisher edition. See <a href="sources.html">source policy and the complete reference register</a>. Compare current source versions when maintaining the collection.</p><p>To suggest a correction, include the numbered entry, HadeethEnc record ID, the exact wording and a supporting source. Report translation issues through the publisher’s linked page. No translation changes should be silently introduced.</p></div></div></div></details></section>'''
+def footer(prefix=''):
+ return f'''<footer class="site-footer"><span>Al-Hayat Centre for Islamic Studies<br>Prepared by Dr. Imran Hayat · <a href="https://drimranhayat.com" target="_blank" rel="noopener">drimranhayat.com</a></span><span><a href="{prefix}sources.html">Sources and publication policy</a><br><a href="{prefix}coverage.html">Learning coverage and question counts</a><br>Topic 001 · Forty source-linked selections</span></footer>'''
+def dock(prefix=''):
+ return f'<nav class="mobile-dock js-only" aria-label="Quick navigation"><a href="{prefix}index.html#reader"><span aria-hidden="true">{icon("book")}</span>Read</a><button data-dialog="outline"><span aria-hidden="true">{icon("list")}</span>Contents</button><a href="{prefix}index.html?view=saved#reader"><span aria-hidden="true">{icon("star")}</span>Saved</a><button data-dialog="settings"><span aria-hidden="true">{icon("settings")}</span>Settings</button></nav>'
+def end(prefix=''):return f'<script src="{prefix}assets/data.js" defer></script><script src="{prefix}assets/app.js" defer></script><script src="{prefix}assets/learning.js" defer></script></body></html>'
+section_options='<option value="0">All five sections</option>'+''.join(f'<option value="{i}">{i}. {E(x["title"])}</option>' for i,x in enumerate(SECTIONS,1))
+jump_options='<option value="">Go to hadith…</option>'+''.join(f'<option value="{d["id"]}">{d["number"]:02d} · {E(d["title"])}</option>' for d in rows)
+quick_nav='<div class="quick-nav js-only"><label>Section<select id="section-select">'+section_options+'</select></label><label>Jump directly<select id="jump-select">'+jump_options+'</select></label></div>'
+nav=''.join(f'<button data-section="{i}" aria-pressed="false"><span class="section-icon" aria-hidden="true">{icon(s["icon"])}</span><span>{E(s["title"])}</span><span class="badge-count">8</span></button>' for i,s in enumerate(SECTIONS,1))
+hero='''<div class="breadcrumb">AL-HAYAT FORTY HADITH SERIES &nbsp; / &nbsp; TOPIC 001</div><section class="hero"><div class="hero-copy"><div class="eyebrow">A SOURCE-LINKED LEARNING COLLECTION</div><h1>Revelation &amp;<br><em>Following the Sunnah</em></h1><p>Forty hadith on receiving revelation, following the Messenger ﷺ, preserving knowledge and living by the Prophetic example.</p><div class="hero-actions"><button class="button primary js-only" id="continue">Start reading →</button><button class="button secondary js-only" data-dialog="outline">Explore all forty</button><a class="button secondary" href="#methodology">Our source standard</a></div></div><div class="hero-art" aria-hidden="true"><div class="arch"><div class="arabic" lang="ar">الْوَحْيُ<br>وَاتِّبَاعُ السُّنَّةِ</div><span>READ · UNDERSTAND · PRACTISE</span></div><small>ARABIC &nbsp; / &nbsp; ENGLISH &nbsp; / &nbsp; URDU</small></div></section>'''
+controls='''<div class="searchbar js-only"><span aria-hidden="true">⌕</span><input id="search" type="search" aria-label="Search all forty hadith"><button id="clear-search" class="clear" aria-label="Clear search">×</button><select id="filter" aria-label="Reading filter"><option value="all">All hadith</option><option value="saved">Saved hadith</option><option value="unread">Not yet read</option></select></div>'''+quick_nav+'''<div class="reading-tools"><div class="color-key" aria-label="Reading colors"><span class="ar-key">Arabic</span><span class="en-key">English</span><span class="ur-key">Urdu</span><span class="ref-key">References</span></div><div class="tool-buttons js-only"><button id="memorize" aria-pressed="false">Memorize</button><button data-dialog="settings">Aa &nbsp; Reading</button></div></div>'''
+body=head('40 Hadith on Revelation and Following the Sunnah | Al-Hayat')+'<body>'+header()+'<main class="wrap">'+hero+'''<div class="stats"><span><b>40</b>Selected hadith</span><span><b>5</b>Learning sections</span><span><b>3</b>Reading languages</span><div class="progress-mini js-only"><span id="progress-label">0 of 40 read</span><div class="track" id="progress-track" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0"><span id="progress-fill"></span></div></div></div><div class="reader-grid"><aside class="sidebar" aria-label="Learning sections"><div class="sidebar-inner"><div class="section-label">YOUR READING PATH</div><div class="section-nav js-only"><button data-section="0" class="active" aria-pressed="true"><span class="section-icon" aria-hidden="true">{icon("grid")}</span><span>The full collection</span><span class="badge-count">40</span></button>'''+nav+'''</div><button class="outline-button js-only" data-dialog="outline">View complete contents ↗</button><div class="source-note"><b>Read with confidence.</b><br>Published text and translations. Explicit source gradings. Direct references for every selection.<a href="sources.html">How this collection was prepared →</a></div></div></aside><section id="reader" aria-label="Hadith reader">'''+controls+'''<div class="result-heading"><h2 id="result-title">The complete collection</h2><span id="result-count" role="status" aria-live="polite">40 of 40 hadith</span></div><noscript><p class="noscript">All forty hadith are available below. Search, bookmarks and notes require JavaScript. Every entry also has a focused reading page.</p></noscript>'''+''.join(card(d) for d in rows)+'''<div class="empty" id="empty" hidden><h3>No matching hadith</h3><p>Try another word, reference or section.</p><button class="button" id="reset-filters">Reset filters</button></div><nav class="pager js-only" id="pagination" aria-label="Hadith pages"><button id="prev-page">← Previous</button><div class="pages" id="page-list"></div><button id="next-page">Next →</button></nav></section></div>'''+about()+footer()+'</main>'+dock()+dialogs()+end()
+body=body.replace('{icon("grid")}',icon('grid'))
+(OUT/'index.html').write_text(body)
+for i,d in enumerate(rows):
+ navlinks=('<a class="button" href="'+rows[i-1]['slug']+'.html">← Back · Previous hadith</a>' if i else '<span></span>')+('<a class="button" href="'+rows[i+1]['slug']+'.html">Next hadith →</a>' if i<39 else '<a class="button" href="../index.html">Back to collection →</a>')
+ s=head(f'{d["title"]} | {d["ref"]} | Al-Hayat','../',f'Read {d["ref"]} in Arabic, Urdu and English, with a source explanation and links. Part of forty hadith on revelation and the Sunnah.')+'<body data-single="true">'+header('../',True)+'<main class="wrap single-reader"><div class="breadcrumb"><a href="../index.html">TOPIC 001</a> &nbsp; / &nbsp; HADITH '+f'{d["number"]:02d} OF 40</div><h1>'+E(d['title'])+'</h1><p class="show-source">'+E(d['sectionTitle'])+' · Revelation and Following the Sunnah</p><div class="single-intro"><a href="../index.html#hadith-'+d['id']+'">← Main menu</a><button class="button js-only" data-dialog="outline">All forty hadith</button></div>'+'<nav class="pager top-pager" aria-label="Reading navigation">'+navlinks+'</nav>'+card(d,True)+'<nav class="pager" aria-label="Previous and next hadith">'+navlinks+'</nav>'+footer('../')+'</main>'+dock('../')+dialogs('../')+end('../')
+ (OUT/'hadith'/f'{d["slug"]}.html').write_text(s)
+register=''.join(f'<li><b>{d["number"]:02d} · {E(d["title"])}</b><br><a href="{d["primary"]}" target="_blank" rel="noopener">{E(d["ref"])}</a> · <a href="{d["source"]}" target="_blank" rel="noopener">HadeethEnc {d["id"]}</a><br><span class="show-source">Publisher’s grade: {E(d["grade"])}. Publisher’s attribution: {E(d["attribution"])}.</span></li>' for d in rows)
+sourcebody=head('Sources and Publication Policy | Al-Hayat Hadith Topic 001')+'<body>'+header()+'<main class="wrap single-reader" id="reader"><div class="breadcrumb"><a href="index.html">TOPIC 001</a> / SOURCES</div><h1>Sources and publication policy</h1>'+about()+'''<h2>Publisher attribution and version record</h2><p>HadeethEnc.com is the publisher and source of the reproduced Arabic, translations, explanations and benefits. Imported textual fields are retained without editorial changes in the accompanying source-data files. This site’s titles, section names, reading order and personal notes are separate.</p><p>Source API: v1. Retrieval snapshot: 17 October 2026. The API does not provide a translation revision number. The snapshot is a local retrieval version, not a publisher translation edition. Compare the linked current source before scholarly citation and update source-data when the publisher revises it.</p><p><a href="https://hadeethenc.com/en/home" target="_blank" rel="noopener">Read HadeethEnc publication terms ↗</a> · <a href="https://sunnah.com/about" target="_blank" rel="noopener">Read Sunnah.com source information ↗</a></p><h2>Editorial checks</h2><p>The forty source IDs are distinct; every record has Arabic, Urdu and English text, explanations and an Authentic grade from HadeethEnc. A hasan candidate was excluded. Exact source files and checksums are included for future maintenance. This is a publisher-based selection, not a new independent hadith authentication or a claim of specialist approval.</p><p>The source sometimes publishes a matn selection without the full chain or surrounding wording. The selection is preserved as supplied. The linked primary collection can contain additional wording. Multiple references to one narration do not create additional numbered entries. Source page versions may update.</p><h2>Privacy and study data</h2><p>No accounts or server database are used. Notes, bookmarks and reading progress stay in local browser storage. Fonts are requested from Google Fonts. External source links open their respective websites. Export study data to keep a backup; no automatic synchronization is offered.</p><h2>Complete reference register</h2><ol class="outline-list">'''+register+'</ol>'+footer()+'</main>'+dock()+dialogs()+end()
+sourcebody=sourcebody.replace('<button class="nav-btn js-only" id="saved-nav">Saved <span data-saved-count></span></button>', '<a href="index.html#reader">Study library</a>')
+source_main,source_tail=sourcebody.split('<footer',1)
+source_main=re.sub(r'<h2>(.*?)</h2>(.*?)(?=<h2>|$)',lambda m: panel('info',m.group(1),'amber' if 'reference register' in m.group(1) else 'green' if 'checks' in m.group(1) else 'rose' if 'Privacy' in m.group(1) else 'teal',m.group(2),'policy'),source_main,flags=re.S)
+sourcebody=source_main+'<footer'+source_tail
+(OUT/'sources.html').write_text(sourcebody)
+(OUT/'assets'/'icon.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#194b36"/><path d="M16 22q8-4 16 1 8-5 16-1v26q-8-4-16 1-8-5-16-1z" fill="none" stroke="#e0cd9e" stroke-width="3"/><path d="M32 23v26" stroke="#e0cd9e" stroke-width="2"/></svg>')
+(OUT/'.nojekyll').touch()
+(OUT/'404.html').write_text(head('Page not found | Al-Hayat')+'<body><main class="wrap single-reader"><h1>This page could not be found</h1><p><a href="./index.html">Open the forty hadith collection →</a></p></main></body></html>')
+manifest={'topic':1,'title':'Revelation and Following the Sunnah','count':40,'sections':5,'retrieved':'2026-10-17','source_interface':'HadeethEnc API v1','publisher_translation_revision':None,'checksums':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(RAW.glob('*.json'))},'verification':'All source records labelled Authentic by HadeethEnc; no independent specialist review claimed.'}
+(BASE/'content-manifest.json').write_text(json.dumps(manifest,indent=2))
+print('Built 40 records, 40 individual pages and source register.')
 
-EXTRA = {
-    6: (('#0f766e', '#0f766e', '#d9f2ef', '#073f3a', '#eef8f7'), ('#4fd6c8', '#0d6b63', '#0f2b29', '#071f1d', '#0a1514')),
-    7: (('#c2410c', '#c2410c', '#fbe3d6', '#6a2406', '#fcf1ea'), ('#ff9d6b', '#9a3412', '#32190d', '#241108', '#18100b')),
-    8: (('#4338ca', '#4338ca', '#e8e9fb', '#231d71', '#f1f1fc'), ('#9fa5ff', '#3d36a8', '#1c1d3b', '#12122c', '#0e0e1b')),
-    9: (('#4d7c0f', '#4d7c0f', '#e6f1d3', '#26400a', '#f4f9ec'), ('#a3d94f', '#3e6a0c', '#1d2a0d', '#141d08', '#0e140a')),
-    10: (('#a21caf', '#a21caf', '#f8e8fa', '#560d5d', '#fbf0fc'), ('#e58bf2', '#82188d', '#2d1030', '#210a24', '#170b19')),
-    11: (('#475569', '#475569', '#e3e8ee', '#1f2937', '#f3f5f8'), ('#a9b8cc', '#3b4859', '#1e252e', '#141a21', '#0e1216')),
-}
-def _lum(h):
-    r, g, bl = [int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)]
-    f = lambda v: v / 12.92 if v <= .03928 else ((v + .055) / 1.055) ** 2.4
-    return .2126 * f(r) + .7152 * f(g) + .0722 * f(bl)
-def _cr(a, c):
-    la, lc = _lum(a), _lum(c); return (max(la, lc) + .05) / (min(la, lc) + .05)
-def _dk(h, t, against):
-    r, g, bl = [int(h[i:i + 2], 16) for i in (1, 3, 5)]
-    for _ in range(90):
-        c = '#%02x%02x%02x' % (r, g, bl)
-        if all(_cr(c, a) >= t for a in against): return c
-        r, g, bl = int(r * .97), int(g * .97), int(bl * .97)
-    return c
-def _fix(world):
-    (lk, lh, ls, ld, lb), (dk, dh, ds, dd, db) = world
-    lk = _dk(lk, 5.6, ['#ffffff', ls, lb]); lh = _dk(lh, 6.8, ['#ffffff'])
-    dh = _dk(dh, 6.8, ['#ffffff'])
-    return ((lk, lh, ls, ld, lb), (dk, dh, ds, dd, db))
-W.update(EXTRA)
-W = {i: _fix(w) for i, w in W.items()}
-NK = len(order) and max(int(re.match(r'k(\d+)', x).group(1)) for x in order)
-def widx(n): return n if n <= 11 else ((n - 1) % 11) + 1
-def kv(t, dark=False):
-    return f'--k:{t[0]};--k-h:{t[1]};--k-soft:{t[2]};--k-deep:{t[3]};--k-bg:{t[4]};--k-ink:{t[0] if dark else t[3]};--on-k:{"#0b141b" if dark else "#ffffff"};'
-light = '\n'.join(f'.k{i}{{{kv(W[widx(i)][0])}}}' for i in range(1, NK + 1)) + '\n.k0{' + kv(W[0][0]) + '}'
-dmedia = '\n  '.join(f':root:not([data-theme="light"]) .k{i}{{{kv(W[widx(i) if i else 0][1], True)}}}' for i in range(0, NK + 1))
-dattr = '\n'.join(f':root[data-theme="dark"] .k{i}{{{kv(W[widx(i) if i else 0][1], True)}}}' for i in range(0, NK + 1))
-dark = ('--bg:#0d1217;--surface:#151c23;--surface-2:#1b242d;--ink:#e6ecf1;--muted:#9aa8b5;--line:#27323c;'
-        '--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);--ay:#f0c46a;--ay-bg:#2b2410;--ha:#b7c5d3;--ha-bg:#1f2a34;'
-        '--im-h:#a3c0ff;--im-y:#62d08e;--im-m:#f3ae52;--im-z:#c7a0ff;'
-        '--c-ar:#c3c4ff;--c-ar-bg:#1d1e40;--c-ur:#6ee7b0;--c-ur-bg:#0f2e22;--c-no:#ff9db9;--c-no-bg:#3a1320;--vc-a:#4fd6a0;--vc-o:#f5a742;--vc-q:#b69cf5;--r-must:#ff8a80;--r-sun:#5fd08c;--r-ok:#7db8f5;--r-mak:#f5b25a;--r-bad:#e48bd0;--r-num:#55d0e0;')
+from coverage_report import write_coverage
+write_coverage(rows,LEARNING,OUT,BASE,head)
 
+from layout_compile import apply_layout
+apply_layout(rows,LEARNING,OUT,head,header,footer,dock,dialogs,end,SECTIONS)
 
-PATS = {
- 1: "<path d='M0 20Q16 8 32 20T64 20M0 44Q16 32 32 44T64 44' fill='none' stroke='%23fff' stroke-opacity='.16' stroke-width='1.4'/>",
- 2: "<path d='M6 62V32a26 26 0 0 1 52 0v30M18 62V34a14 14 0 0 1 28 0v28' fill='none' stroke='%23fff' stroke-opacity='.15' stroke-width='1.3'/>",
- 3: "<g fill='none' stroke='%23fff' stroke-opacity='.16' stroke-width='1.3'><circle cx='20' cy='20' r='14'/><circle cx='20' cy='20' r='9'/><circle cx='50' cy='46' r='10'/><circle cx='50' cy='46' r='5'/></g>",
- 4: "<g fill='none' stroke='%23fff' stroke-opacity='.17' stroke-width='1.3'><path d='M30 8a22 22 0 1 0 24 32a18 18 0 1 1-24-32z'/><path d='M54 10l1.8 4.6 4.9.2-3.8 3 1.3 4.8-4.2-2.7-4.2 2.7 1.3-4.8-3.8-3 4.9-.2z'/></g>",
- 5: "<path d='M32 8l22 12v24L32 56 10 44V20zM10 20l22 12 22-12M32 32v24' fill='none' stroke='%23fff' stroke-opacity='.16' stroke-width='1.3'/>",
-}
-def pat(i):
-    svg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E" + PATS[i].replace('<','%3C').replace('>','%3E') + "%3C/svg%3E\")"
-    return f'.k{i} .hero::before{{background-image:{svg}}}.tile.k{i}::before{{background-image:{svg}}}'
-patcss = '\n'.join(pat(i).replace('.k' + str(i) + ' ', '.k' + str(n) + ' ').replace('.tile.k' + str(i) + '::', '.tile.k' + str(n) + '::') for n in range(1, NK + 1) for i in [((n - 1) % 5) + 1])
-import base64
-_fp = root / 'fonts' / 'jameel-noori-subset.woff2'
-jn_face = ''
-if _fp.exists():
-    jn_face = "@font-face{font-family:'Jameel Noori Nastaleeq';src:url(data:font/woff2;base64," + base64.b64encode(_fp.read_bytes()).decode() + ") format('woff2');font-display:swap}\n"
-
-css = (root / 'src' / 'style.css').read_text(encoding='utf-8')
-css = jn_face + (css.replace('/*KLIGHT*/', light).replace('/*KDARKMEDIA*/', dmedia).replace('/*KDARKATTR*/', dattr).replace('/*DARK*/', dark).replace('/*PAT*/', patcss))
-js = (root / 'src' / 'app.js').read_text(encoding='utf-8')
-data = json.dumps(kitabs, ensure_ascii=False, separators=(',', ':'))
-js = js.replace('/*VOCAB*/', (root / 'src' / 'vocab.json').read_text(encoding='utf-8')).replace('/*DATA*/', data).replace('/*PLAN*/', (root / 'src' / 'plan.json').read_text(encoding='utf-8'))
-
-QAJSON = []
-for f in sorted((root / 'qa').glob('qa*.txt')):
-    for l in f.read_text(encoding='utf-8').splitlines():
-        if l.strip():
-            p = l.split('|'); assert len(p) == 4, (f, l)
-            QAJSON.append({'k': int(p[0]), 'n': int(p[1]), 'q': p[2].strip(), 'a': p[3].strip()})
-MCJSON = []
-for f in sorted((root / 'qa').glob('mcq*.txt')):
-    for l in f.read_text(encoding='utf-8').splitlines():
-        if l.strip():
-            p = l.split('|'); assert len(p) == 7 and len(set(p[3:])) == 4, (f, l)
-            MCJSON.append({'k': int(p[0]), 'n': int(p[1]), 'q': p[2].strip(), 'o': [x.strip() for x in p[3:]]})
-js = js.replace('/*QA*/', json.dumps(QAJSON, ensure_ascii=False, separators=(',', ':'))).replace('/*MCQ*/', json.dumps(MCJSON, ensure_ascii=False, separators=(',', ':')))
-print('QA', len(QAJSON), 'MCQ', len(MCJSON))
-
-fonts = ('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700'
-         '&family=Noto+Nastaliq+Urdu:wght@400;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap')
-frag = (f'<title>الحیات علوم اسلامیہ (مطالعہ فقہ اسلامی: القدوری)</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n'
-        f'<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
-        f'<link rel="stylesheet" href="{fonts}">\n<style>\n{css}\n</style>\n'
-        f'<div id="app" class="k0" dir="rtl" lang="ar"></div>\n<script>\n{js}\n</script>\n')
-import seo
-(root / 'docs').mkdir(exist_ok=True)
-_strip = lambda s: re.sub('[\u064B-\u065F\u0670\u06D6-\u06ED]', '', s)
-seo_head = seo.run(root, kitabs, _strip)
-frag_seo = frag.replace('<title>مختصر القدوري</title>\n', '', 1)
-test = ('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
-        '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">' + seo_head +
-        '<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui}[hidden]{display:none!important}</style></head><body>'
-        + frag_seo + '<noscript><h1>مختصر القدوري</h1><p>' + seo.DESC + '</p>' + ''.join('<a href="k%d/">%s</a> ' % (k['n'], _strip(k['title'])) for k in kitabs) + '</noscript></body></html>')
-(root / 'docs' / 'index.html').write_text(test, encoding='utf-8')
-(root / 'index.html').write_text(test, encoding='utf-8')
-
-tot = 0
-for k in kitabs:
-    m = sum(1 for b in k['babs'] for it in b['items'] if it[0] == 'm')
-    tot += m
-    print(k['n'], k['title'], 'babs', len(k['babs']), 'masail', m)
-print('total masail', tot, '| html bytes', len(frag.encode('utf-8')))
+# Public release metadata; configure_seo.py can rebase this for another host.
+import subprocess,sys
+subprocess.run([sys.executable,str(BASE/'configure_seo.py'),'--directory',str(OUT),'--base-url','https://al-hayat-revelation-sunnah.aquaearth3.chatgpt.site/'],check=True)

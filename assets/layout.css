@@ -1,0 +1,89 @@
+/* Course home, searchable library, focused reader. */
+:root{--course-radius:18px}
+.course-hero{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(250px,.6fr);gap:54px;align-items:center;padding:48px 0 44px;border-bottom:1px solid var(--line)}
+.course-kicker{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--green);margin:0 0 20px}
+.course-hero h1{font-size:clamp(38px,4.4vw,60px);line-height:1.12;max-width:800px}
+.course-hero h1 em{color:var(--green)}
+.course-description{font-size:16px;color:var(--muted);line-height:1.9;max-width:620px;margin:22px 0}
+.course-hero .primary{background:var(--green);color:var(--bg);border-color:var(--green)}
+.course-hero .button{min-height:48px;font-size:13px;padding:12px 19px}
+.course-meta{font-size:12px;color:var(--muted);margin:20px 0 0}
+.course-progress{background:var(--surface);border:1px solid var(--line);border-radius:var(--course-radius);padding:30px;box-shadow:var(--shadow)}
+.course-progress strong{display:block;font:32px/1.3 Georgia,serif;margin:16px 0}
+.course-progress .track{width:100%;height:7px}
+.course-progress p{font-size:13px;color:var(--muted);line-height:1.9;margin:20px 0}
+.course-progress a{display:inline-flex;align-items:center;min-height:44px;font-size:13px;font-weight:600}
+.course-sections{padding:36px 0}
+.section-heading{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}
+.section-heading h2,.how-to-study h2{font:30px/1.3 Georgia,serif;margin:6px 0}
+.section-heading .section-label{margin:0}
+.section-heading>a{font-size:13px;min-height:44px;display:flex;align-items:center}
+.unit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.unit-card{--unit-bg:var(--blue-bg);--unit-ink:var(--blue-ink);display:block;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:25px;color:var(--ink);transition:transform .15s,border-color .15s}
+.unit-card:hover{transform:translateY(-2px);border-color:var(--unit-ink);text-decoration:none}
+.unit-2{--unit-bg:var(--purple-bg);--unit-ink:var(--purple-ink)}.unit-3{--unit-bg:var(--amber-bg);--unit-ink:var(--amber-ink)}.unit-4{--unit-bg:var(--green-bg);--unit-ink:var(--green-ink)}.unit-5{--unit-bg:var(--rose-bg);--unit-ink:var(--rose-ink)}
+.unit-top,.unit-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.unit-number{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--unit-bg);color:var(--unit-ink);font-size:14px;font-weight:700}
+.unit-progress{font-size:12px;color:var(--muted)}.unit-card h3{font:23px/1.35 Georgia,serif;margin:18px 0 8px}
+.unit-card p{font-size:13px;color:var(--muted);margin:0 0 22px;line-height:1.7}.unit-bottom{font-size:11px}.unit-bottom b{color:var(--unit-ink);font-weight:600}
+.how-to-study{padding:28px 0 12px;border-top:1px solid var(--line)}
+.study-path{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;margin:25px 0}
+.study-path b{font-size:14px;color:var(--green)}.study-path p{font-size:13px;color:var(--muted);line-height:1.8}
+.library-heading{display:flex;justify-content:space-between;align-items:center;gap:24px;margin:28px 0}
+.library-heading h1{font-size:40px;margin:10px 0}.library-heading p{font-size:14px;color:var(--muted);max-width:620px}.library-heading>.button{flex-shrink:0}
+.catalog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.library-tile{padding:22px;margin:0;display:flex;flex-direction:column;min-width:0}
+.tile-top{display:flex;gap:9px;align-items:center}.tile-status{font-size:11px;color:var(--muted)}
+.tile-save{margin-left:auto;min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--amber-bg);color:var(--amber-ink);padding:8px 10px;font-size:11px}
+.library-tile .tile-section{font-size:10px;letter-spacing:.5px;color:var(--muted);margin:20px 0 6px}
+.library-tile h3{font:21px/1.4 Georgia,serif;margin:0 0 12px}.library-tile h3 a{color:var(--ink)}
+.tile-reference{font-size:12px;color:var(--ref);margin:0}.tile-counts{font-size:11px;color:var(--muted);margin:12px 0 20px}
+.tile-open{margin-top:auto;justify-content:space-between;background:var(--soft);min-height:46px}
+.section-contents{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin:22px 0 16px;overflow:hidden}
+.section-contents>summary{cursor:pointer;min-height:52px;padding:15px 18px;font-size:13px;font-weight:600;color:var(--green);display:flex;gap:12px;align-items:center;list-style:none}
+.section-contents>summary:before{content:'☷';font-size:20px}.section-contents>summary span{margin-left:auto;white-space:nowrap;font-size:11px;color:var(--muted)}
+.section-contents ol{list-style:none;padding:0 18px;margin:0}.section-contents a{display:flex;gap:12px;padding:12px 8px;border-top:1px solid var(--line);font-size:13px;min-height:44px}.section-contents a[aria-current=page]{background:var(--soft);font-weight:700}.section-contents a span{font-size:11px;color:var(--muted);flex-shrink:0}.section-contents .section-library{margin:10px 18px}
+.reader-toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0 22px}.reader-toolbar .button{min-height:44px;font-size:12px}.reader-toolbar #memorize{background:var(--purple-bg);color:var(--purple-ink)}
+body[data-single=true] .single-reader{max-width:900px}
+html:not(.js) .catalog-grid .library-tile{display:flex!important}
+@media(max-width:960px){.course-hero{gap:28px;grid-template-columns:minmax(0,1.2fr) minmax(220px,.8fr)}.course-progress{padding:22px}.catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.study-path{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.course-hero{grid-template-columns:minmax(0,1fr);padding:22px 0 30px;gap:26px}.course-kicker{font-size:9px;letter-spacing:1.4px}.course-hero h1{font-size:clamp(34px,8.2vw,48px)}.course-description{font-size:15px;margin:18px 0;line-height:1.85}.course-progress{padding:22px}.course-progress strong{font-size:28px}.course-meta{font-size:11px;line-height:1.7}.unit-grid{grid-template-columns:minmax(0,1fr);gap:12px}.unit-card{padding:22px}.unit-card h3{font-size:23px}.course-sections{padding:28px 0}.section-heading{align-items:flex-start;flex-wrap:wrap;gap:10px}.section-heading h2,.how-to-study h2{font-size:27px}.section-heading .section-label{font-size:9px;letter-spacing:1.2px}.study-path{gap:12px}.study-path>div{padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px}.study-path b{font-size:13px}.study-path p{font-size:12px}.library-heading{display:block;margin:20px 0}.library-heading h1{font-size:34px}.library-heading>.button{margin-top:10px;min-height:44px}.catalog-grid{grid-template-columns:minmax(0,1fr);gap:12px}.library-tile{padding:20px}.library-tile h3{font-size:22px}.library-tile .tile-section{font-size:11px;letter-spacing:0}.tile-counts{font-size:12px}.tile-reference{font-size:13px}.tile-open{font-size:13px;min-height:48px}.section-contents>summary{font-size:12px;padding:13px;gap:8px}.section-contents ol{padding:0 10px}.section-contents a{font-size:13px;padding:13px 8px}.reader-toolbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.reader-toolbar .button{justify-content:center;text-align:center;font-size:12px;padding:10px 7px}.reader-toolbar .button:last-child{grid-column:1/-1}.unit-bottom{font-size:11px;flex-wrap:wrap}.unit-progress{font-size:12px}}
+@media(max-width:360px){.study-path{grid-template-columns:minmax(0,1fr)}.course-progress{padding:18px}.section-contents>summary{flex-wrap:wrap}.section-contents>summary span{margin-left:0}}
+@media(prefers-reduced-motion:reduce){.unit-card{transition:none}.unit-card:hover{transform:none}}
+@media print{.course-hero,.course-sections,.how-to-study,.reader-toolbar,.section-contents{display:none}}
+/* Editorial titles in English, Arabic and Urdu. */
+.card-title-en,.card-title-ar,.card-title-ur{display:block;overflow-wrap:break-word;word-break:normal;letter-spacing:normal}
+.unit-card .card-title-en{color:var(--unit-ink,var(--english));font-family:Georgia,serif;font-size:23px;line-height:1.4}
+.library-tile .card-title-en{color:var(--english);font-family:Georgia,serif;font-size:22px;line-height:1.45}
+.card-title-ar{color:var(--arabic);font-family:Amiri,'Traditional Arabic',serif;font-size:25px;font-weight:400;line-height:1.9;margin-top:9px;text-align:right}
+.card-title-ur{color:var(--urdu);font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif;font-size:19px;font-weight:400;line-height:2.6;margin-top:8px;text-align:right;padding-bottom:7px}
+.unit-card h3,.library-tile h3{margin-bottom:16px}
+.unit-card p{color:var(--english)}
+.unit-bottom>span{color:var(--ref)}
+.library-tile .tile-section{color:var(--unit-ink,var(--green));font-weight:600}
+.tile-reference{font-weight:600;color:var(--ref)}
+.tile-counts{color:var(--purple-ink)}
+.reader-translated-titles{border-inline-start:3px solid var(--line);padding:0 16px;margin:10px 0 22px}
+.reader-translated-titles p{margin:0;max-width:100%}
+@media(max-width:720px){.unit-card .card-title-en,.library-tile .card-title-en{font-size:22px}.card-title-ar{font-size:25px;line-height:2}.card-title-ur{font-size:19px;line-height:2.7;margin-top:9px;padding-bottom:10px}.reader-translated-titles{padding:0 12px}.reader-translated-titles .card-title-ar{font-size:25px}.reader-translated-titles .card-title-ur{font-size:20px}}
+
+/* Urdu always uses black ink; light surfaces preserve contrast in dark mode. */
+:root,[data-theme="dark"]{--urdu:#000;--ur:#000}
+[lang="ur"],[lang="ur"] *,.urdu,.urdu *,.card-title-ur{color:#000!important}
+[data-theme="dark"] [lang="ur"],[data-theme="dark"] .urdu{background:#fff;border-radius:.55rem;padding:.45rem .75rem}
+.ur-key{color:#000!important;background:#fff!important}
+.card-title-ar{line-height:2.15;padding-block:.15rem}
+/* Parallel English, Arabic and Urdu course titles. */
+.course-title-group h1{margin-bottom:20px}.course-title-translations{display:grid;gap:8px;border-inline-start:3px solid var(--gold);padding-inline-start:22px;max-width:700px;margin:18px 0 26px}.course-title-ar{font:38px/1.7 Amiri,'Traditional Arabic',serif;color:var(--arabic);margin:0}.course-title-ur{font:30px/2.2 'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif;color:var(--urdu);margin:0}.course-title-translations p{text-align:start}.classical-register>details{border:1px solid var(--line);border-radius:10px;padding:15px;margin:12px 0}.classical-register summary{cursor:pointer;min-height:44px}.classical-register .book-cite{font:19px/1.8 Amiri,serif}.classical-register li{margin-bottom:10px}@media(max-width:720px){.course-title-ar{font-size:30px}.course-title-ur{font-size:25px}.course-title-translations{padding-inline-start:16px}}
+/* Section cards: compact hierarchy, strong heading colours and clear actions. */
+:root{--section-1:#173d70;--section-2:#54275e;--section-3:#714414;--section-4:#175443;--section-5:#782b40}
+.unit-1{--section-heading:var(--section-1)}.unit-2{--section-heading:var(--section-2)}.unit-3{--section-heading:var(--section-3)}.unit-4{--section-heading:var(--section-4)}.unit-5{--section-heading:var(--section-5)}
+.unit-grid{gap:20px}.unit-card{position:relative;padding:26px 28px 22px;border-radius:18px;border:1px solid var(--line);border-top:4px solid var(--section-heading,var(--green));display:flex;flex-direction:column;box-shadow:0 4px 16px #173d3205;transition:box-shadow .18s,transform .18s}.unit-card:hover{box-shadow:0 10px 28px #173d3212;border-color:var(--section-heading);transform:translateY(-3px)}.unit-top{margin-bottom:20px}.unit-number{width:44px;height:44px;border-radius:12px;background:var(--unit-bg);color:var(--section-heading);font-size:15px}.unit-progress{background:var(--soft);border-radius:20px;padding:5px 10px;font-size:11px;white-space:nowrap}.unit-card h3{display:flex;flex-direction:column;gap:8px;margin:0 0 18px}.unit-card .card-title-en{font:600 25px/1.3 Georgia,serif;color:var(--section-heading)}.unit-card .card-title-ar{font-size:28px;line-height:1.8;color:var(--section-heading);margin:6px 0 0;text-align:right;padding:0}.unit-card .card-title-ur{font-size:21px;line-height:2.4;margin:0;text-align:right;padding:0;color:var(--section-heading)!important}.unit-card>p{color:var(--muted);font-size:13px;line-height:1.8;margin:0 0 20px;max-width:42ch}.unit-bottom{border-top:1px solid var(--line);padding-top:17px;margin-top:auto;gap:12px}.unit-bottom>span{color:var(--muted);font-size:12px}.unit-bottom b{display:inline-flex;align-items:center;min-height:40px;padding:8px 12px;border-radius:8px;background:var(--unit-bg);color:var(--section-heading);font-size:12px}.unit-card:focus-visible{outline:3px solid var(--section-heading);outline-offset:4px}.unit-card:last-child{grid-column:1/-1}.unit-card:last-child h3{max-width:720px}.unit-card:last-child>p{max-width:none}.library-tile{border-radius:16px;border-top:3px solid var(--section-heading,var(--green));box-shadow:0 4px 16px #173d3205}.library-tile .card-title-en,.library-tile .card-title-ar{color:var(--section-heading,var(--ink));font-weight:600}.library-tile .card-title-ur{color:var(--section-heading,var(--ink))!important}.library-tile .tile-open{color:var(--section-heading,var(--ink));font-weight:600}.library-tile .tile-save{background:var(--surface);color:var(--ink)}
+[data-theme=dark]{--section-1:#b7d2fa;--section-2:#e0beed;--section-3:#f0ce9d;--section-4:#a9dfc9;--section-5:#efbbc8}.unit-card [lang=ur]{background:transparent!important}.unit-card .card-title-ur{color:var(--section-heading)!important}
+@media(max-width:720px){.unit-card{padding:22px 20px 18px}.unit-top{margin-bottom:17px}.unit-card .card-title-en{font-size:24px}.unit-card .card-title-ar{font-size:27px}.unit-card .card-title-ur{font-size:21px}.unit-card:last-child{grid-column:auto}.unit-bottom{flex-wrap:nowrap}.unit-bottom b{font-size:11px}.unit-progress{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.unit-card{transition:none}.unit-card:hover{transform:none}}
+/* Internal lesson cards use the same editorial hierarchy as the section cards. */
+.catalog-grid{gap:20px;align-items:stretch}.library-tile{padding:24px;overflow:hidden;transition:border-color .18s,box-shadow .18s}.library-tile:hover{border-color:var(--section-heading,var(--green));box-shadow:0 9px 24px #173d3210}.library-tile .tile-top{padding-bottom:14px;border-bottom:1px solid var(--line);gap:10px}.library-tile .number{width:40px;height:40px;border-radius:11px;background:var(--unit-bg,var(--soft));color:var(--section-heading,var(--green));font-size:14px}.library-tile .tile-status{font-size:10px;background:var(--soft);padding:5px 9px;border-radius:20px}.library-tile .tile-save{border-radius:8px;font-size:11px;min-height:40px;padding:7px 10px}.library-tile .tile-section{font-size:10px;text-transform:uppercase;letter-spacing:1px;margin:20px 0 12px;color:var(--section-heading,var(--green))}.library-tile h3{margin:0 0 18px}.library-tile h3 a{display:flex;flex-direction:column;gap:9px;text-decoration:none}.library-tile .card-title-en{font:600 24px/1.35 Georgia,serif;color:var(--section-heading,var(--ink))}.library-tile .card-title-ar{font-size:27px;line-height:1.8;margin:4px 0 0;padding:0;color:var(--section-heading,var(--ink))}.library-tile .card-title-ur{font-size:21px;line-height:2.5;margin:0;padding:0;color:var(--section-heading,var(--ink))!important;background:transparent!important}.library-tile .tile-reference{font-size:12px;line-height:1.8;color:var(--muted);font-weight:500;border-top:1px solid var(--line);padding-top:15px;margin-top:auto}.library-tile .tile-counts{font-size:11px;color:var(--muted);margin:9px 0 18px}.library-tile .tile-open{margin-top:0;background:var(--unit-bg,var(--soft));color:var(--section-heading,var(--green));border:1px solid transparent;min-height:46px;font-size:13px;display:flex;align-items:center;justify-content:space-between;border-radius:9px;padding:10px 14px}.library-tile .tile-open:hover{border-color:currentColor}.library-tile .tile-open:focus-visible{outline:3px solid var(--section-heading);outline-offset:3px}
+@media(max-width:720px){.catalog-grid{gap:14px}.library-tile{padding:20px}.library-tile .card-title-en{font-size:23px}.library-tile .card-title-ar{font-size:26px}.library-tile .card-title-ur{font-size:21px}.library-tile .tile-counts{font-size:12px}.library-tile .tile-status{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.library-tile{transition:none}}
+.library-tile .tile-reference[lang=ar]{font-family:Amiri,'Traditional Arabic',serif;font-size:19px;line-height:1.8;font-weight:400}
